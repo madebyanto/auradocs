@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Docs</title>
+    <link rel="icon" href="images/auradocs.svg" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/turndown/7.1.2/turndown.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <style>
+        :root {
+            --aura-primary: #e008f6;
+            --aura-gradient: linear-gradient(135deg, #e008f6 0%, #803afb 100%);
+            --bg-main: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-main: #202124;
+            --text-secondary: #5f6368;
+            --border: #dadce0;
+            --shadow: rgba(0,0,0,0.08);
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-main: #0b0b0b;
+                --bg-card: #1a1a1a;
+                --text-main: #e8eaed;
+                --text-secondary: #9aa0a6;
+                --border: #333;
+                --shadow: rgba(0,0,0,0.5);
+            }
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); height: 100vh; overflow: hidden; }
+
+        /* HEADER ANIMATO */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 25px; background: var(--bg-card); border-bottom: 1px solid var(--border);
+            z-index: 1000; position: relative;
+        }
+
+        .brand-group { display: flex; align-items: center; gap: 15px; }
+        .brand-logo { width: 42px; cursor: pointer; transition: transform 0.3s ease; border-radius: 50%;}
+        
+        #doc-title-container { display: none; align-items: center; gap: 10px; animation: slideIn 0.4s ease; }
+        #doc-title-input {
+            font-size: 16px; border: 1px solid transparent; padding: 4px 12px;
+            border-radius: 6px; font-weight: 500; color: var(--text-main); background: transparent; outline: none;
+            transition: var(--transition);
+        }
+        #doc-title-input:focus { background: rgba(224, 8, 246, 0.05); border-color: var(--aura-primary); }
+
+        /* TOGGLE SWITCH FIGO */
+        .mode-switch {
+            display: flex; background: var(--bg-main); border-radius: 25px;
+            padding: 4px; border: 1px solid var(--border); margin: 0 15px;
+        }
+        .mode-btn {
+            padding: 6px 18px; border-radius: 20px; font-size: 11px; font-weight: 600;
+            cursor: pointer; border: none; background: transparent; color: var(--text-secondary);
+            transition: var(--transition); text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .mode-btn.active { background: var(--aura-gradient); color: white; box-shadow: 0 4px 10px rgba(224, 8, 246, 0.3); }
+
+        /* DASHBOARD GRID ANIMATA */
+        #dashboard-view { padding: 40px; overflow-y: auto; height: calc(100vh - 60px); animation: fadeIn 0.6s ease; }
+        .docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
+        
+        .doc-card { 
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; 
+            padding: 24px; cursor: pointer; height: 200px; transition: var(--transition);
+            display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; overflow: hidden;
+        }
+        .doc-card:hover { 
+            border-color: var(--aura-primary); transform: translateY(-8px); 
+            box-shadow: 0 12px 30px var(--shadow);
+        }
+        .doc-card::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--aura-gradient); opacity: 0; transition: 0.3s;
+        }
+        .doc-card:hover::after { opacity: 1; }
+        .doc-card h4 { font-size: 17px; margin-bottom: 10px; color: var(--text-main); }
+        .doc-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+        /* EDITOR UI */
+        #editor-view { display: none; height: calc(100vh - 60px); flex-direction: column; align-items: center; overflow-y: auto; padding: 20px; background: var(--bg-main); }
+        
+        .toolbar {
+            display: flex; gap: 8px; background: var(--bg-card); padding: 12px; 
+            border: 1px solid var(--border); border-radius: 14px; margin-bottom: 25px;
+            position: sticky; top: 0; z-index: 500; box-shadow: 0 4px 20px var(--shadow);
+            animation: slideDown 0.5s ease;
+        }
+        .toolbar button { 
+            background: transparent; border: none; color: var(--text-main); 
+            padding: 10px 14px; cursor: pointer; border-radius: 8px; transition: 0.2s;
+        }
+        .toolbar button:hover { background: rgba(224, 8, 246, 0.1); color: var(--aura-primary); transform: scale(1.1); }
+
+        .canvas {
+            width: 100%; max-width: 850px; background: var(--bg-card); min-height: 1100px;
+            padding: 80px 100px; border-radius: 8px; box-shadow: 0 10px 40px var(--shadow); 
+            margin-bottom: 80px; animation: canvasFade 0.7s ease;
+        }
+        
+        #editor-textarea { width: 100%; min-height: 900px; border: none; resize: none; outline: none; font-size: 16px; line-height: 1.8; color: var(--text-main); background: transparent; display: none; }
+        #visual-editor { width: 100%; min-height: 900px; outline: none; line-height: 1.8; font-size: 16px; color: var(--text-main); }
+        
+        /* Render Styles */
+        #visual-editor h1 { font-size: 2.5em; font-weight: 700; margin-bottom: 0.5em; border-bottom: 2px solid var(--bg-main); padding-bottom: 10px; }
+        #visual-editor h2 { font-size: 1.8em; font-weight: 600; margin-top: 1.2em; color: var(--aura-primary); }
+        #visual-editor h3 { font-size: 1.4em; font-weight: 600; margin-top: 1em; }
+        #visual-editor p { margin-bottom: 1em; }
+
+        /* USER DROPDOWN CORRETTO */
+        .user-section { position: relative; cursor: pointer; z-index: 1001; }
+        .avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--aura-primary); transition: 0.3s; }
+        .avatar:hover { box-shadow: 0 0 15px rgba(224, 8, 246, 0.5); }
+        
+        .dropdown { 
+            display: none; position: absolute; top: 55px; right: 0; 
+            width: 280px; background: var(--bg-card); border-radius: 16px; 
+            border: 1px solid var(--border); padding: 20px; z-index: 9999; 
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15); animation: dropdownFade 0.3s ease;
+        }
+        .dropdown a { 
+            display: flex; align-items: center; gap: 12px; padding: 12px; 
+            color: var(--text-main); text-decoration: none; border-radius: 10px; transition: 0.2s;
+        }
+        .dropdown a:hover { background: var(--bg-main); color: var(--aura-primary); }
+
+        /* KEYFRAMES */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes canvasFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes dropdownFade { from { opacity: 0; transform: translateY(10px); scale: 0.95; } to { opacity: 1; transform: translateY(0); scale: 1; } }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand-group">
+        <i class="fas fa-arrow-left" id="close-editor" style="display: none; cursor:pointer;" onclick="closeEditor()"></i>
+        <img src="images/auradocs.svg" alt="Aura" class="brand-logo" onclick="closeEditor()">
+        <div id="doc-title-container">
+            <input type="text" id="doc-title-input" value="Senza titolo">
+            <div class="mode-switch">
+                <button id="btn-visual" class="mode-btn active" onclick="setMode('visual')">Visuale</button>
+                <button id="btn-literal" class="mode-btn" onclick="setMode('literal')">Letterale</button>
+            </div>
+        </div>
+    </div>
+    <div class="user-section" id="user-trigger">
+        <img id="user-avatar" src="images/default.png" class="avatar">
+        <div class="dropdown" id="user-dropdown">
+            <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border);">
+                <p id="user-name" style="font-weight: 600;">...</p>
+                <span id="user-uid" style="font-size: 10px; color: var(--text-secondary);">...</span>
+            </div>
+            <a href="https://launch.aurastudioitalia.it"><i class="fas fa-th-large"></i> Launchboard</a>
+            <a href="#" style="color: #ff4b2b;" onclick="auth.signOut()"><i class="fas fa-sign-out-alt"></i> Esci</a>
+        </div>
+    </div>
+</header>
+
+<div id="dashboard-view">
+    <div style="display:flex; justify-content:space-between; max-width:1200px; margin: 0 auto 40px; align-items:center;">
+        <h2 style="font-weight: 600; font-size: 28px;">I tuoi Documenti</h2>
+        <button class="mode-btn active" style="padding:12px 25px; border-radius: 50px;" onclick="createNewDoc()">
+            <i class="fas fa-plus" style="margin-right: 8px;"></i> Nuovo
+        </button>
+    </div>
+    <div class="docs-grid" id="docs-grid"></div>
+</div>
+
+<div id="editor-view">
+    <div class="toolbar">
+        <button onclick="execCmd('bold')" title="Grassetto"><i class="fas fa-bold"></i></button>
+        <button onclick="execCmd('italic')" title="Corsivo"><i class="fas fa-italic"></i></button>
+        <div style="width:1px; background:var(--border); margin:0 5px;"></div>
+        <button onclick="execCmd('formatBlock', 'H1')"><b>H1</b></button>
+        <button onclick="execCmd('formatBlock', 'H2')"><b>H2</b></button>
+        <button onclick="execCmd('formatBlock', 'H3')"><b>H3</b></button>
+        <div style="width:1px; background:var(--border); margin:0 5px;"></div>
+        <button onclick="execCmd('insertUnorderedList')"><i class="fas fa-list-ul"></i></button>
+        <button onclick="execCmd('insertOrderedList')"><i class="fas fa-list-ol"></i></button>
+        <button onclick="addLink()"><i class="fas fa-link"></i></button>
+        <div style="width:1px; background:var(--border); margin:0 5px;"></div>
+        <button onclick="exportDoc()"><i class="fas fa-file-export"></i></button>
+        <button onclick="deleteDoc()" style="color:#ff4b2b;"><i class="fas fa-trash"></i></button>
+    </div>
+    <div class="canvas">
+        <div id="visual-editor" contenteditable="true" oninput="autoSave()"></div>
+        <textarea id="editor-textarea" oninput="autoSave()"></textarea>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDsrHAtIh5bsYDHa1wz0LMcmciChAoRikU",
+        authDomain: "myauraid-f03c6.firebaseapp.com",
+        projectId: "myauraid-f03c6",
+        storageBucket: "myauraid-f03c6.appspot.com",
+        messagingSenderId: "190478237725",
+        appId: "1:190478237725:web:0d39907473f511b85a06f4"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const turndownService = new TurndownService();
+
+    let currentDocId = null;
+    let saveTimeout = null;
+    let currentMode = 'visual';
+
+    // Inizializzazione editor
+    document.execCommand('defaultParagraphSeparator', false, 'p');
+
+    // MENU PROFILO (FIXED)
+    const userTrigger = document.getElementById('user-trigger');
+    const userDropdown = document.getElementById('user-dropdown');
+
+    userTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    window.addEventListener('click', () => userDropdown.style.display = 'none');
+    userDropdown.addEventListener('click', (e) => e.stopPropagation());
+
+    // FUNZIONI CORE
+    function setMode(mode) {
+        currentMode = mode;
+        const textarea = document.getElementById('editor-textarea');
+        const visual = document.getElementById('visual-editor');
+        
+        document.getElementById('btn-visual').classList.toggle('active', mode === 'visual');
+        document.getElementById('btn-literal').classList.toggle('active', mode === 'literal');
+
+        if (mode === 'visual') {
+            visual.innerHTML = marked.parse(textarea.value);
+            visual.style.display = 'block';
+            textarea.style.display = 'none';
+        } else {
+            textarea.value = turndownService.turndown(visual.innerHTML);
+            visual.style.display = 'none';
+            textarea.style.display = 'block';
+        }
+    }
+
+    function execCmd(cmd, val = null) {
+        if(currentMode === 'visual') {
+            document.execCommand(cmd, false, val);
+            autoSave(); 
+        } else {
+            alert("Usa la modalità Visuale per formattare con i tasti!");
+        }
+    }
+
+    function addLink() {
+        const url = prompt("Inserisci URL:");
+        if(url) execCmd('createLink', url);
+    }
+
+    function autoSave() {
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => {
+            if(!currentDocId) return;
+
+            let contentToSave;
+            if (currentMode === 'visual') {
+                contentToSave = turndownService.turndown(document.getElementById('visual-editor').innerHTML);
+                document.getElementById('editor-textarea').value = contentToSave;
+            } else {
+                contentToSave = document.getElementById('editor-textarea').value;
+            }
+
+            db.collection('users').doc(auth.currentUser.uid).collection('docs').doc(currentDocId).update({
+                title: document.getElementById('doc-title-input').value,
+                content: contentToSave,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }, 1000);
+    }
+
+    // FIREBASE SYNC
+    auth.onAuthStateChanged(user => {
+        if (!user) return;
+        document.getElementById('user-uid').textContent = user.uid;
+        db.collection('users').doc(user.uid).get().then(doc => {
+            if(doc.exists) {
+                document.getElementById('user-name').textContent = doc.data().nome + " " + doc.data().cognome;
+                document.getElementById('user-avatar').src = doc.data().profileImage || 'images/default.png';
+            }
+        });
+        loadDocs();
+    });
+
+    function loadDocs() {
+        db.collection('users').doc(auth.currentUser.uid).collection('docs').orderBy('updatedAt', 'desc').onSnapshot(snap => {
+            const grid = document.getElementById('docs-grid');
+            grid.innerHTML = '';
+            snap.forEach(doc => {
+                const data = doc.data();
+                const card = document.createElement('div');
+                card.className = 'doc-card';
+                card.onclick = () => openDoc(doc.id, data);
+                card.innerHTML = `<div><h4>${data.title}</h4><p>${data.content.substring(0,85)}...</p></div>
+                                  <div style="font-size:10px; opacity:0.5;"><i class="far fa-clock"></i> Modificato di recente</div>`;
+                grid.appendChild(card);
+            });
+        });
+    }
+
+    function openDoc(id, data) {
+        currentDocId = id;
+        document.getElementById('dashboard-view').style.display = 'none';
+        document.getElementById('editor-view').style.display = 'flex';
+        document.getElementById('doc-title-container').style.display = 'flex';
+        document.getElementById('close-editor').style.display = 'block';
+        document.getElementById('doc-title-input').value = data.title;
+        document.getElementById('editor-textarea').value = data.content;
+        document.getElementById('visual-editor').innerHTML = marked.parse(data.content || "");
+        setMode('visual');
+    }
+
+    function closeEditor() {
+        document.getElementById('dashboard-view').style.display = 'block';
+        document.getElementById('editor-view').style.display = 'none';
+        document.getElementById('doc-title-container').style.display = 'none';
+        document.getElementById('close-editor').style.display = 'none';
+        currentDocId = null;
+    }
+
+    async function createNewDoc() {
+        const ref = await db.collection('users').doc(auth.currentUser.uid).collection('docs').add({
+            title: "Senza titolo", content: "", updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        openDoc(ref.id, {title: "Senza titolo", content: ""});
+    }
+
+    function exportDoc() {
+        const content = document.getElementById('editor-textarea').value;
+        const blob = new Blob([content], { type: 'text/markdown' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `${document.getElementById('doc-title-input').value}.md`;
+        a.click();
+    }
+
+    async function deleteDoc() {
+        if(confirm("Vuoi eliminare definitivamente questo documento?")) {
+            await db.collection('users').doc(auth.currentUser.uid).collection('docs').doc(currentDocId).delete();
+            closeEditor();
+        }
+    }
+
+    document.getElementById('doc-title-input').addEventListener('input', autoSave);
+</script>
+
+</body>
+</html>

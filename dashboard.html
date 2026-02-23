@@ -39,10 +39,25 @@
             }
         }
 
+        #editor-textarea {
+    display: none;
+    width: 100%;
+    min-height: 900px;
+    border: none;
+    resize: none;
+    outline: none;
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--text-main);
+    background: transparent;
+    font-family: 'monospace', sans-serif; /* Fondamentale per vedere bene i simboli MD */
+    padding: 10px;
+    white-space: pre-wrap; /* Mantiene gli a capo del Markdown */
+}
+
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-main); height: 100vh; overflow: hidden; }
 
-        /* HEADER ANIMATO */
         header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 25px; background: var(--bg-card); border-bottom: 1px solid var(--border);
@@ -60,7 +75,6 @@
         }
         #doc-title-input:focus { background: rgba(224, 8, 246, 0.05); border-color: var(--aura-primary); }
 
-        /* TOGGLE SWITCH FIGO */
         .mode-switch {
             display: flex; background: var(--bg-main); border-radius: 25px;
             padding: 4px; border: 1px solid var(--border); margin: 0 15px;
@@ -72,7 +86,6 @@
         }
         .mode-btn.active { background: var(--aura-gradient); color: white; box-shadow: 0 4px 10px rgba(224, 8, 246, 0.3); }
 
-        /* DASHBOARD GRID ANIMATA */
         #dashboard-view { padding: 40px; overflow-y: auto; height: calc(100vh - 60px); animation: fadeIn 0.6s ease; }
         .docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
         
@@ -82,19 +95,10 @@
             display: flex; flex-direction: column; justify-content: space-between;
             position: relative; overflow: hidden;
         }
-        .doc-card:hover { 
-            border-color: var(--aura-primary); transform: translateY(-8px); 
-            box-shadow: 0 12px 30px var(--shadow);
-        }
-        .doc-card::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
-            background: var(--aura-gradient); opacity: 0; transition: 0.3s;
-        }
-        .doc-card:hover::after { opacity: 1; }
+        .doc-card:hover { border-color: var(--aura-primary); transform: translateY(-8px); box-shadow: 0 12px 30px var(--shadow); }
         .doc-card h4 { font-size: 17px; margin-bottom: 10px; color: var(--text-main); }
         .doc-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
 
-        /* EDITOR UI */
         #editor-view { display: none; height: calc(100vh - 60px); flex-direction: column; align-items: center; overflow-y: auto; padding: 20px; background: var(--bg-main); }
         
         .toolbar {
@@ -117,17 +121,9 @@
         
         #editor-textarea { width: 100%; min-height: 900px; border: none; resize: none; outline: none; font-size: 16px; line-height: 1.8; color: var(--text-main); background: transparent; display: none; }
         #visual-editor { width: 100%; min-height: 900px; outline: none; line-height: 1.8; font-size: 16px; color: var(--text-main); }
-        
-        /* Render Styles */
-        #visual-editor h1 { font-size: 2.5em; font-weight: 700; margin-bottom: 0.5em; border-bottom: 2px solid var(--bg-main); padding-bottom: 10px; }
-        #visual-editor h2 { font-size: 1.8em; font-weight: 600; margin-top: 1.2em; color: var(--aura-primary); }
-        #visual-editor h3 { font-size: 1.4em; font-weight: 600; margin-top: 1em; }
-        #visual-editor p { margin-bottom: 1em; }
 
-        /* USER DROPDOWN CORRETTO */
         .user-section { position: relative; cursor: pointer; z-index: 1001; }
         .avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--aura-primary); transition: 0.3s; }
-        .avatar:hover { box-shadow: 0 0 15px rgba(224, 8, 246, 0.5); }
         
         .dropdown { 
             display: none; position: absolute; top: 55px; right: 0; 
@@ -135,18 +131,30 @@
             border: 1px solid var(--border); padding: 20px; z-index: 9999; 
             box-shadow: 0 15px 50px rgba(0,0,0,0.15); animation: dropdownFade 0.3s ease;
         }
-        .dropdown a { 
-            display: flex; align-items: center; gap: 12px; padding: 12px; 
-            color: var(--text-main); text-decoration: none; border-radius: 10px; transition: 0.2s;
-        }
-        .dropdown a:hover { background: var(--bg-main); color: var(--aura-primary); }
 
-        /* KEYFRAMES */
+        /* PATCH COLLABORAZIONE UI */
+        #collab-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 3000; justify-content: center; align-items: center;
+            backdrop-filter: blur(4px);
+        }
+        .modal-box {
+            background: var(--bg-card); padding: 25px; border-radius: 20px; width: 90%; max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+        .search-results {
+            background: var(--bg-main); border-radius: 10px; margin-top: 5px; 
+            max-height: 150px; overflow-y: auto; border: 1px solid var(--border); display: none;
+        }
+        .search-item { padding: 10px; cursor: pointer; border-bottom: 1px solid var(--border); font-size: 14px; }
+        .search-item:hover { background: rgba(224, 8, 246, 0.1); }
+        .collab-list { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 15px; }
+        .collab-user { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 13px; }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes canvasFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes dropdownFade { from { opacity: 0; transform: translateY(10px); scale: 0.95; } to { opacity: 1; transform: translateY(0); scale: 1; } }
     </style>
 </head>
 <body>
@@ -195,16 +203,43 @@
         <button onclick="execCmd('formatBlock', 'H2')"><b>H2</b></button>
         <button onclick="execCmd('formatBlock', 'H3')"><b>H3</b></button>
         <div style="width:1px; background:var(--border); margin:0 5px;"></div>
+        <button onclick="openCollabModal()" title="Collaborazione"><i class="fas fa-user-plus"></i></button>
+        <div style="width:1px; background:var(--border); margin:0 5px;"></div>
         <button onclick="execCmd('insertUnorderedList')"><i class="fas fa-list-ul"></i></button>
         <button onclick="execCmd('insertOrderedList')"><i class="fas fa-list-ol"></i></button>
         <button onclick="addLink()"><i class="fas fa-link"></i></button>
         <div style="width:1px; background:var(--border); margin:0 5px;"></div>
         <button onclick="exportDoc()"><i class="fas fa-file-export"></i></button>
-        <button onclick="deleteDoc()" style="color:#ff4b2b;"><i class="fas fa-trash"></i></button>
+        <button id="btn-delete" onclick="deleteDoc()" style="color:#ff4b2b;"><i class="fas fa-trash"></i></button>
     </div>
     <div class="canvas">
         <div id="visual-editor" contenteditable="true" oninput="autoSave()"></div>
         <textarea id="editor-textarea" oninput="autoSave()"></textarea>
+    </div>
+</div>
+
+<div id="collab-modal" onclick="closeCollabModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <h3>Collaborazione</h3>
+        <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 15px;">Cerca utenti per nome e cognome</p>
+        
+        <input type="text" id="user-search-input" placeholder="Cerca collaboratore..." style="width:100%; padding:12px; border-radius:10px; border:1px solid var(--border); outline:none; background:var(--bg-main); color:var(--text-main);">
+        <div id="search-results" class="search-results"></div>
+
+        <div id="role-selector" style="display:none; margin-top:15px; background:rgba(224, 8, 246, 0.05); padding:10px; border-radius:10px;">
+            <p id="selected-user-display" style="font-weight:600; font-size:13px; margin-bottom:10px;"></p>
+            <div style="display:flex; gap:10px;">
+                <select id="collab-role" style="flex:1; padding:5px; border-radius:5px; border:1px solid var(--border);">
+                    <option value="Editor">Editor</option>
+                    <option value="Visualizzatore">Visualizzatore</option>
+                </select>
+                <button onclick="addCollaborator()" style="background:var(--aura-gradient); color:white; border:none; padding:5px 15px; border-radius:5px; font-weight:600;">Aggiungi</button>
+            </div>
+        </div>
+
+        <div class="collab-list" id="active-collabs-list">
+            </div>
+        <button onclick="document.getElementById('collab-modal').style.display='none'" style="width:100%; margin-top:20px; padding:10px; border:none; border-radius:10px; background:var(--bg-main); color:var(--text-main); font-weight:600;">Chiudi</button>
     </div>
 </div>
 
@@ -225,108 +260,200 @@
     let currentDocId = null;
     let saveTimeout = null;
     let currentMode = 'visual';
+    let tempSelectedUser = null;
 
-    // Inizializzazione editor
+    // INIZIALIZZAZIONE
+
     document.execCommand('defaultParagraphSeparator', false, 'p');
 
-    // MENU PROFILO (FIXED)
     const userTrigger = document.getElementById('user-trigger');
     const userDropdown = document.getElementById('user-dropdown');
-
-    userTrigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block';
-    });
-
+    userTrigger.addEventListener('click', (e) => { e.stopPropagation(); userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block'; });
     window.addEventListener('click', () => userDropdown.style.display = 'none');
-    userDropdown.addEventListener('click', (e) => e.stopPropagation());
 
-    // FUNZIONI CORE
-    function setMode(mode) {
-        currentMode = mode;
-        const textarea = document.getElementById('editor-textarea');
-        const visual = document.getElementById('visual-editor');
+    // COLLABORAZIONE: LOGICA RICERCA
+    document.getElementById('user-search-input').addEventListener('input', async (e) => {
+    const val = e.target.value.trim();
+    const resultsBox = document.getElementById('search-results');
+    if(val.length < 2) { resultsBox.style.display = 'none'; return; }
+
+    const snap = await db.collection('users').where('nome', '>=', val).where('nome', '<=', val + '\uf8ff').limit(5).get();
+    resultsBox.innerHTML = '';
+    
+    if(snap.empty) {
+        resultsBox.innerHTML = '<div class="search-item">Nessuna email o nome trovato</div>';
+    } else {
+        snap.forEach(doc => {
+            const u = doc.data();
+            const div = document.createElement('div');
+            div.className = 'search-item';
+            div.style.display = 'flex';
+            div.style.alignItems = 'center';
+            div.style.gap = '10px';
+
+            const photoUrl = u.profileImage || 'images/default.png';
+
+            div.innerHTML = `
+                <img src="${photoUrl}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; border: 1px solid var(--border);">
+                <span>${u.nome} ${u.cognome}</span>
+            `;
+            
+            div.onclick = () => {
+                tempSelectedUser = { id: doc.id, name: `${u.nome} ${u.cognome}` };
+                document.getElementById('selected-user-display').textContent = tempSelectedUser.name;
+                document.getElementById('role-selector').style.display = 'block';
+                resultsBox.style.display = 'none';
+                document.getElementById('user-search-input').value = '';
+            };
+            resultsBox.appendChild(div);
+        });
+        resultsBox.style.display = 'block'; // Mostra il box se ci sono risultati
+    }
+}); // <--- CHIUDI QUI L'EVENT LISTENER
+
+    async function addCollaborator() {
+        if(!tempSelectedUser || !currentDocId) return;
+        const role = document.getElementById('collab-role').value;
+        const docRef = db.collection('documents').doc(currentDocId);
         
-        document.getElementById('btn-visual').classList.toggle('active', mode === 'visual');
-        document.getElementById('btn-literal').classList.toggle('active', mode === 'literal');
+        await docRef.update({
+            [`collaborators.${tempSelectedUser.id}`]: role
+        });
+        
+        tempSelectedUser = null;
+        document.getElementById('role-selector').style.display = 'none';
+        document.getElementById('user-search-input').value = '';
+        renderCollabsList();
+    }
 
-        if (mode === 'visual') {
-            visual.innerHTML = marked.parse(textarea.value);
-            visual.style.display = 'block';
-            textarea.style.display = 'none';
-        } else {
-            textarea.value = turndownService.turndown(visual.innerHTML);
-            visual.style.display = 'none';
-            textarea.style.display = 'block';
+  async function renderCollabsList() {
+    const doc = await db.collection('documents').doc(currentDocId).get();
+    const listDiv = document.getElementById('active-collabs-list');
+    listDiv.innerHTML = '<p style="font-weight:600; font-size:12px; margin-bottom:10px;">Collaboratori correnti:</p>';
+    
+    const collabs = doc.data().collaborators;
+    for (const [uid, role] of Object.entries(collabs)) {
+        const uDoc = await db.collection('users').doc(uid).get();
+        let name = uid;
+        let photoUrl = 'images/default.png';
+
+        if(uDoc.exists) {
+            const uData = uDoc.data();
+            name = `${uData.nome} ${uData.cognome}`;
+            photoUrl = uData.profileImage || 'images/default.png';
         }
+
+        listDiv.innerHTML += `
+            <div class="collab-user" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <img src="${photoUrl}" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border: 1px solid var(--aura-primary);">
+                    <span>${name}</span>
+                </div>
+                <b style="color:var(--aura-primary); font-size:11px; text-transform:uppercase;">${role}</b>
+            </div>`;
+    }
+}
+
+    function openCollabModal() {
+        document.getElementById('collab-modal').style.display = 'flex';
+        renderCollabsList();
     }
 
-    function execCmd(cmd, val = null) {
-        if(currentMode === 'visual') {
-            document.execCommand(cmd, false, val);
-            autoSave(); 
-        } else {
-            alert("Usa la modalità Visuale per formattare con i tasti!");
-        }
-    }
+    // CORE FUNCTIONS
+    function setMode(mode) {
+    currentMode = mode;
+    const textarea = document.getElementById('editor-textarea');
+    const visual = document.getElementById('visual-editor');
+    
+    document.getElementById('btn-visual').classList.toggle('active', mode === 'visual');
+    document.getElementById('btn-literal').classList.toggle('active', mode === 'literal');
 
-    function addLink() {
-        const url = prompt("Inserisci URL:");
-        if(url) execCmd('createLink', url);
+    if (mode === 'visual') {
+        // Da MD a Anteprima (HTML)
+        visual.innerHTML = marked.parse(textarea.value);
+        visual.style.display = 'block';
+        textarea.style.display = 'none';
+    } else {
+        // Da HTML a MD PURO
+        // Usiamo turndown per convertire l'HTML in Markdown reale
+        const mdResult = turndownService.turndown(visual.innerHTML);
+        
+        textarea.value = mdResult; // Imposta il testo con i vari #, ** ecc.
+        visual.style.display = 'none';
+        textarea.style.display = 'block';
     }
+}
+
+    function execCmd(cmd, val = null) { if(currentMode === 'visual') { document.execCommand(cmd, false, val); autoSave(); } }
 
     function autoSave() {
         clearTimeout(saveTimeout);
         saveTimeout = setTimeout(() => {
             if(!currentDocId) return;
-
-            let contentToSave;
-            if (currentMode === 'visual') {
-                contentToSave = turndownService.turndown(document.getElementById('visual-editor').innerHTML);
-                document.getElementById('editor-textarea').value = contentToSave;
-            } else {
-                contentToSave = document.getElementById('editor-textarea').value;
-            }
-
-            db.collection('users').doc(auth.currentUser.uid).collection('docs').doc(currentDocId).update({
+            const content = currentMode === 'visual' ? turndownService.turndown(document.getElementById('visual-editor').innerHTML) : document.getElementById('editor-textarea').value;
+            db.collection('documents').doc(currentDocId).update({
                 title: document.getElementById('doc-title-input').value,
-                content: contentToSave,
+                content: content,
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
         }, 1000);
     }
 
-    // FIREBASE SYNC
     auth.onAuthStateChanged(user => {
         if (!user) return;
-        document.getElementById('user-uid').textContent = user.uid;
         db.collection('users').doc(user.uid).get().then(doc => {
             if(doc.exists) {
                 document.getElementById('user-name').textContent = doc.data().nome + " " + doc.data().cognome;
                 document.getElementById('user-avatar').src = doc.data().profileImage || 'images/default.png';
+                document.getElementById('user-uid').textContent = user.uid;
             }
         });
         loadDocs();
     });
 
-    function loadDocs() {
-        db.collection('users').doc(auth.currentUser.uid).collection('docs').orderBy('updatedAt', 'desc').onSnapshot(snap => {
-            const grid = document.getElementById('docs-grid');
-            grid.innerHTML = '';
-            snap.forEach(doc => {
-                const data = doc.data();
-                const card = document.createElement('div');
-                card.className = 'doc-card';
-                card.onclick = () => openDoc(doc.id, data);
-                card.innerHTML = `<div><h4>${data.title}</h4><p>${data.content.substring(0,85)}...</p></div>
-                                  <div style="font-size:10px; opacity:0.5;"><i class="far fa-clock"></i> Modificato di recente</div>`;
-                grid.appendChild(card);
-            });
-        });
-    }
+   function loadDocs() {
+    if (!auth.currentUser) return;
+
+    console.log("Caricamento documenti per UID:", auth.currentUser.uid);
+
+    db.collection('documents')
+      .where(`collaborators.${auth.currentUser.uid}`, 'in', ['Proprietario', 'Editor', 'Visualizzatore'])
+      .onSnapshot(snap => {
+          console.log("Documenti trovati:", snap.size);
+          const grid = document.getElementById('docs-grid');
+          grid.innerHTML = '';
+          
+          if (snap.empty) {
+              grid.innerHTML = '<p style="text-align:center; opacity:0.5;">Nessun documento trovato.</p>';
+          }
+
+          snap.forEach(doc => {
+              const data = doc.data();
+              const card = document.createElement('div');
+              card.className = 'doc-card';
+              card.onclick = () => openDoc(doc.id, data);
+              card.innerHTML = `
+                  <div>
+                      <h4>${data.title}</h4>
+                      <p>${data.content ? data.content.substring(0,85) : 'Nessun contenuto'}...</p>
+                  </div>
+                  <div style="font-size:10px; opacity:0.5;">Ruolo: ${data.collaborators[auth.currentUser.uid]}</div>`;
+              grid.appendChild(card);
+          });
+      }, err => {
+          console.error("Errore Firestore:", err);
+      });
+}
 
     function openDoc(id, data) {
         currentDocId = id;
+        const role = data.collaborators[auth.currentUser.uid];
+        const canEdit = role === 'Proprietario' || role === 'Editor';
+        
+        document.getElementById('visual-editor').contentEditable = canEdit;
+        document.getElementById('doc-title-input').disabled = !canEdit;
+        document.getElementById('btn-delete').style.display = (role === 'Proprietario') ? 'block' : 'none';
+
         document.getElementById('dashboard-view').style.display = 'none';
         document.getElementById('editor-view').style.display = 'flex';
         document.getElementById('doc-title-container').style.display = 'flex';
@@ -337,40 +464,20 @@
         setMode('visual');
     }
 
-    function closeEditor() {
-        document.getElementById('dashboard-view').style.display = 'block';
-        document.getElementById('editor-view').style.display = 'none';
-        document.getElementById('doc-title-container').style.display = 'none';
-        document.getElementById('close-editor').style.display = 'none';
-        currentDocId = null;
-    }
-
     async function createNewDoc() {
-        const ref = await db.collection('users').doc(auth.currentUser.uid).collection('docs').add({
-            title: "Senza titolo", content: "", updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        const ref = await db.collection('documents').add({
+            title: "Senza titolo",
+            content: "",
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            collaborators: { [auth.currentUser.uid]: "Proprietario" }
         });
-        openDoc(ref.id, {title: "Senza titolo", content: ""});
     }
 
-    function exportDoc() {
-        const content = document.getElementById('editor-textarea').value;
-        const blob = new Blob([content], { type: 'text/markdown' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `${document.getElementById('doc-title-input').value}.md`;
-        a.click();
-    }
+    function closeEditor() { location.reload(); }
 
-    async function deleteDoc() {
-        if(confirm("Vuoi eliminare definitivamente questo documento?")) {
-            await db.collection('users').doc(auth.currentUser.uid).collection('docs').doc(currentDocId).delete();
-            closeEditor();
-        }
-    }
-
+    async function deleteDoc() { if(confirm("Eliminare definitivamente?")) { await db.collection('documents').doc(currentDocId).delete(); closeEditor(); } }
+    
     document.getElementById('doc-title-input').addEventListener('input', autoSave);
 </script>
-
 </body>
-
 </html>

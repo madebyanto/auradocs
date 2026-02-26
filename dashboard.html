@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aura Docs</title>
     <link rel="icon" href="images/auradocs.svg" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto:wght@300;400;700&family=Open+Sans:wght@300;400;600&family=Playfair+Display:wght@400;700&family=Courier+Prime&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/turndown/7.1.2/turndown.min.js"></script>
-
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -18,150 +17,688 @@
     <style>
         :root {
             --aura-primary: #e008f6;
+            --aura-secondary: #803afb;
             --aura-gradient: linear-gradient(135deg, #e008f6 0%, #803afb 100%);
-            --bg-main: #f8f9fa;
+            --aura-glow: 0 0 20px rgba(224, 8, 246, 0.25);
+            --bg-main: #f4f5f8;
             --bg-card: #ffffff;
-            --text-main: #202124;
-            --text-secondary: #5f6368;
-            --border: #dadce0;
-            --shadow: rgba(0,0,0,0.08);
-            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --bg-hover: #fafafa;
+            --text-main: #1a1b1e;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --border: #e5e7eb;
+            --border-focus: rgba(224, 8, 246, 0.4);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.06);
+            --shadow-xl: 0 24px 64px rgba(0,0,0,0.12);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --radius-xl: 24px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-main: #0b0b0b;
-                --bg-card: #1a1a1a;
-                --text-main: #e8eaed;
-                --text-secondary: #9aa0a6;
-                --border: #333;
-                --shadow: rgba(0,0,0,0.5);
+                --bg-main: #0d0e11;
+                --bg-card: #16181d;
+                --bg-hover: #1c1e24;
+                --text-main: #f1f3f5;
+                --text-secondary: #8b95a1;
+                --text-muted: #5a6272;
+                --border: #252830;
+                --border-focus: rgba(224, 8, 246, 0.5);
+                --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+                --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+                --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
+                --shadow-xl: 0 24px 64px rgba(0,0,0,0.6);
             }
         }
 
-        #editor-textarea {
-    display: none;
-    width: 100%;
-    min-height: 900px;
-    border: none;
-    resize: none;
-    outline: none;
-    font-size: 16px;
-    line-height: 1.8;
-    color: var(--text-main);
-    background: transparent;
-    font-family: 'monospace', sans-serif; /* Fondamentale per vedere bene i simboli MD */
-    padding: 10px;
-    white-space: pre-wrap; /* Mantiene gli a capo del Markdown */
-}
-
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); height: 100vh; overflow: hidden; }
-
-        header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 25px; background: var(--bg-card); border-bottom: 1px solid var(--border);
-            z-index: 1000; position: relative;
-        }
-
-        .brand-group { display: flex; align-items: center; gap: 15px; }
-        .brand-logo { width: 42px; cursor: pointer; transition: transform 0.3s ease; border-radius: 50%;}
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         
-        #doc-title-container { display: none; align-items: center; gap: 10px; animation: slideIn 0.4s ease; }
-        #doc-title-input {
-            font-size: 16px; border: 1px solid transparent; padding: 4px 12px;
-            border-radius: 6px; font-weight: 500; color: var(--text-main); background: transparent; outline: none;
-            transition: var(--transition);
+        body { 
+            background-color: var(--bg-main); 
+            color: var(--text-main); 
+            height: 100vh; 
+            overflow: hidden;
         }
-        #doc-title-input:focus { background: rgba(224, 8, 246, 0.05); border-color: var(--aura-primary); }
 
+        /* ── HEADER ── */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            height: 58px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            position: relative;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .brand-group { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+        }
+
+        #close-editor {
+            width: 34px; height: 34px;
+            border-radius: var(--radius-sm);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            border: 1px solid var(--border);
+            background: transparent;
+            font-size: 13px;
+        }
+        #close-editor:hover { 
+            background: rgba(224, 8, 246, 0.08); 
+            color: var(--aura-primary); 
+            border-color: var(--border-focus);
+        }
+
+        .brand-logo { 
+            width: 36px; 
+            height: 36px;
+            cursor: pointer; 
+            transition: var(--transition); 
+            border-radius: 10px;
+        }
+        .brand-logo:hover { transform: scale(1.05); }
+
+        #doc-title-container { 
+            display: none; 
+            align-items: center; 
+            gap: 8px; 
+            animation: slideIn 0.3s ease; 
+        }
+
+        #doc-title-input {
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid transparent;
+            padding: 5px 10px;
+            border-radius: var(--radius-sm);
+            color: var(--text-main);
+            background: transparent;
+            outline: none;
+            transition: var(--transition);
+            max-width: 280px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #doc-title-input:focus { 
+            background: rgba(224, 8, 246, 0.04); 
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px rgba(224, 8, 246, 0.08);
+        }
+
+        /* ── MODE SWITCH ── */
         .mode-switch {
-            display: flex; background: var(--bg-main); border-radius: 25px;
-            padding: 4px; border: 1px solid var(--border); margin: 0 15px;
+            display: flex;
+            background: var(--bg-main);
+            border-radius: 20px;
+            padding: 3px;
+            border: 1px solid var(--border);
+            margin: 0 8px;
+            gap: 2px;
         }
         .mode-btn {
-            padding: 6px 18px; border-radius: 20px; font-size: 11px; font-weight: 600;
-            cursor: pointer; border: none; background: transparent; color: var(--text-secondary);
-            transition: var(--transition); text-transform: uppercase; letter-spacing: 0.5px;
+            padding: 5px 16px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
         }
-        .mode-btn.active { background: var(--aura-gradient); color: white; box-shadow: 0 4px 10px rgba(224, 8, 246, 0.3); }
+        .mode-btn.active { 
+            background: var(--aura-gradient); 
+            color: white; 
+            box-shadow: 0 2px 10px rgba(224, 8, 246, 0.35); 
+        }
 
-        #dashboard-view { padding: 40px; overflow-y: auto; height: calc(100vh - 60px); animation: fadeIn 0.6s ease; }
-        .docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
-        
-        .doc-card { 
-            background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; 
-            padding: 24px; cursor: pointer; height: 200px; transition: var(--transition);
-            display: flex; flex-direction: column; justify-content: space-between;
-            position: relative; overflow: hidden;
+        /* ── SAVE STATUS ── */
+        #save-status {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: none;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            white-space: nowrap;
+            animation: fadeIn 0.2s ease;
         }
-        .doc-card:hover { border-color: var(--aura-primary); transform: translateY(-8px); box-shadow: 0 12px 30px var(--shadow); }
-        .doc-card h4 { font-size: 17px; margin-bottom: 10px; color: var(--text-main); }
-        .doc-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+        #save-status.saving { color: var(--aura-primary); }
+        #save-status.saved { color: #22c55e; }
 
-        #editor-view { display: none; height: calc(100vh - 60px); flex-direction: column; align-items: center; overflow-y: auto; padding: 20px; background: var(--bg-main); }
-        
-        .toolbar {
-            display: flex; gap: 8px; background: var(--bg-card); padding: 12px; 
-            border: 1px solid var(--border); border-radius: 14px; margin-bottom: 25px;
-            position: sticky; top: 0; z-index: 500; box-shadow: 0 4px 20px var(--shadow);
-            animation: slideDown 0.5s ease;
-        }
-        .toolbar button { 
-            background: transparent; border: none; color: var(--text-main); 
-            padding: 10px 14px; cursor: pointer; border-radius: 8px; transition: 0.2s;
-        }
-        .toolbar button:hover { background: rgba(224, 8, 246, 0.1); color: var(--aura-primary); transform: scale(1.1); }
-
-        .canvas {
-            width: 100%; max-width: 850px; background: var(--bg-card); min-height: 1100px;
-            padding: 80px 100px; border-radius: 8px; box-shadow: 0 10px 40px var(--shadow); 
-            margin-bottom: 80px; animation: canvasFade 0.7s ease;
-        }
-        
-        #editor-textarea { width: 100%; min-height: 900px; border: none; resize: none; outline: none; font-size: 16px; line-height: 1.8; color: var(--text-main); background: transparent; display: none; }
-        #visual-editor { width: 100%; min-height: 900px; outline: none; line-height: 1.8; font-size: 16px; color: var(--text-main); }
-
+        /* ── USER SECTION ── */
         .user-section { position: relative; cursor: pointer; z-index: 1001; }
-        .avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--aura-primary); transition: 0.3s; }
+        .avatar { 
+            width: 36px; height: 36px; 
+            border-radius: 50%; 
+            border: 2px solid var(--aura-primary); 
+            transition: var(--transition);
+            object-fit: cover;
+        }
+        .avatar:hover { box-shadow: var(--aura-glow); transform: scale(1.05); }
         
         .dropdown { 
-            display: none; position: absolute; top: 55px; right: 0; 
-            width: 280px; background: var(--bg-card); border-radius: 16px; 
-            border: 1px solid var(--border); padding: 20px; z-index: 9999; 
-            box-shadow: 0 15px 50px rgba(0,0,0,0.15); animation: dropdownFade 0.3s ease;
+            display: none;
+            position: absolute; top: 50px; right: 0; 
+            width: 260px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            padding: 8px;
+            z-index: 9999; 
+            box-shadow: var(--shadow-xl);
+            animation: dropdownFade 0.2s ease;
         }
 
-        /* PATCH COLLABORAZIONE UI */
+        .dropdown-header {
+            padding: 12px;
+            margin-bottom: 4px;
+        }
+        .dropdown-header p { font-weight: 600; font-size: 14px; }
+        .dropdown-header span { font-size: 10px; color: var(--text-muted); }
+
+        .dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 13px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        .dropdown a:hover { background: var(--bg-main); }
+        .dropdown a i { width: 16px; text-align: center; color: var(--text-secondary); }
+        .dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
+
+        /* ── DASHBOARD ── */
+        #dashboard-view { 
+            padding: 40px 32px;
+            overflow-y: auto; 
+            height: calc(100vh - 58px); 
+            animation: fadeIn 0.4s ease; 
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto 36px;
+        }
+
+        .dashboard-header h2 { 
+            font-weight: 600; 
+            font-size: 24px; 
+            letter-spacing: -0.3px;
+        }
+
+        .btn-new {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            background: var(--aura-gradient);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 16px rgba(224, 8, 246, 0.3);
+        }
+        .btn-new:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 24px rgba(224, 8, 246, 0.4);
+        }
+        .btn-new:active { transform: translateY(0); }
+
+        .docs-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
+            gap: 20px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+        
+        .doc-card { 
+            background: var(--bg-card); 
+            border: 1px solid var(--border); 
+            border-radius: var(--radius-lg); 
+            padding: 22px; 
+            cursor: pointer; 
+            height: 190px; 
+            transition: var(--transition-slow);
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
+            position: relative; 
+            overflow: hidden;
+        }
+        .doc-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            right: 0; height: 3px;
+            background: var(--aura-gradient);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .doc-card:hover { 
+            border-color: rgba(224, 8, 246, 0.3); 
+            transform: translateY(-6px); 
+            box-shadow: var(--shadow-lg);
+        }
+        .doc-card:hover::before { opacity: 1; }
+
+        .doc-card-icon {
+            width: 38px; height: 38px;
+            border-radius: var(--radius-sm);
+            background: rgba(224, 8, 246, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--aura-primary);
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .doc-card h4 { 
+            font-size: 15px; 
+            font-weight: 600;
+            margin-bottom: 6px; 
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .doc-card p { 
+            font-size: 12px; 
+            color: var(--text-secondary); 
+            line-height: 1.6;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .doc-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .doc-role-badge {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background: rgba(224, 8, 246, 0.08);
+            color: var(--aura-primary);
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-muted);
+        }
+        .empty-state i { font-size: 48px; margin-bottom: 16px; opacity: 0.3; display: block; }
+        .empty-state p { font-size: 15px; }
+
+        /* ── EDITOR VIEW ── */
+        #editor-view { 
+            display: none; 
+            height: calc(100vh - 58px); 
+            flex-direction: column; 
+            align-items: center; 
+            overflow-y: auto; 
+            padding: 24px 20px;
+            background: var(--bg-main);
+        }
+
+        /* ── TOOLBAR ── */
+        .toolbar {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-card);
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 500;
+            box-shadow: var(--shadow-md);
+            animation: slideDown 0.4s ease;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 850px;
+            width: 100%;
+        }
+
+        .toolbar-divider {
+            width: 1px;
+            background: var(--border);
+            height: 20px;
+            margin: 0 4px;
+            flex-shrink: 0;
+        }
+
+        .toolbar button {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            outline: none;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+        .toolbar button:hover { 
+            background: rgba(224, 8, 246, 0.1); 
+            color: var(--aura-primary); 
+        }
+        .toolbar button.danger:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .toolbar select {
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 5px 8px;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            outline: none;
+            font-size: 12px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .toolbar select:focus { border-color: var(--border-focus); }
+
+        .toolbar input[type="number"] {
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 5px 6px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            outline: none;
+            font-size: 12px;
+            width: 56px;
+            text-align: center;
+        }
+        .toolbar input[type="number"]:focus { border-color: var(--border-focus); }
+
+        /* ── CANVAS ── */
+        .canvas {
+            width: 100%;
+            max-width: 850px;
+            background: var(--bg-card);
+            min-height: 1100px;
+            padding: 72px 96px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 80px;
+            animation: canvasFade 0.5s ease;
+            border: 1px solid var(--border);
+        }
+
+        #editor-textarea {
+            display: none;
+            width: 100%;
+            min-height: 900px;
+            border: none;
+            resize: none;
+            outline: none;
+            font-size: 15px;
+            line-height: 1.9;
+            color: var(--text-main);
+            background: transparent;
+            font-family: 'Courier Prime', monospace;
+            padding: 0;
+            white-space: pre-wrap;
+        }
+
+        #visual-editor { 
+            width: 100%; 
+            min-height: 900px; 
+            outline: none; 
+            line-height: 1.85;
+            font-size: 16px; 
+            color: var(--text-main); 
+        }
+
+        #visual-editor:focus-visible { outline: none; }
+
+        /* ── VISUAL EDITOR TYPOGRAPHY ── */
+        #visual-editor h1 { font-size: 2em; font-weight: 700; margin: 0.8em 0 0.4em; letter-spacing: -0.5px; }
+        #visual-editor h2 { font-size: 1.5em; font-weight: 600; margin: 0.8em 0 0.4em; }
+        #visual-editor p { margin-bottom: 0.8em; }
+        #visual-editor ul, #visual-editor ol { padding-left: 1.5em; margin-bottom: 0.8em; }
+        #visual-editor li { margin-bottom: 0.3em; }
+        #visual-editor a { color: var(--aura-primary); text-decoration: underline; text-underline-offset: 3px; }
+        #visual-editor strong { font-weight: 700; }
+        #visual-editor em { font-style: italic; }
+        #visual-editor code { 
+            font-family: 'Courier Prime', monospace; 
+            font-size: 0.88em;
+            background: rgba(224, 8, 246, 0.07); 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            color: var(--aura-primary); 
+        }
+        #visual-editor blockquote {
+            border-left: 3px solid var(--aura-primary);
+            padding-left: 16px;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin: 1em 0;
+        }
+
+        /* ── COLLAB MODAL ── */
         #collab-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 3000; justify-content: center; align-items: center;
-            backdrop-filter: blur(4px);
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.45);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(6px);
+            animation: fadeIn 0.2s ease;
         }
         .modal-box {
-            background: var(--bg-card); padding: 25px; border-radius: 20px; width: 90%; max-width: 400px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            background: var(--bg-card);
+            padding: 28px;
+            border-radius: var(--radius-xl);
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--shadow-xl);
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            animation: modalSlide 0.3s ease;
         }
-        .search-results {
-            background: var(--bg-main); border-radius: 10px; margin-top: 5px; 
-            max-height: 150px; overflow-y: auto; border: 1px solid var(--border); display: none;
+        .modal-box h3 { 
+            font-size: 17px; 
+            font-weight: 600; 
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .search-item { padding: 10px; cursor: pointer; border-bottom: 1px solid var(--border); font-size: 14px; }
-        .search-item:hover { background: rgba(224, 8, 246, 0.1); }
-        .collab-list { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 15px; }
-        .collab-user { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 13px; }
+        .modal-box h3::before {
+            content: '';
+            width: 4px; height: 18px;
+            background: var(--aura-gradient);
+            border-radius: 2px;
+            display: inline-block;
+        }
 
+        .search-results {
+            background: var(--bg-main);
+            border-radius: var(--radius-sm);
+            margin-top: 5px;
+            max-height: 160px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            display: none;
+            box-shadow: var(--shadow-md);
+        }
+        .search-item { 
+            padding: 10px 12px; 
+            cursor: pointer; 
+            border-bottom: 1px solid var(--border); 
+            font-size: 13px;
+            transition: var(--transition);
+        }
+        .search-item:last-child { border-bottom: none; }
+        .search-item:hover { background: rgba(224, 8, 246, 0.06); }
+        
+        .collab-list { 
+            margin-top: 20px; 
+            border-top: 1px solid var(--border); 
+            padding-top: 16px; 
+        }
+        .collab-user { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 12px; 
+            font-size: 13px;
+            padding: 8px 10px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-main);
+        }
+
+        .public-link-box {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(224, 8, 246, 0.04);
+            border-radius: var(--radius-md);
+            border: 1px dashed rgba(224, 8, 246, 0.3);
+        }
+
+        /* ── MODAL FORM ELEMENTS ── */
+        .modal-input {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            outline: none;
+            background: var(--bg-main);
+            color: var(--text-main);
+            font-size: 13px;
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+        .modal-input:focus { 
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px rgba(224, 8, 246, 0.1);
+        }
+
+        .modal-btn-close {
+            width: 100%;
+            margin-top: 16px;
+            padding: 11px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg-main);
+            color: var(--text-main);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+        }
+        .modal-btn-close:hover { border-color: var(--border-focus); }
+
+        /* ── ANIMATIONS ── */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes canvasFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes canvasFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes dropdownFade { from { opacity: 0; transform: translateY(-8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes modalSlide { from { opacity: 0; transform: translateY(20px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        /* ── CHECKBOX TOGGLE ── */
+        input[type="checkbox"] {
+            appearance: none;
+            width: 36px; height: 20px;
+            border-radius: 10px;
+            background: var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+        input[type="checkbox"]::after {
+            content: '';
+            position: absolute;
+            left: 3px; top: 3px;
+            width: 14px; height: 14px;
+            border-radius: 50%;
+            background: white;
+            transition: var(--transition);
+        }
+        input[type="checkbox"]:checked { background: var(--aura-gradient); }
+        input[type="checkbox"]:checked::after { transform: translateX(16px); }
+
+        @media (max-width: 600px) {
+            .canvas { padding: 40px 28px; }
+            .toolbar { gap: 2px; padding: 6px 8px; }
+            #dashboard-view { padding: 28px 16px; }
+            .docs-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+        }
     </style>
 </head>
 <body>
 
 <header>
     <div class="brand-group">
-        <i class="fas fa-arrow-left" id="close-editor" style="display: none; cursor:pointer;" onclick="closeEditor()"></i>
+        <div id="close-editor" onclick="closeEditor()">
+            <i class="fas fa-arrow-left"></i>
+        </div>
         <img src="images/auradocs.svg" alt="Aura" class="brand-logo" onclick="closeEditor()">
         <div id="doc-title-container">
             <input type="text" id="doc-title-input" value="Senza titolo">
@@ -169,26 +706,29 @@
                 <button id="btn-visual" class="mode-btn active" onclick="setMode('visual')">Visuale</button>
                 <button id="btn-literal" class="mode-btn" onclick="setMode('literal')">Letterale</button>
             </div>
+            <div id="save-status"><i class="fas fa-circle" style="font-size:6px;"></i> <span id="save-text">Salvato</span></div>
         </div>
     </div>
     <div class="user-section" id="user-trigger">
         <img id="user-avatar" src="images/default.png" class="avatar">
         <div class="dropdown" id="user-dropdown">
-            <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border);">
-                <p id="user-name" style="font-weight: 600;">...</p>
-                <span id="user-uid" style="font-size: 10px; color: var(--text-secondary);">...</span>
+            <div class="dropdown-header">
+                <p id="user-name">...</p>
+                <span id="user-uid">...</span>
             </div>
+            <div class="dropdown-divider"></div>
             <a href="https://apps.aurastudioitalia.it"><i class="fas fa-th-large"></i> Launchboard</a>
-            <a href="#" style="color: #ff4b2b;" onclick="auth.signOut()"><i class="fas fa-sign-out-alt"></i> Esci</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" style="color: #ef4444;" onclick="auth.signOut()"><i class="fas fa-sign-out-alt"></i> Esci</a>
         </div>
     </div>
 </header>
 
 <div id="dashboard-view">
-    <div style="display:flex; justify-content:space-between; max-width:1200px; margin: 0 auto 40px; align-items:center;">
-        <h2 style="font-weight: 600; font-size: 28px;">I tuoi Documenti</h2>
-        <button class="mode-btn active" style="padding:12px 25px; border-radius: 50px;" onclick="createNewDoc()">
-            <i class="fas fa-plus" style="margin-right: 8px;"></i> Nuovo
+    <div class="dashboard-header">
+        <h2>I tuoi Documenti</h2>
+        <button class="btn-new" onclick="createNewDoc()">
+            <i class="fas fa-plus"></i> Nuovo documento
         </button>
     </div>
     <div class="docs-grid" id="docs-grid"></div>
@@ -196,21 +736,44 @@
 
 <div id="editor-view">
     <div class="toolbar">
+        <select id="font-family" onchange="execCmd('fontName', this.value)" title="Carattere">
+            <option value="Poppins">Poppins</option>
+            <option value="Roboto">Roboto</option>
+            <option value="Open Sans">Open Sans</option>
+            <option value="Playfair Display">Elegante</option>
+            <option value="Courier Prime">Monospace</option>
+        </select>
+        <input type="number" id="font-size" min="11" max="128" value="16" onchange="changeFontSize(this.value)" title="Dimensione" style="width: 56px;">
+        
+        <div class="toolbar-divider"></div>
+        
         <button onclick="execCmd('bold')" title="Grassetto"><i class="fas fa-bold"></i></button>
         <button onclick="execCmd('italic')" title="Corsivo"><i class="fas fa-italic"></i></button>
-        <div style="width:1px; background:var(--border); margin:0 5px;"></div>
-        <button onclick="execCmd('formatBlock', 'H1')"><b>H1</b></button>
-        <button onclick="execCmd('formatBlock', 'H2')"><b>H2</b></button>
-        <button onclick="execCmd('formatBlock', 'H3')"><b>H3</b></button>
-        <div style="width:1px; background:var(--border); margin:0 5px;"></div>
+        <button onclick="execCmd('underline')" title="Sottolineato"><i class="fas fa-underline"></i></button>
+
+        <div class="toolbar-divider"></div>
+
+        <button onclick="execCmd('formatBlock', 'H1')" title="Titolo 1"><b style="font-size:11px;">H1</b></button>
+        <button onclick="execCmd('formatBlock', 'H2')" title="Titolo 2"><b style="font-size:11px;">H2</b></button>
+        <button onclick="execCmd('formatBlock', 'H3')" title="Titolo 3"><b style="font-size:11px;">H3</b></button>
+
+        <div class="toolbar-divider"></div>
+
+        <button onclick="execCmd('insertUnorderedList')" title="Lista"><i class="fas fa-list-ul"></i></button>
+        <button onclick="execCmd('insertOrderedList')" title="Lista numerata"><i class="fas fa-list-ol"></i></button>
+        <button onclick="addLink()" title="Inserisci link"><i class="fas fa-link"></i></button>
+
+        <div class="toolbar-divider"></div>
+
+        <button onclick="execCmd('justifyLeft')" title="Allinea sinistra"><i class="fas fa-align-left"></i></button>
+        <button onclick="execCmd('justifyCenter')" title="Allinea centro"><i class="fas fa-align-center"></i></button>
+        <button onclick="execCmd('justifyRight')" title="Allinea destra"><i class="fas fa-align-right"></i></button>
+
+        <div class="toolbar-divider"></div>
+
         <button onclick="openCollabModal()" title="Collaborazione"><i class="fas fa-user-plus"></i></button>
-        <div style="width:1px; background:var(--border); margin:0 5px;"></div>
-        <button onclick="execCmd('insertUnorderedList')"><i class="fas fa-list-ul"></i></button>
-        <button onclick="execCmd('insertOrderedList')"><i class="fas fa-list-ol"></i></button>
-        <button onclick="addLink()"><i class="fas fa-link"></i></button>
-        <div style="width:1px; background:var(--border); margin:0 5px;"></div>
-        <button onclick="exportDoc()"><i class="fas fa-file-export"></i></button>
-        <button id="btn-delete" onclick="deleteDoc()" style="color:#ff4b2b;"><i class="fas fa-trash"></i></button>
+        <button onclick="exportDoc()" title="Esporta"><i class="fas fa-file-export"></i></button>
+        <button id="btn-delete" onclick="deleteDoc()" title="Elimina documento" class="danger"><i class="fas fa-trash"></i></button>
     </div>
     <div class="canvas">
         <div id="visual-editor" contenteditable="true" oninput="autoSave()"></div>
@@ -218,28 +781,42 @@
     </div>
 </div>
 
+<!-- COLLAB MODAL -->
 <div id="collab-modal" onclick="closeCollabModal(event)">
     <div class="modal-box" onclick="event.stopPropagation()">
         <h3>Collaborazione</h3>
-        <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 15px;">Cerca utenti per nome e cognome</p>
         
-        <input type="text" id="user-search-input" placeholder="Cerca collaboratore..." style="width:100%; padding:12px; border-radius:10px; border:1px solid var(--border); outline:none; background:var(--bg-main); color:var(--text-main);">
-        <div id="search-results" class="search-results"></div>
-
-        <div id="role-selector" style="display:none; margin-top:15px; background:rgba(224, 8, 246, 0.05); padding:10px; border-radius:10px;">
-            <p id="selected-user-display" style="font-weight:600; font-size:13px; margin-bottom:10px;"></p>
-            <div style="display:flex; gap:10px;">
-                <select id="collab-role" style="flex:1; padding:5px; border-radius:5px; border:1px solid var(--border);">
-                    <option value="Editor">Editor</option>
-                    <option value="Visualizzatore">Visualizzatore</option>
-                </select>
-                <button onclick="addCollaborator()" style="background:var(--aura-gradient); color:white; border:none; padding:5px 15px; border-radius:5px; font-weight:600;">Aggiungi</button>
+        <div class="public-link-box">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <div>
+                    <span style="font-weight:600; font-size:13px; display:block;">Rendi pubblico</span>
+                    <span style="font-size:11px; color:var(--text-muted);">Chiunque può visualizzare con il link</span>
+                </div>
+                <input type="checkbox" id="public-check" onchange="togglePublic()">
+            </div>
+            <div id="public-url-container" style="display:none;">
+                <input type="text" id="public-url-input" readonly class="modal-input" style="font-size:11px; margin-top:4px;">
             </div>
         </div>
 
-        <div class="collab-list" id="active-collabs-list">
+        <p style="font-size: 12px; color: var(--text-secondary); margin: 18px 0 8px; font-weight: 500;">Aggiungi collaboratore</p>
+        
+        <input type="text" id="user-search-input" placeholder="Cerca per nome e cognome..." class="modal-input">
+        <div id="search-results" class="search-results"></div>
+
+        <div id="role-selector" style="display:none; margin-top:12px; background:rgba(224, 8, 246, 0.05); padding:12px; border-radius:var(--radius-sm);">
+            <p id="selected-user-display" style="font-weight:600; font-size:13px; margin-bottom:10px;"></p>
+            <div style="display:flex; gap:8px;">
+                <select id="collab-role" style="flex:1; padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--bg-main); color:var(--text-main); font-family:'Poppins',sans-serif; font-size:12px; outline:none;">
+                    <option value="Editor">Editor</option>
+                    <option value="Visualizzatore">Visualizzatore</option>
+                </select>
+                <button onclick="addCollaborator()" style="background:var(--aura-gradient); color:white; border:none; padding:7px 18px; border-radius:var(--radius-sm); font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; font-size:12px; transition:var(--transition);">Aggiungi</button>
             </div>
-        <button onclick="document.getElementById('collab-modal').style.display='none'" style="width:100%; margin-top:20px; padding:10px; border:none; border-radius:10px; background:var(--bg-main); color:var(--text-main); font-weight:600;">Chiudi</button>
+        </div>
+
+        <div class="collab-list" id="active-collabs-list"></div>
+        <button class="modal-btn-close" onclick="document.getElementById('collab-modal').style.display='none'">Chiudi</button>
     </div>
 </div>
 
@@ -262,147 +839,184 @@
     let currentMode = 'visual';
     let tempSelectedUser = null;
 
-    // INIZIALIZZAZIONE
-
     document.execCommand('defaultParagraphSeparator', false, 'p');
 
+    // ── DROPDOWN ──
     const userTrigger = document.getElementById('user-trigger');
     const userDropdown = document.getElementById('user-dropdown');
-    userTrigger.addEventListener('click', (e) => { e.stopPropagation(); userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block'; });
+    userTrigger.addEventListener('click', (e) => { 
+        e.stopPropagation(); 
+        userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block'; 
+    });
     window.addEventListener('click', () => userDropdown.style.display = 'none');
 
-    // COLLABORAZIONE: LOGICA RICERCA
-    document.getElementById('user-search-input').addEventListener('input', async (e) => {
-    const val = e.target.value.trim();
-    const resultsBox = document.getElementById('search-results');
-    if(val.length < 2) { resultsBox.style.display = 'none'; return; }
-
-    const snap = await db.collection('users').where('nome', '>=', val).where('nome', '<=', val + '\uf8ff').limit(5).get();
-    resultsBox.innerHTML = '';
-    
-    if(snap.empty) {
-        resultsBox.innerHTML = '<div class="search-item">Nessuna email o nome trovato</div>';
-    } else {
-        snap.forEach(doc => {
-            const u = doc.data();
-            const div = document.createElement('div');
-            div.className = 'search-item';
-            div.style.display = 'flex';
-            div.style.alignItems = 'center';
-            div.style.gap = '10px';
-
-            const photoUrl = u.profileImage || 'images/default.png';
-
-            div.innerHTML = `
-                <img src="${photoUrl}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; border: 1px solid var(--border);">
-                <span>${u.nome} ${u.cognome}</span>
-            `;
-            
-            div.onclick = () => {
-                tempSelectedUser = { id: doc.id, name: `${u.nome} ${u.cognome}` };
-                document.getElementById('selected-user-display').textContent = tempSelectedUser.name;
-                document.getElementById('role-selector').style.display = 'block';
-                resultsBox.style.display = 'none';
-                document.getElementById('user-search-input').value = '';
-            };
-            resultsBox.appendChild(div);
-        });
-        resultsBox.style.display = 'block'; // Mostra il box se ci sono risultati
+    // ── FONT SIZE ──
+    function changeFontSize(size) {
+        if (currentMode === 'visual') {
+            document.getElementById('visual-editor').style.fontSize = size + "px";
+            autoSave();
+        }
     }
-}); // <--- CHIUDI QUI L'EVENT LISTENER
+
+    // ── PUBBLICO ──
+    async function togglePublic() {
+        const isPublic = document.getElementById('public-check').checked;
+        const container = document.getElementById('public-url-container');
+        container.style.display = isPublic ? 'block' : 'none';
+        if (isPublic) {
+            document.getElementById('public-url-input').value = `docs.aurastudioitalia.it/document?id=${currentDocId}`;
+        }
+        await db.collection('documents').doc(currentDocId).update({ isPublic });
+    }
+
+    // ── RICERCA UTENTI ──
+    document.getElementById('user-search-input').addEventListener('input', async (e) => {
+        const val = e.target.value.trim();
+        const resultsBox = document.getElementById('search-results');
+        if (val.length < 2) { resultsBox.style.display = 'none'; return; }
+
+        const snap = await db.collection('users').where('nome', '>=', val).where('nome', '<=', val + '\uf8ff').limit(5).get();
+        resultsBox.innerHTML = '';
+        
+        if (snap.empty) {
+            resultsBox.innerHTML = '<div class="search-item" style="color:var(--text-muted);">Nessun utente trovato</div>';
+        } else {
+            snap.forEach(doc => {
+                const u = doc.data();
+                const div = document.createElement('div');
+                div.className = 'search-item';
+                div.style.cssText = 'display:flex; align-items:center; gap:10px;';
+                const photoUrl = u.profileImage || 'images/default.png';
+                div.innerHTML = `
+                    <img src="${photoUrl}" style="width:26px; height:26px; border-radius:50%; object-fit:cover; border:1px solid var(--border);">
+                    <span>${u.nome} ${u.cognome}</span>`;
+                div.onclick = () => {
+                    tempSelectedUser = { id: doc.id, name: `${u.nome} ${u.cognome}` };
+                    document.getElementById('selected-user-display').textContent = tempSelectedUser.name;
+                    document.getElementById('role-selector').style.display = 'block';
+                    resultsBox.style.display = 'none';
+                    document.getElementById('user-search-input').value = '';
+                };
+                resultsBox.appendChild(div);
+            });
+            resultsBox.style.display = 'block';
+        }
+    });
 
     async function addCollaborator() {
-        if(!tempSelectedUser || !currentDocId) return;
+        if (!tempSelectedUser || !currentDocId) return;
         const role = document.getElementById('collab-role').value;
-        const docRef = db.collection('documents').doc(currentDocId);
-        
-        await docRef.update({
+        await db.collection('documents').doc(currentDocId).update({
             [`collaborators.${tempSelectedUser.id}`]: role
         });
-        
         tempSelectedUser = null;
         document.getElementById('role-selector').style.display = 'none';
         document.getElementById('user-search-input').value = '';
         renderCollabsList();
     }
 
-  async function renderCollabsList() {
-    const doc = await db.collection('documents').doc(currentDocId).get();
-    const listDiv = document.getElementById('active-collabs-list');
-    listDiv.innerHTML = '<p style="font-weight:600; font-size:12px; margin-bottom:10px;">Collaboratori correnti:</p>';
-    
-    const collabs = doc.data().collaborators;
-    for (const [uid, role] of Object.entries(collabs)) {
-        const uDoc = await db.collection('users').doc(uid).get();
-        let name = uid;
-        let photoUrl = 'images/default.png';
+    async function renderCollabsList() {
+        const doc = await db.collection('documents').doc(currentDocId).get();
+        const listDiv = document.getElementById('active-collabs-list');
+        const data = doc.data();
+        
+        document.getElementById('public-check').checked = data.isPublic || false;
+        document.getElementById('public-url-container').style.display = data.isPublic ? 'block' : 'none';
+        if (data.isPublic) document.getElementById('public-url-input').value = `docs.aurastudioitalia.it/document?id=${currentDocId}`;
 
-        if(uDoc.exists) {
-            const uData = uDoc.data();
-            name = `${uData.nome} ${uData.cognome}`;
-            photoUrl = uData.profileImage || 'images/default.png';
+        listDiv.innerHTML = '<p style="font-weight:600; font-size:12px; margin-bottom:10px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Collaboratori</p>';
+        const collabs = data.collaborators;
+        for (const [uid, role] of Object.entries(collabs)) {
+            const uDoc = await db.collection('users').doc(uid).get();
+            let name = uid;
+            let photoUrl = 'images/default.png';
+            if (uDoc.exists) {
+                const uData = uDoc.data();
+                name = `${uData.nome} ${uData.cognome}`;
+                photoUrl = uData.profileImage || 'images/default.png';
+            }
+            listDiv.innerHTML += `
+                <div class="collab-user">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <img src="${photoUrl}" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:1.5px solid var(--aura-primary);">
+                        <span style="font-weight:500;">${name}</span>
+                    </div>
+                    <span style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; padding:3px 8px; border-radius:20px; background:rgba(224,8,246,0.1); color:var(--aura-primary);">${role}</span>
+                </div>`;
         }
-
-        listDiv.innerHTML += `
-            <div class="collab-user" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <img src="${photoUrl}" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border: 1px solid var(--aura-primary);">
-                    <span>${name}</span>
-                </div>
-                <b style="color:var(--aura-primary); font-size:11px; text-transform:uppercase;">${role}</b>
-            </div>`;
     }
-}
 
     function openCollabModal() {
         document.getElementById('collab-modal').style.display = 'flex';
         renderCollabsList();
     }
 
-    // CORE FUNCTIONS
-    function setMode(mode) {
-    currentMode = mode;
-    const textarea = document.getElementById('editor-textarea');
-    const visual = document.getElementById('visual-editor');
-    
-    document.getElementById('btn-visual').classList.toggle('active', mode === 'visual');
-    document.getElementById('btn-literal').classList.toggle('active', mode === 'literal');
-
-    if (mode === 'visual') {
-        // Da MD a Anteprima (HTML)
-        visual.innerHTML = marked.parse(textarea.value);
-        visual.style.display = 'block';
-        textarea.style.display = 'none';
-    } else {
-        // Da HTML a MD PURO
-        // Usiamo turndown per convertire l'HTML in Markdown reale
-        const mdResult = turndownService.turndown(visual.innerHTML);
-        
-        textarea.value = mdResult; // Imposta il testo con i vari #, ** ecc.
-        visual.style.display = 'none';
-        textarea.style.display = 'block';
+    // ── SAVE STATUS ──
+    function showSaveStatus(state) {
+        const el = document.getElementById('save-status');
+        const text = document.getElementById('save-text');
+        el.style.display = 'flex';
+        el.className = state;
+        if (state === 'saving') { text.textContent = 'Salvataggio...'; }
+        else if (state === 'saved') { text.textContent = 'Salvato'; setTimeout(() => { el.style.display = 'none'; }, 2500); }
     }
-}
 
-    function execCmd(cmd, val = null) { if(currentMode === 'visual') { document.execCommand(cmd, false, val); autoSave(); } }
+    // ── MODALITÀ ──
+    function setMode(mode) {
+        currentMode = mode;
+        const textarea = document.getElementById('editor-textarea');
+        const visual = document.getElementById('visual-editor');
+        document.getElementById('btn-visual').classList.toggle('active', mode === 'visual');
+        document.getElementById('btn-literal').classList.toggle('active', mode === 'literal');
+
+        if (mode === 'visual') {
+            visual.innerHTML = marked.parse(textarea.value);
+            visual.style.display = 'block';
+            textarea.style.display = 'none';
+        } else {
+            textarea.value = turndownService.turndown(visual.innerHTML);
+            visual.style.display = 'none';
+            textarea.style.display = 'block';
+        }
+    }
+
+    function execCmd(cmd, val = null) { 
+        if (currentMode === 'visual') { 
+            document.execCommand(cmd, false, val); 
+            autoSave(); 
+        } 
+    }
+
+    function addLink() {
+        if (currentMode !== 'visual') return;
+        const url = prompt('Inserisci URL:');
+        if (url) execCmd('createLink', url);
+    }
 
     function autoSave() {
+        showSaveStatus('saving');
         clearTimeout(saveTimeout);
         saveTimeout = setTimeout(() => {
-            if(!currentDocId) return;
-            const content = currentMode === 'visual' ? turndownService.turndown(document.getElementById('visual-editor').innerHTML) : document.getElementById('editor-textarea').value;
+            if (!currentDocId) return;
+            const visualDiv = document.getElementById('visual-editor');
+            const content = currentMode === 'visual' 
+                ? turndownService.turndown(visualDiv.innerHTML) 
+                : document.getElementById('editor-textarea').value;
             db.collection('documents').doc(currentDocId).update({
                 title: document.getElementById('doc-title-input').value,
-                content: content,
+                content,
+                fontSize: visualDiv.style.fontSize || "16px",
+                fontFamily: visualDiv.style.fontFamily || "Poppins",
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            }).then(() => showSaveStatus('saved'));
         }, 1000);
     }
 
+    // ── AUTH ──
     auth.onAuthStateChanged(user => {
         if (!user) return;
         db.collection('users').doc(user.uid).get().then(doc => {
-            if(doc.exists) {
+            if (doc.exists) {
                 document.getElementById('user-name').textContent = doc.data().nome + " " + doc.data().cognome;
                 document.getElementById('user-avatar').src = doc.data().profileImage || 'images/default.png';
                 document.getElementById('user-uid').textContent = user.uid;
@@ -411,72 +1025,96 @@
         loadDocs();
     });
 
-   function loadDocs() {
-    if (!auth.currentUser) return;
-
-    console.log("Caricamento documenti per UID:", auth.currentUser.uid);
-
-    db.collection('documents')
-      .where(`collaborators.${auth.currentUser.uid}`, 'in', ['Proprietario', 'Editor', 'Visualizzatore'])
-      .onSnapshot(snap => {
-          console.log("Documenti trovati:", snap.size);
-          const grid = document.getElementById('docs-grid');
-          grid.innerHTML = '';
-          
-          if (snap.empty) {
-              grid.innerHTML = '<p style="text-align:center; opacity:0.5;">Nessun documento trovato.</p>';
-          }
-
-          snap.forEach(doc => {
-              const data = doc.data();
-              const card = document.createElement('div');
-              card.className = 'doc-card';
-              card.onclick = () => openDoc(doc.id, data);
-              card.innerHTML = `
-                  <div>
-                      <h4>${data.title}</h4>
-                      <p>${data.content ? data.content.substring(0,85) : 'Nessun contenuto'}...</p>
-                  </div>
-                  <div style="font-size:10px; opacity:0.5;">Ruolo: ${data.collaborators[auth.currentUser.uid]}</div>`;
-              grid.appendChild(card);
-          });
-      }, err => {
-          console.error("Errore Firestore:", err);
-      });
-}
+    function loadDocs() {
+        if (!auth.currentUser) return;
+        db.collection('documents')
+            .where(`collaborators.${auth.currentUser.uid}`, 'in', ['Proprietario', 'Editor', 'Visualizzatore'])
+            .onSnapshot(snap => {
+                const grid = document.getElementById('docs-grid');
+                grid.innerHTML = '';
+                if (snap.empty) {
+                    grid.innerHTML = `<div class="empty-state"><i class="fas fa-file-alt"></i><p>Nessun documento trovato.<br>Creane uno nuovo!</p></div>`;
+                    return;
+                }
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    const card = document.createElement('div');
+                    card.className = 'doc-card';
+                    card.onclick = () => openDoc(doc.id, data);
+                    card.innerHTML = `
+                        <div>
+                            <div class="doc-card-icon"><i class="fas fa-file-alt"></i></div>
+                            <h4>${data.title || 'Senza titolo'}</h4>
+                            <p>${data.content ? data.content.substring(0, 90) : 'Nessun contenuto'}...</p>
+                        </div>
+                        <div class="doc-card-footer">
+                            <span class="doc-role-badge">${data.collaborators[auth.currentUser.uid]}</span>
+                        </div>`;
+                    grid.appendChild(card);
+                });
+            });
+    }
 
     function openDoc(id, data) {
         currentDocId = id;
         const role = data.collaborators[auth.currentUser.uid];
         const canEdit = role === 'Proprietario' || role === 'Editor';
+        const visual = document.getElementById('visual-editor');
         
-        document.getElementById('visual-editor').contentEditable = canEdit;
+        visual.contentEditable = canEdit;
         document.getElementById('doc-title-input').disabled = !canEdit;
-        document.getElementById('btn-delete').style.display = (role === 'Proprietario') ? 'block' : 'none';
+        document.getElementById('btn-delete').style.display = (role === 'Proprietario') ? 'flex' : 'none';
 
         document.getElementById('dashboard-view').style.display = 'none';
         document.getElementById('editor-view').style.display = 'flex';
         document.getElementById('doc-title-container').style.display = 'flex';
-        document.getElementById('close-editor').style.display = 'block';
-        document.getElementById('doc-title-input').value = data.title;
-        document.getElementById('editor-textarea').value = data.content;
-        document.getElementById('visual-editor').innerHTML = marked.parse(data.content || "");
+        document.getElementById('close-editor').style.display = 'flex';
+        
+        document.getElementById('doc-title-input').value = data.title || 'Senza titolo';
+        document.getElementById('editor-textarea').value = data.content || '';
+        
+        visual.style.fontSize = data.fontSize || "16px";
+        visual.style.fontFamily = data.fontFamily || "Poppins";
+        document.getElementById('font-size').value = parseInt(data.fontSize) || 16;
+        document.getElementById('font-family').value = data.fontFamily || "Poppins";
+        
+        visual.innerHTML = marked.parse(data.content || "");
         setMode('visual');
     }
 
     async function createNewDoc() {
-        const ref = await db.collection('documents').add({
+        const docRef = await db.collection('documents').add({
             title: "Senza titolo",
             content: "",
+            fontSize: "16px",
+            fontFamily: "Poppins",
+            isPublic: false,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
             collaborators: { [auth.currentUser.uid]: "Proprietario" }
         });
+        // Auto-apri il nuovo documento
+        const doc = await docRef.get();
+        openDoc(docRef.id, doc.data());
     }
 
     function closeEditor() { location.reload(); }
+    function closeCollabModal(e) { document.getElementById('collab-modal').style.display = 'none'; }
+    function exportDoc() {
+        const content = document.getElementById('visual-editor').innerHTML;
+        const blob = new Blob([content], { type: 'text/html' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = (document.getElementById('doc-title-input').value || 'documento') + '.html';
+        a.click();
+    }
 
-    async function deleteDoc() { if(confirm("Eliminare definitivamente?")) { await db.collection('documents').doc(currentDocId).delete(); closeEditor(); } }
-    
+    async function deleteDoc() { 
+        if (confirm("Eliminare definitivamente questo documento?")) { 
+            await db.collection('documents').doc(currentDocId).delete(); 
+            closeEditor(); 
+        } 
+    }
+
     document.getElementById('doc-title-input').addEventListener('input', autoSave);
 </script>
 </body>

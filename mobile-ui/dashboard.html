@@ -70,7 +70,7 @@
             touch-action: manipulation;
         }
 
-        /* \u2500\u2500 HEADER \u2500\u2500 */
+        /* ── HEADER ── */
         header {
             display: flex;
             justify-content: space-between;
@@ -154,7 +154,7 @@
             box-shadow: 0 0 0 3px rgba(224, 8, 246, 0.08);
         }
 
-        /* \u2500\u2500 MODE SWITCH (header, solo desktop) \u2500\u2500 */
+        /* ── MODE SWITCH (header, solo desktop) ── */
         .mode-switch {
             display: flex;
             background: var(--bg-main);
@@ -184,7 +184,7 @@
             box-shadow: 0 2px 10px rgba(224, 8, 246, 0.35); 
         }
 
-        /* \u2500\u2500 SAVE STATUS \u2500\u2500 */
+        /* ── SAVE STATUS ── */
         #save-status {
             font-size: 10px;
             color: var(--text-muted);
@@ -202,7 +202,7 @@
         #save-status.saving { color: var(--aura-primary); }
         #save-status.saved { color: #22c55e; }
 
-        /* \u2500\u2500 USER SECTION \u2500\u2500 */
+        /* ── USER SECTION ── */
         .user-section { position: relative; cursor: pointer; z-index: 1001; flex-shrink: 0; }
         .avatar { 
             width: 34px; height: 34px; 
@@ -248,13 +248,13 @@
         .dropdown a i { width: 16px; text-align: center; color: var(--text-secondary); }
         .dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
 
-        /* \u2500\u2500 LAYOUT ROOT \u2500\u2500 */
+        /* ── LAYOUT ROOT ── */
         #app-root {
             height: 100%;
             padding-top: var(--header-h);
         }
 
-        /* \u2500\u2500 DASHBOARD \u2500\u2500 */
+        /* ── DASHBOARD ── */
         #dashboard-view { 
             padding: 24px 16px 80px;
             overflow-y: auto; 
@@ -396,7 +396,7 @@
         .empty-state i { font-size: 40px; margin-bottom: 14px; opacity: 0.3; display: block; }
         .empty-state p { font-size: 14px; }
 
-        /* \u2500\u2500 EDITOR VIEW \u2500\u2500 */
+        /* ── EDITOR VIEW ── */
         #editor-view { 
             display: none; 
             height: 100%;
@@ -405,7 +405,7 @@
             overflow: hidden;
         }
 
-        /* \u2500\u2500 TOOLBAR (sticky, scrollable) \u2500\u2500 */
+        /* ── TOOLBAR (sticky, scrollable) ── */
         .toolbar-wrapper {
             position: sticky;
             top: 0;
@@ -416,7 +416,7 @@
             animation: slideDown 0.4s ease;
         }
 
-        /* Mode switch row \u2014 mobile only */
+        /* Mode switch row — mobile only */
         .toolbar-mode-row {
             display: none;
             align-items: center;
@@ -508,7 +508,7 @@
             flex-shrink: 0;
         }
 
-        /* \u2500\u2500 EDITOR SCROLL AREA \u2500\u2500 */
+        /* ── EDITOR SCROLL AREA ── */
         .editor-scroll {
             flex: 1;
             overflow-y: auto;
@@ -519,7 +519,7 @@
             align-items: center;
         }
 
-        /* \u2500\u2500 CANVAS \u2500\u2500 */
+        /* ── CANVAS ── */
         .canvas {
             width: 100%;
             max-width: 850px;
@@ -558,7 +558,7 @@
         }
         #visual-editor:focus-visible { outline: none; }
 
-        /* \u2500\u2500 VISUAL EDITOR TYPOGRAPHY \u2500\u2500 */
+        /* ── VISUAL EDITOR TYPOGRAPHY ── */
         #visual-editor h1 { font-size: 1.7em; font-weight: 700; margin: 0.8em 0 0.4em; letter-spacing: -0.5px; }
         #visual-editor h2 { font-size: 1.3em; font-weight: 600; margin: 0.8em 0 0.4em; }
         #visual-editor p { margin-bottom: 0.8em; }
@@ -583,7 +583,7 @@
             margin: 1em 0;
         }
 
-        /* \u2500\u2500 COLLAB MODAL \u2500\u2500 */
+        /* ── COLLAB MODAL ── */
         #collab-modal {
             display: none;
             position: fixed;
@@ -682,7 +682,7 @@
             border: 1px dashed rgba(224, 8, 246, 0.3);
         }
 
-        /* \u2500\u2500 MODAL FORM ELEMENTS \u2500\u2500 */
+        /* ── MODAL FORM ELEMENTS ── */
         .modal-input {
             width: 100%;
             padding: 11px 14px;
@@ -716,7 +716,7 @@
         }
         .modal-btn-close:active { border-color: var(--border-focus); }
 
-        /* \u2500\u2500 ANIMATIONS \u2500\u2500 */
+        /* ── ANIMATIONS ── */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
@@ -724,12 +724,12 @@
         @keyframes dropdownFade { from { opacity: 0; transform: translateY(-8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes sheetSlide { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* \u2500\u2500 SCROLLBAR \u2500\u2500 */
+        /* ── SCROLLBAR ── */
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
 
-        /* \u2500\u2500 CHECKBOX TOGGLE \u2500\u2500 */
+        /* ── CHECKBOX TOGGLE ── */
         input[type="checkbox"] {
             appearance: none;
             -webkit-appearance: none;
@@ -753,7 +753,7 @@
         input[type="checkbox"]:checked { background: var(--aura-gradient); }
         input[type="checkbox"]:checked::after { transform: translateX(16px); }
 
-        /* \u2500\u2500 DESKTOP OVERRIDES \u2500\u2500 */
+        /* ── DESKTOP OVERRIDES ── */
         @media (min-width: 640px) {
             header { padding: 0 24px; height: 58px; --header-h: 58px; }
             .brand-logo { width: 36px; height: 36px; }
@@ -801,7 +801,7 @@
         }
         @keyframes modalSlide { from { opacity: 0; transform: translateY(20px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        /* \u2500\u2500 MOBILE: hide mode switch in header, show in toolbar row \u2500\u2500 */
+        /* ── MOBILE: hide mode switch in header, show in toolbar row ── */
         @media (max-width: 639px) {
             .mode-switch { display: none; }
             .toolbar-mode-row { display: flex; }
@@ -886,4 +886,418 @@
 
             <div class="toolbar">
                 <select id="font-family" onchange="execCmd('fontName', this.value)" title="Carattere">
-                    <option value="P
+                    <option value="Poppins">Poppins</option>
+                    <option value="Roboto">Roboto</option>
+                    <option value="Open Sans">Open Sans</option>
+                    <option value="Playfair Display">Elegante</option>
+                    <option value="Courier Prime">Monospace</option>
+                </select>
+                <input type="number" id="font-size" min="11" max="128" value="16" onchange="changeFontSize(this.value)" title="Dimensione">
+                
+                <div class="toolbar-divider"></div>
+                
+                <button onclick="execCmd('bold')" title="Grassetto"><i class="fas fa-bold"></i></button>
+                <button onclick="execCmd('italic')" title="Corsivo"><i class="fas fa-italic"></i></button>
+                <button onclick="execCmd('underline')" title="Sottolineato"><i class="fas fa-underline"></i></button>
+
+                <div class="toolbar-divider"></div>
+
+                <button onclick="execCmd('formatBlock', 'H1')" title="Titolo 1"><b style="font-size:10px;">H1</b></button>
+                <button onclick="execCmd('formatBlock', 'H2')" title="Titolo 2"><b style="font-size:10px;">H2</b></button>
+                <button onclick="execCmd('formatBlock', 'H3')" title="Titolo 3"><b style="font-size:10px;">H3</b></button>
+
+                <div class="toolbar-divider"></div>
+
+                <button onclick="execCmd('insertUnorderedList')" title="Lista"><i class="fas fa-list-ul"></i></button>
+                <button onclick="execCmd('insertOrderedList')" title="Lista numerata"><i class="fas fa-list-ol"></i></button>
+                <button onclick="addLink()" title="Inserisci link"><i class="fas fa-link"></i></button>
+
+                <div class="toolbar-divider"></div>
+
+                <button onclick="execCmd('justifyLeft')" title="Allinea sinistra"><i class="fas fa-align-left"></i></button>
+                <button onclick="execCmd('justifyCenter')" title="Allinea centro"><i class="fas fa-align-center"></i></button>
+                <button onclick="execCmd('justifyRight')" title="Allinea destra"><i class="fas fa-align-right"></i></button>
+
+                <div class="toolbar-divider"></div>
+
+                <button onclick="openCollabModal()" title="Collaborazione"><i class="fas fa-user-plus"></i></button>
+                <button onclick="exportDoc()" title="Esporta"><i class="fas fa-file-export"></i></button>
+                <button id="btn-delete" onclick="deleteDoc()" title="Elimina documento" class="danger"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>
+
+        <!-- Scrollable editor area -->
+        <div class="editor-scroll">
+            <div class="canvas">
+                <div id="visual-editor" contenteditable="true" oninput="autoSave()"></div>
+                <textarea id="editor-textarea" oninput="autoSave()"></textarea>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- COLLAB MODAL (bottom sheet on mobile, centered on desktop) -->
+<div id="collab-modal" onclick="closeCollabModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <h3>Collaborazione</h3>
+        
+        <div class="public-link-box">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap:12px;">
+                <div>
+                    <span style="font-weight:600; font-size:13px; display:block;">Rendi pubblico</span>
+                    <span style="font-size:11px; color:var(--text-muted);">Chiunque può visualizzare con il link</span>
+                </div>
+                <input type="checkbox" id="public-check" onchange="togglePublic()">
+            </div>
+            <div id="public-url-container" style="display:none;">
+                <input type="text" id="public-url-input" readonly class="modal-input" style="font-size:11px; margin-top:4px;">
+            </div>
+        </div>
+
+        <p style="font-size: 12px; color: var(--text-secondary); margin: 16px 0 8px; font-weight: 500;">Aggiungi collaboratore</p>
+        
+        <input type="text" id="user-search-input" placeholder="Cerca per nome e cognome..." class="modal-input">
+        <div id="search-results" class="search-results"></div>
+
+        <div id="role-selector" style="display:none; margin-top:12px; background:rgba(224, 8, 246, 0.05); padding:12px; border-radius:var(--radius-sm);">
+            <p id="selected-user-display" style="font-weight:600; font-size:13px; margin-bottom:10px;"></p>
+            <div style="display:flex; gap:8px;">
+                <select id="collab-role" style="flex:1; padding:9px 10px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--bg-main); color:var(--text-main); font-family:'Poppins',sans-serif; font-size:13px; outline:none;">
+                    <option value="Editor">Editor</option>
+                    <option value="Visualizzatore">Visualizzatore</option>
+                </select>
+                <button onclick="addCollaborator()" style="background:var(--aura-gradient); color:white; border:none; padding:9px 18px; border-radius:var(--radius-sm); font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; font-size:13px; transition:var(--transition);">Aggiungi</button>
+            </div>
+        </div>
+
+        <div class="collab-list" id="active-collabs-list"></div>
+        <button class="modal-btn-close" onclick="document.getElementById('collab-modal').style.display='none'">Chiudi</button>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDsrHAtIh5bsYDHa1wz0LMcmciChAoRikU",
+        authDomain: "myauraid-f03c6.firebaseapp.com",
+        projectId: "myauraid-f03c6",
+        storageBucket: "myauraid-f03c6.appspot.com",
+        messagingSenderId: "190478237725",
+        appId: "1:190478237725:web:0d39907473f511b85a06f4"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const turndownService = new TurndownService();
+
+    let currentDocId = null;
+    let saveTimeout = null;
+    let currentMode = 'visual';
+    let tempSelectedUser = null;
+
+    document.execCommand('defaultParagraphSeparator', false, 'p');
+
+    // ── DROPDOWN ──
+    const userTrigger = document.getElementById('user-trigger');
+    const userDropdown = document.getElementById('user-dropdown');
+    userTrigger.addEventListener('click', (e) => { 
+        e.stopPropagation(); 
+        userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block'; 
+    });
+    window.addEventListener('click', () => userDropdown.style.display = 'none');
+
+    // ── FONT SIZE ──
+    function changeFontSize(size) {
+        if (currentMode === 'visual') {
+            document.getElementById('visual-editor').style.fontSize = size + "px";
+            autoSave();
+        }
+    }
+
+    // ── PUBBLICO ──
+    async function togglePublic() {
+        const isPublic = document.getElementById('public-check').checked;
+        const container = document.getElementById('public-url-container');
+        container.style.display = isPublic ? 'block' : 'none';
+        if (isPublic) {
+            document.getElementById('public-url-input').value = `docs.aurastudioitalia.it/document?id=${currentDocId}`;
+        }
+        await db.collection('documents').doc(currentDocId).update({ isPublic });
+    }
+
+    // ── RICERCA UTENTI ──
+    document.getElementById('user-search-input').addEventListener('input', async (e) => {
+        const val = e.target.value.trim();
+        const resultsBox = document.getElementById('search-results');
+        if (val.length < 2) { resultsBox.style.display = 'none'; return; }
+
+        const snap = await db.collection('users').where('nome', '>=', val).where('nome', '<=', val + '\uf8ff').limit(5).get();
+        resultsBox.innerHTML = '';
+        
+        if (snap.empty) {
+            resultsBox.innerHTML = '<div class="search-item" style="color:var(--text-muted);">Nessun utente trovato</div>';
+        } else {
+            snap.forEach(doc => {
+                const u = doc.data();
+                const div = document.createElement('div');
+                div.className = 'search-item';
+                div.style.cssText = 'display:flex; align-items:center; gap:10px;';
+                const photoUrl = u.profileImage || 'images/default.png';
+                div.innerHTML = `
+                    <img src="${photoUrl}" style="width:26px; height:26px; border-radius:50%; object-fit:cover; border:1px solid var(--border);">
+                    <span>${u.nome} ${u.cognome}</span>`;
+                div.onclick = () => {
+                    tempSelectedUser = { id: doc.id, name: `${u.nome} ${u.cognome}` };
+                    document.getElementById('selected-user-display').textContent = tempSelectedUser.name;
+                    document.getElementById('role-selector').style.display = 'block';
+                    resultsBox.style.display = 'none';
+                    document.getElementById('user-search-input').value = '';
+                };
+                resultsBox.appendChild(div);
+            });
+            resultsBox.style.display = 'block';
+        }
+    });
+
+    async function addCollaborator() {
+        if (!tempSelectedUser || !currentDocId) return;
+        const role = document.getElementById('collab-role').value;
+        await db.collection('documents').doc(currentDocId).update({
+            [`collaborators.${tempSelectedUser.id}`]: role
+        });
+        tempSelectedUser = null;
+        document.getElementById('role-selector').style.display = 'none';
+        document.getElementById('user-search-input').value = '';
+        renderCollabsList();
+    }
+
+    async function renderCollabsList() {
+        const doc = await db.collection('documents').doc(currentDocId).get();
+        const listDiv = document.getElementById('active-collabs-list');
+        const data = doc.data();
+        
+        document.getElementById('public-check').checked = data.isPublic || false;
+        document.getElementById('public-url-container').style.display = data.isPublic ? 'block' : 'none';
+        if (data.isPublic) document.getElementById('public-url-input').value = `docs.aurastudioitalia.it/document?id=${currentDocId}`;
+
+        listDiv.innerHTML = '<p style="font-weight:600; font-size:12px; margin-bottom:10px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Collaboratori</p>';
+        const collabs = data.collaborators;
+        for (const [uid, role] of Object.entries(collabs)) {
+            const uDoc = await db.collection('users').doc(uid).get();
+            let name = uid;
+            let photoUrl = 'images/default.png';
+            if (uDoc.exists) {
+                const uData = uDoc.data();
+                name = `${uData.nome} ${uData.cognome}`;
+                photoUrl = uData.profileImage || 'images/default.png';
+            }
+            listDiv.innerHTML += `
+                <div class="collab-user">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <img src="${photoUrl}" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:1.5px solid var(--aura-primary);">
+                        <span style="font-weight:500;">${name}</span>
+                    </div>
+                    <span style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; padding:3px 8px; border-radius:20px; background:rgba(224,8,246,0.1); color:var(--aura-primary);">${role}</span>
+                </div>`;
+        }
+    }
+
+    function openCollabModal() {
+        document.getElementById('collab-modal').style.display = 'flex';
+        renderCollabsList();
+    }
+
+    // ── SAVE STATUS ── (aggiorna sia desktop sia mobile)
+    function showSaveStatus(state) {
+        // Desktop
+        const el = document.getElementById('save-status');
+        const text = document.getElementById('save-text');
+        // Mobile
+        const elM = document.getElementById('save-status-mobile');
+        const textM = document.getElementById('save-text-mobile');
+
+        [el, elM].forEach((e, i) => {
+            if (!e) return;
+            const t = i === 0 ? text : textM;
+            e.className = state;
+            if (state === 'saving') {
+                e.style.display = 'flex';
+                t.textContent = 'Salvataggio...';
+            } else if (state === 'saved') {
+                e.style.display = 'flex';
+                t.textContent = 'Salvato';
+                setTimeout(() => { e.style.display = 'none'; }, 2500);
+            }
+        });
+
+        // desktop-only show
+        if (window.innerWidth >= 640) {
+            el.style.display = state === 'saving' || state === 'saved' ? 'flex' : 'none';
+        }
+    }
+
+    // ── MODALITÀ ── (sincronizza entrambi i set di bottoni)
+    function setMode(mode) {
+        currentMode = mode;
+        const textarea = document.getElementById('editor-textarea');
+        const visual = document.getElementById('visual-editor');
+
+        // update all mode buttons
+        ['btn-visual','btn-literal','btn-visual-m','btn-literal-m'].forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.classList.toggle('active', 
+                (mode === 'visual' && id.includes('visual')) ||
+                (mode === 'literal' && id.includes('literal'))
+            );
+        });
+
+        if (mode === 'visual') {
+            visual.innerHTML = marked.parse(textarea.value);
+            visual.style.display = 'block';
+            textarea.style.display = 'none';
+        } else {
+            textarea.value = turndownService.turndown(visual.innerHTML);
+            visual.style.display = 'none';
+            textarea.style.display = 'block';
+        }
+    }
+
+    function execCmd(cmd, val = null) { 
+        if (currentMode === 'visual') { 
+            document.execCommand(cmd, false, val); 
+            autoSave(); 
+        } 
+    }
+
+    function addLink() {
+        if (currentMode !== 'visual') return;
+        const url = prompt('Inserisci URL:');
+        if (url) execCmd('createLink', url);
+    }
+
+    function autoSave() {
+        showSaveStatus('saving');
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => {
+            if (!currentDocId) return;
+            const visualDiv = document.getElementById('visual-editor');
+            const content = currentMode === 'visual' 
+                ? turndownService.turndown(visualDiv.innerHTML) 
+                : document.getElementById('editor-textarea').value;
+            db.collection('documents').doc(currentDocId).update({
+                title: document.getElementById('doc-title-input').value,
+                content,
+                fontSize: visualDiv.style.fontSize || "16px",
+                fontFamily: visualDiv.style.fontFamily || "Poppins",
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => showSaveStatus('saved'));
+        }, 1000);
+    }
+
+    // ── AUTH ──
+    auth.onAuthStateChanged(user => {
+        if (!user) return;
+        db.collection('users').doc(user.uid).get().then(doc => {
+            if (doc.exists) {
+                document.getElementById('user-name').textContent = doc.data().nome + " " + doc.data().cognome;
+                document.getElementById('user-avatar').src = doc.data().profileImage || 'images/default.png';
+                document.getElementById('user-uid').textContent = user.uid;
+            }
+        });
+        loadDocs();
+    });
+
+    function loadDocs() {
+        if (!auth.currentUser) return;
+        db.collection('documents')
+            .where(`collaborators.${auth.currentUser.uid}`, 'in', ['Proprietario', 'Editor', 'Visualizzatore'])
+            .onSnapshot(snap => {
+                const grid = document.getElementById('docs-grid');
+                grid.innerHTML = '';
+                if (snap.empty) {
+                    grid.innerHTML = `<div class="empty-state"><i class="fas fa-file-alt"></i><p>Nessun documento trovato.<br>Creane uno nuovo!</p></div>`;
+                    return;
+                }
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    const card = document.createElement('div');
+                    card.className = 'doc-card';
+                    card.onclick = () => openDoc(doc.id, data);
+                    card.innerHTML = `
+                        <div>
+                            <div class="doc-card-icon"><i class="fas fa-file-alt"></i></div>
+                            <h4>${data.title || 'Senza titolo'}</h4>
+                            <p>${data.content ? data.content.substring(0, 90) : 'Nessun contenuto'}...</p>
+                        </div>
+                        <div class="doc-card-footer">
+                            <span class="doc-role-badge">${data.collaborators[auth.currentUser.uid]}</span>
+                        </div>`;
+                    grid.appendChild(card);
+                });
+            });
+    }
+
+    function openDoc(id, data) {
+        currentDocId = id;
+        const role = data.collaborators[auth.currentUser.uid];
+        const canEdit = role === 'Proprietario' || role === 'Editor';
+        const visual = document.getElementById('visual-editor');
+        
+        visual.contentEditable = canEdit;
+        document.getElementById('doc-title-input').disabled = !canEdit;
+        document.getElementById('btn-delete').style.display = (role === 'Proprietario') ? 'flex' : 'none';
+
+        document.getElementById('dashboard-view').style.display = 'none';
+        document.getElementById('editor-view').style.display = 'flex';
+        document.getElementById('doc-title-container').style.display = 'flex';
+        document.getElementById('close-editor').style.display = 'flex';
+        
+        document.getElementById('doc-title-input').value = data.title || 'Senza titolo';
+        document.getElementById('editor-textarea').value = data.content || '';
+        
+        visual.style.fontSize = data.fontSize || "16px";
+        visual.style.fontFamily = data.fontFamily || "Poppins";
+        document.getElementById('font-size').value = parseInt(data.fontSize) || 16;
+        document.getElementById('font-family').value = data.fontFamily || "Poppins";
+        
+        visual.innerHTML = marked.parse(data.content || "");
+        setMode('visual');
+    }
+
+    async function createNewDoc() {
+        const docRef = await db.collection('documents').add({
+            title: "Senza titolo",
+            content: "",
+            fontSize: "16px",
+            fontFamily: "Poppins",
+            isPublic: false,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            collaborators: { [auth.currentUser.uid]: "Proprietario" }
+        });
+        const doc = await docRef.get();
+        openDoc(docRef.id, doc.data());
+    }
+
+    function closeEditor() { location.reload(); }
+    function closeCollabModal(e) { document.getElementById('collab-modal').style.display = 'none'; }
+    function exportDoc() {
+        const content = document.getElementById('visual-editor').innerHTML;
+        const blob = new Blob([content], { type: 'text/html' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = (document.getElementById('doc-title-input').value || 'documento') + '.html';
+        a.click();
+    }
+
+    async function deleteDoc() { 
+        if (confirm("Eliminare definitivamente questo documento?")) { 
+            await db.collection('documents').doc(currentDocId).delete(); 
+            closeEditor(); 
+        } 
+    }
+
+    document.getElementById('doc-title-input').addEventListener('input', autoSave);
+</script>
+</body>
+</html>

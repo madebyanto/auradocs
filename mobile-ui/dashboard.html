@@ -2,9 +2,9 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Aura Docs</title>
-    <link rel="icon" href="/images/auradocs.svg" type="image/png">
+    <link rel="icon" href="images/auradocs.svg" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto:wght@300;400;700&family=Open+Sans:wght@300;400;600&family=Playfair+Display:wght@400;700&family=Courier+Prime&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -38,9 +38,8 @@
             --radius-xl: 24px;
             --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-slow: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            --header-height: 58px;
-            --safe-top: env(safe-area-inset-top, 0px);
-            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --header-h: 54px;
+            --toolbar-h: 52px;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -60,24 +59,15 @@
             }
         }
 
-        * { 
-            margin: 0; padding: 0; box-sizing: border-box; 
-            font-family: 'Poppins', sans-serif; 
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         
-        html {
+        html, body { 
             height: 100%;
-            height: -webkit-fill-available;
-        }
-
-        body { 
+            overflow: hidden;
             background-color: var(--bg-main); 
             color: var(--text-main); 
-            height: 100vh;
-            height: -webkit-fill-available;
-            overflow: hidden;
-            padding-top: var(--safe-top);
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         /* \u2500\u2500 HEADER \u2500\u2500 */
@@ -86,26 +76,25 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 16px;
-            height: var(--header-height);
+            height: var(--header-h);
             background: var(--bg-card);
             border-bottom: 1px solid var(--border);
             z-index: 1000;
-            position: relative;
+            position: fixed;
+            top: 0; left: 0; right: 0;
             box-shadow: var(--shadow-sm);
-            flex-shrink: 0;
         }
 
         .brand-group { 
             display: flex; 
             align-items: center; 
-            gap: 8px;
-            flex: 1;
+            gap: 10px;
             min-width: 0;
+            flex: 1;
         }
 
         #close-editor {
-            width: 36px; height: 36px;
-            min-width: 36px;
+            width: 34px; height: 34px;
             border-radius: var(--radius-sm);
             display: none;
             align-items: center;
@@ -116,7 +105,7 @@
             border: 1px solid var(--border);
             background: transparent;
             font-size: 13px;
-            touch-action: manipulation;
+            flex-shrink: 0;
         }
         #close-editor:hover { 
             background: rgba(224, 8, 246, 0.08); 
@@ -127,11 +116,10 @@
         .brand-logo { 
             width: 32px; 
             height: 32px;
-            min-width: 32px;
             cursor: pointer; 
             transition: var(--transition); 
             border-radius: 10px;
-            touch-action: manipulation;
+            flex-shrink: 0;
         }
         .brand-logo:hover { transform: scale(1.05); }
 
@@ -139,13 +127,13 @@
             display: none; 
             align-items: center; 
             gap: 6px;
-            flex: 1;
             min-width: 0;
+            flex: 1;
             animation: slideIn 0.3s ease; 
         }
 
         #doc-title-input {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             border: 1px solid transparent;
             padding: 5px 8px;
@@ -166,19 +154,18 @@
             box-shadow: 0 0 0 3px rgba(224, 8, 246, 0.08);
         }
 
-        /* \u2500\u2500 MODE SWITCH \u2500\u2500 */
+        /* \u2500\u2500 MODE SWITCH (header, solo desktop) \u2500\u2500 */
         .mode-switch {
             display: flex;
             background: var(--bg-main);
             border-radius: 20px;
             padding: 3px;
             border: 1px solid var(--border);
-            margin: 0 4px;
             gap: 2px;
             flex-shrink: 0;
         }
         .mode-btn {
-            padding: 4px 10px;
+            padding: 4px 12px;
             border-radius: 16px;
             font-size: 10px;
             font-weight: 600;
@@ -189,7 +176,6 @@
             transition: var(--transition);
             text-transform: uppercase;
             letter-spacing: 0.6px;
-            touch-action: manipulation;
             white-space: nowrap;
         }
         .mode-btn.active { 
@@ -200,12 +186,12 @@
 
         /* \u2500\u2500 SAVE STATUS \u2500\u2500 */
         #save-status {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
             display: none;
             align-items: center;
-            gap: 5px;
-            padding: 4px 8px;
+            gap: 4px;
+            padding: 3px 8px;
             border-radius: 20px;
             background: var(--bg-main);
             border: 1px solid var(--border);
@@ -226,11 +212,12 @@
             object-fit: cover;
             display: block;
         }
-        .avatar:hover { box-shadow: var(--aura-glow); transform: scale(1.05); }
         
         .dropdown { 
             display: none;
-            position: absolute; top: 50px; right: 0; 
+            position: fixed;
+            top: calc(var(--header-h) + 4px);
+            right: 12px;
             width: 240px;
             background: var(--bg-card);
             border-radius: var(--radius-lg);
@@ -241,12 +228,9 @@
             animation: dropdownFade 0.2s ease;
         }
 
-        .dropdown-header {
-            padding: 12px;
-            margin-bottom: 4px;
-        }
-        .dropdown-header p { font-weight: 600; font-size: 14px; }
-        .dropdown-header span { font-size: 10px; color: var(--text-muted); }
+        .dropdown-header { padding: 10px; margin-bottom: 4px; }
+        .dropdown-header p { font-weight: 600; font-size: 13px; }
+        .dropdown-header span { font-size: 10px; color: var(--text-muted); word-break: break-all; }
 
         .dropdown a {
             display: flex;
@@ -259,17 +243,22 @@
             font-size: 13px;
             font-weight: 500;
             transition: var(--transition);
-            min-height: 44px;
         }
         .dropdown a:hover { background: var(--bg-main); }
         .dropdown a i { width: 16px; text-align: center; color: var(--text-secondary); }
         .dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
 
+        /* \u2500\u2500 LAYOUT ROOT \u2500\u2500 */
+        #app-root {
+            height: 100%;
+            padding-top: var(--header-h);
+        }
+
         /* \u2500\u2500 DASHBOARD \u2500\u2500 */
         #dashboard-view { 
-            padding: 28px 16px;
+            padding: 24px 16px 80px;
             overflow-y: auto; 
-            height: calc(100vh - var(--header-height) - var(--safe-top) - var(--safe-bottom));
+            height: 100%;
             animation: fadeIn 0.4s ease; 
             -webkit-overflow-scrolling: touch;
         }
@@ -280,7 +269,6 @@
             align-items: center;
             max-width: 1200px;
             margin: 0 auto 24px;
-            gap: 12px;
         }
 
         .dashboard-header h2 { 
@@ -292,8 +280,8 @@
         .btn-new {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
+            gap: 7px;
+            padding: 9px 18px;
             border-radius: 50px;
             font-size: 13px;
             font-weight: 600;
@@ -304,55 +292,51 @@
             transition: var(--transition);
             box-shadow: 0 4px 16px rgba(224, 8, 246, 0.3);
             white-space: nowrap;
-            min-height: 44px;
-            touch-action: manipulation;
+            flex-shrink: 0;
         }
-        .btn-new:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 8px 24px rgba(224, 8, 246, 0.4);
-        }
-        .btn-new:active { transform: translateY(0); opacity: 0.9; }
+        .btn-new:active { transform: scale(0.97); }
 
         .docs-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
             gap: 14px; 
             max-width: 1200px; 
-            margin: 0 auto;
-            padding-bottom: calc(20px + var(--safe-bottom));
+            margin: 0 auto; 
         }
         
         .doc-card { 
             background: var(--bg-card); 
             border: 1px solid var(--border); 
             border-radius: var(--radius-lg); 
-            padding: 18px; 
+            padding: 18px 16px; 
             cursor: pointer; 
-            height: 170px; 
+            min-height: 160px;
             transition: var(--transition-slow);
             display: flex; 
             flex-direction: column; 
             justify-content: space-between;
             position: relative; 
             overflow: hidden;
-            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
         }
         .doc-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0;
-            right: 0; height: 3px;
+            top: 0; left: 0; right: 0; height: 3px;
             background: var(--aura-gradient);
             opacity: 0;
             transition: var(--transition);
         }
-        .doc-card:hover { 
-            border-color: rgba(224, 8, 246, 0.3); 
-            transform: translateY(-4px); 
-            box-shadow: var(--shadow-lg);
+        .doc-card:active { transform: scale(0.97); box-shadow: var(--shadow-md); }
+        @media (hover: hover) {
+            .doc-card:hover { 
+                border-color: rgba(224, 8, 246, 0.3); 
+                transform: translateY(-4px); 
+                box-shadow: var(--shadow-lg);
+            }
+            .doc-card:hover::before { opacity: 1; }
         }
-        .doc-card:active { transform: translateY(-2px); }
-        .doc-card:hover::before { opacity: 1; }
 
         .doc-card-icon {
             width: 34px; height: 34px;
@@ -364,10 +348,11 @@
             color: var(--aura-primary);
             font-size: 14px;
             margin-bottom: 10px;
+            flex-shrink: 0;
         }
 
         .doc-card h4 { 
-            font-size: 14px; 
+            font-size: 13px; 
             font-weight: 600;
             margin-bottom: 5px; 
             color: var(--text-main);
@@ -378,16 +363,18 @@
         .doc-card p { 
             font-size: 11px; 
             color: var(--text-secondary); 
-            line-height: 1.6;
+            line-height: 1.5;
             overflow: hidden;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
+            flex: 1;
         }
         .doc-card-footer {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            margin-top: 10px;
         }
         .doc-role-badge {
             font-size: 9px;
@@ -406,41 +393,44 @@
             padding: 60px 20px;
             color: var(--text-muted);
         }
-        .empty-state i { font-size: 48px; margin-bottom: 16px; opacity: 0.3; display: block; }
-        .empty-state p { font-size: 15px; }
+        .empty-state i { font-size: 40px; margin-bottom: 14px; opacity: 0.3; display: block; }
+        .empty-state p { font-size: 14px; }
 
         /* \u2500\u2500 EDITOR VIEW \u2500\u2500 */
         #editor-view { 
             display: none; 
-            height: calc(100vh - var(--header-height) - var(--safe-top));
+            height: 100%;
             flex-direction: column; 
-            align-items: center; 
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: 16px 12px;
             background: var(--bg-main);
-            -webkit-overflow-scrolling: touch;
-            padding-bottom: calc(16px + var(--safe-bottom));
+            overflow: hidden;
         }
 
-        /* \u2500\u2500 TOOLBAR \u2500\u2500 */
-        .toolbar {
-            display: flex;
-            gap: 2px;
-            background: var(--bg-card);
-            padding: 6px 8px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            margin-bottom: 14px;
+        /* \u2500\u2500 TOOLBAR (sticky, scrollable) \u2500\u2500 */
+        .toolbar-wrapper {
             position: sticky;
             top: 0;
             z-index: 500;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
             box-shadow: var(--shadow-md);
             animation: slideDown 0.4s ease;
+        }
+
+        /* Mode switch row \u2014 mobile only */
+        .toolbar-mode-row {
+            display: none;
             align-items: center;
-            flex-wrap: wrap;
-            max-width: 850px;
-            width: 100%;
+            justify-content: space-between;
+            padding: 6px 12px;
+            border-bottom: 1px solid var(--border);
+            gap: 8px;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 2px;
+            padding: 6px 10px;
+            align-items: center;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
@@ -451,7 +441,7 @@
             width: 1px;
             background: var(--border);
             height: 20px;
-            margin: 0 2px;
+            margin: 0 3px;
             flex-shrink: 0;
         }
 
@@ -471,20 +461,22 @@
             outline: none;
             font-size: 13px;
             flex-shrink: 0;
-            touch-action: manipulation;
         }
-        .toolbar button:hover { 
-            background: rgba(224, 8, 246, 0.1); 
+        .toolbar button:active { 
+            background: rgba(224, 8, 246, 0.15); 
             color: var(--aura-primary); 
         }
-        .toolbar button:active {
-            background: rgba(224, 8, 246, 0.2);
-            color: var(--aura-primary);
+        @media (hover: hover) {
+            .toolbar button:hover { 
+                background: rgba(224, 8, 246, 0.1); 
+                color: var(--aura-primary); 
+            }
+            .toolbar button.danger:hover {
+                background: rgba(239, 68, 68, 0.1);
+                color: #ef4444;
+            }
         }
-        .toolbar button.danger:hover {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-        }
+        .toolbar button.danger:active { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
 
         .toolbar select {
             background: var(--bg-main);
@@ -497,12 +489,9 @@
             outline: none;
             font-size: 11px;
             font-family: 'Poppins', sans-serif;
-            -webkit-appearance: none;
-            appearance: none;
             flex-shrink: 0;
-            max-width: 90px;
+            max-width: 100px;
         }
-        .toolbar select:focus { border-color: var(--border-focus); }
 
         .toolbar input[type="number"] {
             background: var(--bg-main);
@@ -512,25 +501,33 @@
             border-radius: var(--radius-sm);
             transition: var(--transition);
             outline: none;
-            font-size: 12px;
+            font-size: 11px;
             width: 48px;
+            min-width: 48px;
             text-align: center;
             flex-shrink: 0;
-            -webkit-appearance: none;
-            appearance: none;
         }
-        .toolbar input[type="number"]:focus { border-color: var(--border-focus); }
+
+        /* \u2500\u2500 EDITOR SCROLL AREA \u2500\u2500 */
+        .editor-scroll {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 16px 12px 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
         /* \u2500\u2500 CANVAS \u2500\u2500 */
         .canvas {
             width: 100%;
             max-width: 850px;
             background: var(--bg-card);
-            min-height: 500px;
+            min-height: 400px;
             padding: 32px 20px;
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-lg);
-            margin-bottom: 40px;
             animation: canvasFade 0.5s ease;
             border: 1px solid var(--border);
         }
@@ -542,14 +539,13 @@
             border: none;
             resize: none;
             outline: none;
-            font-size: 15px;
+            font-size: 14px;
             line-height: 1.9;
             color: var(--text-main);
             background: transparent;
             font-family: 'Courier Prime', monospace;
             padding: 0;
             white-space: pre-wrap;
-            -webkit-appearance: none;
         }
 
         #visual-editor { 
@@ -557,17 +553,14 @@
             min-height: 500px; 
             outline: none; 
             line-height: 1.85;
-            font-size: 16px; 
+            font-size: 15px; 
             color: var(--text-main); 
-            word-break: break-word;
-            overflow-wrap: break-word;
         }
-
         #visual-editor:focus-visible { outline: none; }
 
         /* \u2500\u2500 VISUAL EDITOR TYPOGRAPHY \u2500\u2500 */
         #visual-editor h1 { font-size: 1.7em; font-weight: 700; margin: 0.8em 0 0.4em; letter-spacing: -0.5px; }
-        #visual-editor h2 { font-size: 1.35em; font-weight: 600; margin: 0.8em 0 0.4em; }
+        #visual-editor h2 { font-size: 1.3em; font-weight: 600; margin: 0.8em 0 0.4em; }
         #visual-editor p { margin-bottom: 0.8em; }
         #visual-editor ul, #visual-editor ol { padding-left: 1.5em; margin-bottom: 0.8em; }
         #visual-editor li { margin-bottom: 0.3em; }
@@ -601,7 +594,6 @@
             justify-content: center;
             align-items: flex-end;
             backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
             animation: fadeIn 0.2s ease;
         }
         .modal-box {
@@ -609,32 +601,31 @@
             padding: 24px 20px;
             border-radius: var(--radius-xl) var(--radius-xl) 0 0;
             width: 100%;
-            max-width: 500px;
+            max-width: 480px;
             box-shadow: var(--shadow-xl);
-            max-height: 85vh;
+            max-height: 88vh;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             border: 1px solid var(--border);
             border-bottom: none;
-            animation: modalSlide 0.3s ease;
-            padding-bottom: calc(24px + var(--safe-bottom));
+            animation: sheetSlide 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+            margin: 0 auto;
         }
 
-        /* Sheet handle */
+        /* drag handle */
         .modal-box::before {
             content: '';
             display: block;
-            width: 36px;
-            height: 4px;
+            width: 40px; height: 4px;
             background: var(--border);
             border-radius: 2px;
             margin: 0 auto 20px;
         }
 
         .modal-box h3 { 
-            font-size: 17px; 
+            font-size: 16px; 
             font-weight: 600; 
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -653,33 +644,30 @@
             margin-top: 5px;
             max-height: 160px;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
             border: 1px solid var(--border);
             display: none;
             box-shadow: var(--shadow-md);
         }
         .search-item { 
-            padding: 12px; 
+            padding: 10px 12px; 
             cursor: pointer; 
             border-bottom: 1px solid var(--border); 
             font-size: 13px;
             transition: var(--transition);
-            min-height: 44px;
-            touch-action: manipulation;
         }
         .search-item:last-child { border-bottom: none; }
-        .search-item:hover { background: rgba(224, 8, 246, 0.06); }
+        .search-item:active { background: rgba(224, 8, 246, 0.06); }
         
         .collab-list { 
-            margin-top: 20px; 
+            margin-top: 18px; 
             border-top: 1px solid var(--border); 
-            padding-top: 16px; 
+            padding-top: 14px; 
         }
         .collab-user { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            margin-bottom: 12px; 
+            margin-bottom: 10px; 
             font-size: 13px;
             padding: 8px 10px;
             border-radius: var(--radius-sm);
@@ -687,8 +675,8 @@
         }
 
         .public-link-box {
-            margin-top: 20px;
-            padding: 16px;
+            margin-top: 18px;
+            padding: 14px;
             background: rgba(224, 8, 246, 0.04);
             border-radius: var(--radius-md);
             border: 1px dashed rgba(224, 8, 246, 0.3);
@@ -697,17 +685,15 @@
         /* \u2500\u2500 MODAL FORM ELEMENTS \u2500\u2500 */
         .modal-input {
             width: 100%;
-            padding: 12px 14px;
+            padding: 11px 14px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border);
             outline: none;
             background: var(--bg-main);
             color: var(--text-main);
-            font-size: 16px; /* Prevent iOS zoom */
+            font-size: 14px;
             font-family: 'Poppins', sans-serif;
             transition: var(--transition);
-            -webkit-appearance: none;
-            appearance: none;
         }
         .modal-input:focus { 
             border-color: var(--border-focus);
@@ -716,8 +702,8 @@
 
         .modal-btn-close {
             width: 100%;
-            margin-top: 16px;
-            padding: 14px;
+            margin-top: 14px;
+            padding: 13px;
             border: 1px solid var(--border);
             border-radius: var(--radius-sm);
             background: var(--bg-main);
@@ -727,17 +713,28 @@
             transition: var(--transition);
             font-family: 'Poppins', sans-serif;
             font-size: 14px;
-            min-height: 48px;
-            touch-action: manipulation;
         }
-        .modal-btn-close:hover { border-color: var(--border-focus); }
+        .modal-btn-close:active { border-color: var(--border-focus); }
+
+        /* \u2500\u2500 ANIMATIONS \u2500\u2500 */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes canvasFade { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes dropdownFade { from { opacity: 0; transform: translateY(-8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes sheetSlide { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* \u2500\u2500 SCROLLBAR \u2500\u2500 */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
 
         /* \u2500\u2500 CHECKBOX TOGGLE \u2500\u2500 */
         input[type="checkbox"] {
             appearance: none;
             -webkit-appearance: none;
-            width: 40px; height: 22px;
-            border-radius: 11px;
+            width: 36px; height: 20px;
+            border-radius: 10px;
             background: var(--border);
             cursor: pointer;
             transition: var(--transition);
@@ -748,64 +745,83 @@
             content: '';
             position: absolute;
             left: 3px; top: 3px;
-            width: 16px; height: 16px;
+            width: 14px; height: 14px;
             border-radius: 50%;
             background: white;
             transition: var(--transition);
         }
         input[type="checkbox"]:checked { background: var(--aura-gradient); }
-        input[type="checkbox"]:checked::after { transform: translateX(18px); }
+        input[type="checkbox"]:checked::after { transform: translateX(16px); }
 
-        /* \u2500\u2500 ANIMATIONS \u2500\u2500 */
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes canvasFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes dropdownFade { from { opacity: 0; transform: translateY(-8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        @keyframes modalSlide { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        /* \u2500\u2500 DESKTOP OVERRIDES \u2500\u2500 */
+        @media (min-width: 640px) {
+            header { padding: 0 24px; height: 58px; --header-h: 58px; }
+            .brand-logo { width: 36px; height: 36px; }
+            #doc-title-input { font-size: 14px; max-width: 240px; }
+            #save-status { font-size: 11px; }
 
-        /* \u2500\u2500 SCROLLBAR \u2500\u2500 */
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+            .toolbar-mode-row { display: none !important; }
+            .mode-switch { display: flex; }
 
-        /* \u2500\u2500 TABLET \u2500\u2500 */
-        @media (min-width: 600px) {
-            header { padding: 0 24px; }
-            .brand-group { gap: 12px; }
-            .docs-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
-            #editor-view { padding: 20px 16px; }
-            .canvas { padding: 48px 60px; }
-            .toolbar { gap: 4px; padding: 8px 10px; }
-            .mode-btn { padding: 5px 14px; font-size: 11px; }
-            #doc-title-input { font-size: 14px; }
+            #dashboard-view { padding: 40px 32px 40px; }
+            .dashboard-header h2 { font-size: 24px; }
+            .docs-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+            .doc-card { padding: 22px; min-height: 190px; }
+            .doc-card h4 { font-size: 15px; }
+            .doc-card p { font-size: 12px; }
+
+            .toolbar { gap: 4px; padding: 8px 12px; overflow-x: unset; }
+            .toolbar button { width: 34px; height: 34px; min-width: unset; }
+            .toolbar-wrapper { position: sticky; background: transparent; border-bottom: none; box-shadow: none; }
+            .toolbar {
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: var(--radius-lg);
+                box-shadow: var(--shadow-md);
+                flex-wrap: wrap;
+                width: 100%;
+                max-width: 850px;
+                margin: 0 auto 20px;
+            }
+
+            .editor-scroll { padding: 24px 20px 80px; }
+            .canvas { padding: 72px 96px; min-height: 1100px; }
+            #visual-editor { font-size: 16px; min-height: 900px; }
+            #editor-textarea { font-size: 15px; min-height: 900px; }
+
+            #collab-modal { align-items: center; }
             .modal-box { 
                 border-radius: var(--radius-xl); 
                 border-bottom: 1px solid var(--border);
-                align-self: center;
                 max-width: 400px;
-                padding-bottom: 24px;
+                animation: modalSlide 0.3s ease;
+                padding: 28px;
             }
-            #collab-modal { align-items: center; }
+            .modal-box::before { display: none; }
         }
+        @keyframes modalSlide { from { opacity: 0; transform: translateY(20px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        /* \u2500\u2500 DESKTOP \u2500\u2500 */
-        @media (min-width: 900px) {
-            header { padding: 0 24px; }
-            #doc-title-input { max-width: 280px; }
-            .canvas { padding: 72px 96px; min-height: 1100px; }
-            .docs-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
-            #dashboard-view { padding: 40px 32px; }
-            #editor-view { padding: 24px 20px; }
-        }
-
-        /* \u2500\u2500 LANDSCAPE MOBILE \u2500\u2500 */
-        @media (max-height: 500px) and (orientation: landscape) {
-            :root { --header-height: 48px; }
-            .canvas { padding: 20px 24px; min-height: 300px; }
-            #editor-view { padding: 10px 12px; }
-            .toolbar { margin-bottom: 8px; }
+        /* \u2500\u2500 MOBILE: hide mode switch in header, show in toolbar row \u2500\u2500 */
+        @media (max-width: 639px) {
+            .mode-switch { display: none; }
+            .toolbar-mode-row { display: flex; }
+            #save-status { display: none !important; }
+            /* save indicator in toolbar-mode-row */
+            #save-status-mobile {
+                font-size: 10px;
+                color: var(--text-muted);
+                display: none;
+                align-items: center;
+                gap: 4px;
+                padding: 3px 8px;
+                border-radius: 20px;
+                background: var(--bg-main);
+                border: 1px solid var(--border);
+                white-space: nowrap;
+                animation: fadeIn 0.2s ease;
+            }
+            #save-status-mobile.saving { color: var(--aura-primary); display: flex; }
+            #save-status-mobile.saved { color: #22c55e; display: flex; }
         }
     </style>
 </head>
@@ -816,18 +832,19 @@
         <div id="close-editor" onclick="closeEditor()">
             <i class="fas fa-arrow-left"></i>
         </div>
-        <img src="/images/auradocs.svg" alt="Aura" class="brand-logo" onclick="closeEditor()">
+        <img src="images/auradocs.svg" alt="Aura" class="brand-logo" onclick="closeEditor()">
         <div id="doc-title-container">
             <input type="text" id="doc-title-input" value="Senza titolo">
+            <!-- mode switch shown in header only on desktop -->
             <div class="mode-switch">
-                <button id="btn-visual" class="mode-btn active" onclick="setMode('visual')">Vis</button>
-                <button id="btn-literal" class="mode-btn" onclick="setMode('literal')">Lit</button>
+                <button id="btn-visual" class="mode-btn active" onclick="setMode('visual')">Visuale</button>
+                <button id="btn-literal" class="mode-btn" onclick="setMode('literal')">Letterale</button>
             </div>
             <div id="save-status"><i class="fas fa-circle" style="font-size:6px;"></i> <span id="save-text">Salvato</span></div>
         </div>
     </div>
     <div class="user-section" id="user-trigger">
-        <img id="user-avatar" src="/images/default.png" class="avatar">
+        <img id="user-avatar" src="images/default.png" class="avatar">
         <div class="dropdown" id="user-dropdown">
             <div class="dropdown-header">
                 <p id="user-name">...</p>
@@ -841,221 +858,32 @@
     </div>
 </header>
 
-<div id="dashboard-view">
-    <div class="dashboard-header">
-        <h2>I tuoi Documenti</h2>
-        <button class="btn-new" onclick="createNewDoc()">
-            <i class="fas fa-plus"></i> Nuovo
-        </button>
+<div id="app-root">
+
+    <!-- DASHBOARD -->
+    <div id="dashboard-view">
+        <div class="dashboard-header">
+            <h2>I tuoi Documenti</h2>
+            <button class="btn-new" onclick="createNewDoc()">
+                <i class="fas fa-plus"></i> Nuovo
+            </button>
+        </div>
+        <div class="docs-grid" id="docs-grid"></div>
     </div>
-    <div class="docs-grid" id="docs-grid"></div>
-</div>
 
-<div id="editor-view">
-    <div class="toolbar">
-        <select id="font-family" onchange="execCmd('fontName', this.value)" title="Carattere">
-            <option value="Poppins">Poppins</option>
-            <option value="Roboto">Roboto</option>
-            <option value="Open Sans">Open Sans</option>
-            <option value="Playfair Display">Elegante</option>
-            <option value="Courier Prime">Monospace</option>
-        </select>
-        <input type="number" id="font-size" min="11" max="128" value="16" onchange="changeFontSize(this.value)" title="Dimensione" inputmode="numeric">
-        
-        <div class="toolbar-divider"></div>
-        
-        <button onclick="execCmd('bold')" title="Grassetto"><i class="fas fa-bold"></i></button>
-        <button onclick="execCmd('italic')" title="Corsivo"><i class="fas fa-italic"></i></button>
-        <button onclick="execCmd('underline')" title="Sottolineato"><i class="fas fa-underline"></i></button>
-
-        <div class="toolbar-divider"></div>
-
-        <button onclick="execCmd('formatBlock', 'H1')" title="Titolo 1"><b style="font-size:11px;">H1</b></button>
-        <button onclick="execCmd('formatBlock', 'H2')" title="Titolo 2"><b style="font-size:11px;">H2</b></button>
-        <button onclick="execCmd('formatBlock', 'H3')" title="Titolo 3"><b style="font-size:11px;">H3</b></button>
-
-        <div class="toolbar-divider"></div>
-
-        <button onclick="execCmd('insertUnorderedList')" title="Lista"><i class="fas fa-list-ul"></i></button>
-        <button onclick="execCmd('insertOrderedList')" title="Lista numerata"><i class="fas fa-list-ol"></i></button>
-        <button onclick="addLink()" title="Inserisci link"><i class="fas fa-link"></i></button>
-
-        <div class="toolbar-divider"></div>
-
-        <button onclick="execCmd('justifyLeft')" title="Allinea sinistra"><i class="fas fa-align-left"></i></button>
-        <button onclick="execCmd('justifyCenter')" title="Allinea centro"><i class="fas fa-align-center"></i></button>
-        <button onclick="execCmd('justifyRight')" title="Allinea destra"><i class="fas fa-align-right"></i></button>
-
-        <div class="toolbar-divider"></div>
-
-        <button onclick="openCollabModal()" title="Collaborazione"><i class="fas fa-user-plus"></i></button>
-        <button onclick="exportDoc()" title="Esporta"><i class="fas fa-file-export"></i></button>
-        <button id="btn-delete" onclick="deleteDoc()" title="Elimina documento" class="danger"><i class="fas fa-trash"></i></button>
-    </div>
-    <div class="canvas">
-        <div id="visual-editor" contenteditable="true" oninput="autoSave()"></div>
-        <textarea id="editor-textarea" oninput="autoSave()"></textarea>
-    </div>
-</div>
-
-<!-- COLLAB MODAL -->
-<div id="collab-modal" onclick="closeCollabModal(event)">
-    <div class="modal-box" onclick="event.stopPropagation()">
-        <h3>Collaborazione</h3>
-        
-        <div class="public-link-box">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <div>
-                    <span style="font-weight:600; font-size:13px; display:block;">Rendi pubblico</span>
-                    <span style="font-size:11px; color:var(--text-muted);">Chiunque pu\u00f2 visualizzare con il link</span>
+    <!-- EDITOR -->
+    <div id="editor-view">
+        <!-- Toolbar wrapper: sticky on mobile, flows on desktop -->
+        <div class="toolbar-wrapper">
+            <!-- Mobile: mode switch + save indicator row -->
+            <div class="toolbar-mode-row">
+                <div class="mode-switch" style="display:flex;">
+                    <button id="btn-visual-m" class="mode-btn active" onclick="setMode('visual')">Visuale</button>
+                    <button id="btn-literal-m" class="mode-btn" onclick="setMode('literal')">Letterale</button>
                 </div>
-                <input type="checkbox" id="public-check" onchange="togglePublic()">
+                <div id="save-status-mobile"><i class="fas fa-circle" style="font-size:6px;"></i> <span id="save-text-mobile">Salvato</span></div>
             </div>
-            <div id="public-url-container" style="display:none;">
-                <input type="text" id="public-url-input" readonly class="modal-input" style="font-size:12px; margin-top:4px;">
-            </div>
-        </div>
 
-        <p style="font-size: 12px; color: var(--text-secondary); margin: 18px 0 8px; font-weight: 500;">Aggiungi collaboratore</p>
-        
-        <input type="text" id="user-search-input" placeholder="Cerca per nome e cognome..." class="modal-input">
-        <div id="search-results" class="search-results"></div>
-
-        <div id="role-selector" style="display:none; margin-top:12px; background:rgba(224, 8, 246, 0.05); padding:12px; border-radius:var(--radius-sm);">
-            <p id="selected-user-display" style="font-weight:600; font-size:13px; margin-bottom:10px;"></p>
-            <div style="display:flex; gap:8px;">
-                <select id="collab-role" style="flex:1; padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--bg-main); color:var(--text-main); font-family:'Poppins',sans-serif; font-size:14px; outline:none; -webkit-appearance:none;">
-                    <option value="Editor">Editor</option>
-                    <option value="Visualizzatore">Visualizzatore</option>
-                </select>
-                <button onclick="addCollaborator()" style="background:var(--aura-gradient); color:white; border:none; padding:10px 18px; border-radius:var(--radius-sm); font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; font-size:13px; transition:var(--transition); min-height:44px; touch-action:manipulation;">Aggiungi</button>
-            </div>
-        </div>
-
-        <div class="collab-list" id="active-collabs-list"></div>
-        <button class="modal-btn-close" onclick="document.getElementById('collab-modal').style.display='none'">Chiudi</button>
-    </div>
-</div>
-
-<script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyDsrHAtIh5bsYDHa1wz0LMcmciChAoRikU",
-        authDomain: "myauraid-f03c6.firebaseapp.com",
-        projectId: "myauraid-f03c6",
-        storageBucket: "myauraid-f03c6.appspot.com",
-        messagingSenderId: "190478237725",
-        appId: "1:190478237725:web:0d39907473f511b85a06f4"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-    const turndownService = new TurndownService();
-
-    let currentDocId = null;
-    let saveTimeout = null;
-    let currentMode = 'visual';
-    let tempSelectedUser = null;
-
-    document.execCommand('defaultParagraphSeparator', false, 'p');
-
-    // \u2500\u2500 DROPDOWN \u2500\u2500
-    const userTrigger = document.getElementById('user-trigger');
-    const userDropdown = document.getElementById('user-dropdown');
-    userTrigger.addEventListener('click', (e) => { 
-        e.stopPropagation(); 
-        userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block'; 
-    });
-    window.addEventListener('click', () => userDropdown.style.display = 'none');
-
-    // \u2500\u2500 FONT SIZE \u2500\u2500
-    function changeFontSize(size) {
-        if (currentMode === 'visual') {
-            document.getElementById('visual-editor').style.fontSize = size + "px";
-            autoSave();
-        }
-    }
-
-    // \u2500\u2500 PUBBLICO \u2500\u2500
-    async function togglePublic() {
-        const isPublic = document.getElementById('public-check').checked;
-        const container = document.getElementById('public-url-container');
-        container.style.display = isPublic ? 'block' : 'none';
-        if (isPublic) {
-            document.getElementById('public-url-input').value = `docs.aurastudioitalia.it/document?id=${currentDocId}`;
-        }
-        await db.collection('documents').doc(currentDocId).update({ isPublic });
-    }
-
-    // \u2500\u2500 RICERCA UTENTI \u2500\u2500
-    document.getElementById('user-search-input').addEventListener('input', async (e) => {
-        const val = e.target.value.trim();
-        const resultsBox = document.getElementById('search-results');
-        if (val.length < 2) { resultsBox.style.display = 'none'; return; }
-
-        const snap = await db.collection('users').where('nome', '>=', val).where('nome', '<=', val + '\uf8ff').limit(5).get();
-        resultsBox.innerHTML = '';
-        
-        if (snap.empty) {
-            resultsBox.innerHTML = '<div class="search-item" style="color:var(--text-muted);">Nessun utente trovato</div>';
-        } else {
-            snap.forEach(doc => {
-                const u = doc.data();
-                const div = document.createElement('div');
-                div.className = 'search-item';
-                div.style.cssText = 'display:flex; align-items:center; gap:10px;';
-                const photoUrl = u.profileImage || 'images/default.png';
-                div.innerHTML = `
-                    <img src="${photoUrl}" style="width:26px; height:26px; border-radius:50%; object-fit:cover; border:1px solid var(--border);">
-                    <span>${u.nome} ${u.cognome}</span>`;
-                div.onclick = () => {
-                    tempSelectedUser = { id: doc.id, name: `${u.nome} ${u.cognome}` };
-                    document.getElementById('selected-user-display').textContent = tempSelectedUser.name;
-                    document.getElementById('role-selector').style.display = 'block';
-                    resultsBox.style.display = 'none';
-                    document.getElementById('user-search-input').value = '';
-                };
-                resultsBox.appendChild(div);
-            });
-            resultsBox.style.display = 'block';
-        }
-    });
-
-    async function addCollaborator() {
-        if (!tempSelectedUser || !currentDocId) return;
-        const role = document.getElementById('collab-role').value;
-        await db.collection('documents').doc(currentDocId).update({
-            [`collaborators.${tempSelectedUser.id}`]: role
-        });
-        tempSelectedUser = null;
-        document.getElementById('role-selector').style.display = 'none';
-        document.getElementById('user-search-input').value = '';
-        renderCollabsList();
-    }
-
-    async function renderCollabsList() {
-        const doc = await db.collection('documents').doc(currentDocId).get();
-        const listDiv = document.getElementById('active-collabs-list');
-        const data = doc.data();
-        
-        document.getElementById('public-check').checked = data.isPublic || false;
-        document.getElementById('public-url-container').style.display = data.isPublic ? 'block' : 'none';
-        if (data.isPublic) document.getElementById('public-url-input').value = `docs.aurastudioitalia.it/document?id=${currentDocId}`;
-
-        listDiv.innerHTML = '<p style="font-weight:600; font-size:12px; margin-bottom:10px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Collaboratori</p>';
-        const collabs = data.collaborators;
-        for (const [uid, role] of Object.entries(collabs)) {
-            const uDoc = await db.collection('users').doc(uid).get();
-            let name = uid;
-            let photoUrl = 'images/default.png';
-            if (uDoc.exists) {
-                const uData = uDoc.data();
-                name = `${uData.nome} ${uData.cognome}`;
-                photoUrl = uData.profileImage || 'images/default.png';
-            }
-            listDiv.innerHTML += `
-                <div class="collab-user">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <img src="${photoUrl}" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:1.5px solid var(--aura-primary);">
-                        <span style="font-weight:500;">${name}</span>
-                    </div>
-                    <span
+            <div class="toolbar">
+                <select id="font-family" onchange="execCmd('fontName', this.value)" title="Carattere">
+                    <option value="P

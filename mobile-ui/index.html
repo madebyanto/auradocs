@@ -371,23 +371,30 @@
     }
 
     // Logic Login
-    document.getElementById('login-form').onsubmit = (e) => {
-        e.preventDefault();
-        const email = document.getElementById('l-email').value;
-        const pass = document.getElementById('l-pass').value;
+    document.getElementById('login-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('l-email').value;
+    const pass = document.getElementById('l-pass').value;
 
-        showMsg('msg-login', 'Verifica in corso...');
-        auth.signInWithEmailAndPassword(email, pass)
-            .then(async (userCredential) => {
-                if (!userCredential.user.emailVerified) {
-                    showMsg('msg-login', 'Verifica la tua email prima di entrare.', true);
-                    await auth.signOut();
-                } else {
-                    window.location.href = "dashboard.html";
-                }
-            })
-            .catch(err => showMsg('msg-login', getAuthErrorMessage(normalizeAuthError(err)), true));
-    };
+    showMsg('msg-login', 'Verifica in corso...');
+
+    try {
+        const userCredential = await auth.signInWithEmailAndPassword(email, pass);
+        const user = userCredential.user;
+
+        // Aggiorna lo stato dell'utente
+        await user.reload();
+
+        if (!user.emailVerified) {
+            showMsg('msg-login', 'Verifica la tua email prima di entrare.', true);
+            await auth.signOut();
+        } else {
+            window.location.href = "dashboard.html";
+        }
+    } catch (err) {
+        showMsg('msg-login', getAuthErrorMessage(normalizeAuthError(err)), true);
+    }
+};
 
     // Logic Signup
     document.getElementById('signup-form').onsubmit = (e) => {

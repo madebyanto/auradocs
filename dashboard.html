@@ -7,7 +7,6 @@
     <link rel="icon" href="images/auradocs.svg" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto:wght@300;400;700&family=Open+Sans:wght@300;400;600&family=Playfair+Display:wght@400;700&family=Courier+Prime&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/turndown/7.1.2/turndown.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -38,6 +37,7 @@
             --radius-xl: 24px;
             --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-slow: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --nyra-panel: 340px;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -58,13 +58,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        
-        body { 
-            background-color: var(--bg-main); 
-            color: var(--text-main); 
-            height: 100vh; 
-            overflow: hidden;
-        }
+        body { background-color: var(--bg-main); color: var(--text-main); height: 100vh; overflow: hidden; }
 
         /* ── HEADER ── */
         header {
@@ -80,11 +74,7 @@
             box-shadow: var(--shadow-sm);
         }
 
-        .brand-group { 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-        }
+        .brand-group { display: flex; align-items: center; gap: 12px; }
 
         #close-editor {
             width: 34px; height: 34px;
@@ -99,31 +89,15 @@
             background: transparent;
             font-size: 13px;
         }
-        #close-editor:hover { 
-            background: rgba(224, 8, 246, 0.08); 
-            color: var(--aura-primary); 
-            border-color: var(--border-focus);
-        }
+        #close-editor:hover { background: rgba(224, 8, 246, 0.08); color: var(--aura-primary); border-color: var(--border-focus); }
 
-        .brand-logo { 
-            width: 36px; 
-            height: 36px;
-            cursor: pointer; 
-            transition: var(--transition); 
-            border-radius: 10px;
-        }
+        .brand-logo { width: 36px; height: 36px; cursor: pointer; transition: var(--transition); border-radius: 10px; }
         .brand-logo:hover { transform: scale(1.05); }
 
-        #doc-title-container { 
-            display: none; 
-            align-items: center; 
-            gap: 8px; 
-            animation: slideIn 0.3s ease; 
-        }
+        #doc-title-container { display: none; align-items: center; gap: 8px; animation: slideIn 0.3s ease; }
 
         #doc-title-input {
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 14px; font-weight: 500;
             border: 1px solid transparent;
             padding: 5px 10px;
             border-radius: var(--radius-sm);
@@ -132,379 +106,155 @@
             outline: none;
             transition: var(--transition);
             max-width: 280px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        #doc-title-input:focus { 
-            background: rgba(224, 8, 246, 0.04); 
-            border-color: var(--border-focus);
-            box-shadow: 0 0 0 3px rgba(224, 8, 246, 0.08);
-        }
+        #doc-title-input:focus { background: rgba(224, 8, 246, 0.04); border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(224, 8, 246, 0.08); }
 
-        /* ── MODE SWITCH ── */
         .mode-switch {
-            display: flex;
-            background: var(--bg-main);
-            border-radius: 20px;
-            padding: 3px;
+            display: flex; background: var(--bg-main);
+            border-radius: 20px; padding: 3px;
             border: 1px solid var(--border);
-            margin: 0 8px;
-            gap: 2px;
+            margin: 0 8px; gap: 2px;
         }
         .mode-btn {
-            padding: 5px 16px;
-            border-radius: 16px;
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
+            padding: 5px 16px; border-radius: 16px;
+            font-size: 11px; font-weight: 600;
+            cursor: pointer; border: none;
+            background: transparent; color: var(--text-secondary);
             transition: var(--transition);
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
+            text-transform: uppercase; letter-spacing: 0.6px;
         }
-        .mode-btn.active { 
-            background: var(--aura-gradient); 
-            color: white; 
-            box-shadow: 0 2px 10px rgba(224, 8, 246, 0.35); 
-        }
+        .mode-btn.active { background: var(--aura-gradient); color: white; box-shadow: 0 2px 10px rgba(224, 8, 246, 0.35); }
 
-        /* ── SAVE STATUS ── */
         #save-status {
-            font-size: 11px;
-            color: var(--text-muted);
-            display: none;
-            align-items: center;
-            gap: 5px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            background: var(--bg-main);
-            border: 1px solid var(--border);
-            white-space: nowrap;
-            animation: fadeIn 0.2s ease;
+            font-size: 11px; color: var(--text-muted);
+            display: none; align-items: center; gap: 5px;
+            padding: 4px 10px; border-radius: 20px;
+            background: var(--bg-main); border: 1px solid var(--border);
+            white-space: nowrap; animation: fadeIn 0.2s ease;
         }
         #save-status.saving { color: var(--aura-primary); }
         #save-status.saved { color: #22c55e; }
 
-        /* ── USER SECTION ── */
         .user-section { position: relative; cursor: pointer; z-index: 1001; }
-        .avatar { 
-            width: 36px; height: 36px; 
-            border-radius: 50%; 
-            border: 2px solid var(--aura-primary); 
-            transition: var(--transition);
-            object-fit: cover;
-        }
+        .avatar { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--aura-primary); transition: var(--transition); object-fit: cover; }
         .avatar:hover { box-shadow: var(--aura-glow); transform: scale(1.05); }
-        
-        .dropdown { 
-            display: none;
-            position: absolute; top: 50px; right: 0; 
-            width: 260px;
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
-            padding: 8px;
-            z-index: 9999; 
-            box-shadow: var(--shadow-xl);
-            animation: dropdownFade 0.2s ease;
-        }
 
-        .dropdown-header {
-            padding: 12px;
-            margin-bottom: 4px;
+        .dropdown {
+            display: none; position: absolute; top: 50px; right: 0;
+            width: 260px; background: var(--bg-card);
+            border-radius: var(--radius-lg); border: 1px solid var(--border);
+            padding: 8px; z-index: 9999;
+            box-shadow: var(--shadow-xl); animation: dropdownFade 0.2s ease;
         }
+        .dropdown-header { padding: 12px; margin-bottom: 4px; }
         .dropdown-header p { font-weight: 600; font-size: 14px; }
         .dropdown-header span { font-size: 10px; color: var(--text-muted); }
-
-        .dropdown a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
-            border-radius: var(--radius-sm);
-            text-decoration: none;
-            color: var(--text-main);
-            font-size: 13px;
-            font-weight: 500;
-            transition: var(--transition);
-        }
+        .dropdown a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-sm); text-decoration: none; color: var(--text-main); font-size: 13px; font-weight: 500; transition: var(--transition); }
         .dropdown a:hover { background: var(--bg-main); }
         .dropdown a i { width: 16px; text-align: center; color: var(--text-secondary); }
         .dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
 
         /* ── DASHBOARD ── */
-        #dashboard-view { 
-            padding: 40px 32px;
-            overflow-y: auto; 
-            height: calc(100vh - 58px); 
-            animation: fadeIn 0.4s ease; 
-        }
-
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto 36px;
-        }
-
-        .dashboard-header h2 { 
-            font-weight: 600; 
-            font-size: 24px; 
-            letter-spacing: -0.3px;
-        }
-
+        #dashboard-view { padding: 40px 32px; overflow-y: auto; height: calc(100vh - 58px); animation: fadeIn 0.4s ease; }
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 36px; }
+        .dashboard-header h2 { font-weight: 600; font-size: 24px; letter-spacing: -0.3px; }
         .btn-new {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 22px;
-            border-radius: 50px;
-            font-size: 13px;
-            font-weight: 600;
-            background: var(--aura-gradient);
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
+            display: flex; align-items: center; gap: 8px;
+            padding: 10px 22px; border-radius: 50px;
+            font-size: 13px; font-weight: 600;
+            background: var(--aura-gradient); color: white;
+            border: none; cursor: pointer; transition: var(--transition);
             box-shadow: 0 4px 16px rgba(224, 8, 246, 0.3);
         }
-        .btn-new:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 8px 24px rgba(224, 8, 246, 0.4);
-        }
+        .btn-new:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(224, 8, 246, 0.4); }
         .btn-new:active { transform: translateY(0); }
-
-        .docs-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
-            gap: 20px; 
-            max-width: 1200px; 
-            margin: 0 auto; 
-        }
-        
-        .doc-card { 
-            background: var(--bg-card); 
-            border: 1px solid var(--border); 
-            border-radius: var(--radius-lg); 
-            padding: 22px; 
-            cursor: pointer; 
-            height: 190px; 
-            transition: var(--transition-slow);
-            display: flex; 
-            flex-direction: column; 
-            justify-content: space-between;
-            position: relative; 
-            overflow: hidden;
-        }
-        .doc-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            right: 0; height: 3px;
-            background: var(--aura-gradient);
-            opacity: 0;
-            transition: var(--transition);
-        }
-        .doc-card:hover { 
-            border-color: rgba(224, 8, 246, 0.3); 
-            transform: translateY(-6px); 
-            box-shadow: var(--shadow-lg);
-        }
+        .docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .doc-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; cursor: pointer; height: 190px; transition: var(--transition-slow); display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+        .doc-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--aura-gradient); opacity: 0; transition: var(--transition); }
+        .doc-card:hover { border-color: rgba(224, 8, 246, 0.3); transform: translateY(-6px); box-shadow: var(--shadow-lg); }
         .doc-card:hover::before { opacity: 1; }
-
-        .doc-card-icon {
-            width: 38px; height: 38px;
-            border-radius: var(--radius-sm);
-            background: rgba(224, 8, 246, 0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--aura-primary);
-            font-size: 15px;
-            margin-bottom: 12px;
-        }
-
-        .doc-card h4 { 
-            font-size: 15px; 
-            font-weight: 600;
-            margin-bottom: 6px; 
-            color: var(--text-main);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .doc-card p { 
-            font-size: 12px; 
-            color: var(--text-secondary); 
-            line-height: 1.6;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
-        .doc-card-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .doc-role-badge {
-            font-size: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 3px 8px;
-            border-radius: 20px;
-            background: rgba(224, 8, 246, 0.08);
-            color: var(--aura-primary);
-        }
-
-        .empty-state {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 80px 20px;
-            color: var(--text-muted);
-        }
+        .doc-card-icon { width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(224, 8, 246, 0.08); display: flex; align-items: center; justify-content: center; color: var(--aura-primary); font-size: 15px; margin-bottom: 12px; }
+        .doc-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .doc-card p { font-size: 12px; color: var(--text-secondary); line-height: 1.6; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .doc-card-footer { display: flex; align-items: center; justify-content: space-between; }
+        .doc-role-badge { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 3px 8px; border-radius: 20px; background: rgba(224, 8, 246, 0.08); color: var(--aura-primary); }
+        .empty-state { grid-column: 1 / -1; text-align: center; padding: 80px 20px; color: var(--text-muted); }
         .empty-state i { font-size: 48px; margin-bottom: 16px; opacity: 0.3; display: block; }
         .empty-state p { font-size: 15px; }
 
-        /* ── EDITOR VIEW ── */
-        #editor-view { 
-            display: none; 
-            height: calc(100vh - 58px); 
-            flex-direction: column; 
-            align-items: center; 
-            overflow-y: auto; 
+        /* ── EDITOR LAYOUT ── */
+        #editor-view {
+            display: none;
+            height: calc(100vh - 58px);
+            flex-direction: row;
+            overflow: hidden;
+        }
+
+        /* ── EDITOR MAIN AREA ── */
+        #editor-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
             padding: 24px 20px;
             background: var(--bg-main);
+            transition: var(--transition-slow);
+            min-width: 0;
         }
 
         /* ── TOOLBAR ── */
         .toolbar {
-            display: flex;
-            gap: 4px;
+            display: flex; gap: 4px;
             background: var(--bg-card);
             padding: 8px 12px;
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
             margin-bottom: 20px;
-            position: sticky;
-            top: 0;
-            z-index: 500;
+            position: sticky; top: 0; z-index: 500;
             box-shadow: var(--shadow-md);
             animation: slideDown 0.4s ease;
-            align-items: center;
-            flex-wrap: wrap;
-            max-width: 850px;
-            width: 100%;
+            align-items: center; flex-wrap: wrap;
+            max-width: 850px; width: 100%;
         }
+        .toolbar-divider { width: 1px; background: var(--border); height: 20px; margin: 0 4px; flex-shrink: 0; }
+        .toolbar button { background: transparent; border: none; color: var(--text-secondary); width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: var(--radius-sm); transition: var(--transition); outline: none; font-size: 13px; flex-shrink: 0; }
+        .toolbar button:hover { background: rgba(224, 8, 246, 0.1); color: var(--aura-primary); }
+        .toolbar button.danger:hover { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
 
-        .toolbar-divider {
-            width: 1px;
-            background: var(--border);
-            height: 20px;
-            margin: 0 4px;
-            flex-shrink: 0;
-        }
-
-        .toolbar button {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            width: 34px;
-            height: 34px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
+        /* Nyra button in toolbar */
+        .toolbar button.nyra-btn {
+            width: 34px; height: 34px;
+            font-size: 14px;
+            background: rgba(224, 8, 246, 0.08);
+            color: var(--aura-primary);
+            border: 1px solid rgba(224, 8, 246, 0.2);
             border-radius: var(--radius-sm);
-            transition: var(--transition);
-            outline: none;
-            font-size: 13px;
-            flex-shrink: 0;
         }
-        .toolbar button:hover { 
-            background: rgba(224, 8, 246, 0.1); 
-            color: var(--aura-primary); 
+        .toolbar button.nyra-btn:hover {
+            background: var(--aura-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 14px rgba(224, 8, 246, 0.35);
         }
-        .toolbar button.danger:hover {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
+        .toolbar button.nyra-btn.active {
+            background: var(--aura-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 14px rgba(224, 8, 246, 0.35);
         }
 
-        .toolbar select {
-            background: var(--bg-main);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 5px 8px;
-            cursor: pointer;
-            border-radius: var(--radius-sm);
-            transition: var(--transition);
-            outline: none;
-            font-size: 12px;
-            font-family: 'Poppins', sans-serif;
-        }
+        .toolbar select { background: var(--bg-main); border: 1px solid var(--border); color: var(--text-main); padding: 5px 8px; cursor: pointer; border-radius: var(--radius-sm); transition: var(--transition); outline: none; font-size: 12px; font-family: 'Poppins', sans-serif; }
         .toolbar select:focus { border-color: var(--border-focus); }
-
-        .toolbar input[type="number"] {
-            background: var(--bg-main);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 5px 6px;
-            border-radius: var(--radius-sm);
-            transition: var(--transition);
-            outline: none;
-            font-size: 12px;
-            width: 56px;
-            text-align: center;
-        }
+        .toolbar input[type="number"] { background: var(--bg-main); border: 1px solid var(--border); color: var(--text-main); padding: 5px 6px; border-radius: var(--radius-sm); transition: var(--transition); outline: none; font-size: 12px; width: 56px; text-align: center; }
         .toolbar input[type="number"]:focus { border-color: var(--border-focus); }
 
         /* ── CANVAS ── */
-        .canvas {
-            width: 100%;
-            max-width: 850px;
-            background: var(--bg-card);
-            min-height: 1100px;
-            padding: 72px 96px;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-lg);
-            margin-bottom: 80px;
-            animation: canvasFade 0.5s ease;
-            border: 1px solid var(--border);
-        }
-
-        #editor-textarea {
-            display: none;
-            width: 100%;
-            min-height: 900px;
-            border: none;
-            resize: none;
-            outline: none;
-            font-size: 15px;
-            line-height: 1.9;
-            color: var(--text-main);
-            background: transparent;
-            font-family: 'Courier Prime', monospace;
-            padding: 0;
-            white-space: pre-wrap;
-        }
-
-        #visual-editor { 
-            width: 100%; 
-            min-height: 900px; 
-            outline: none; 
-            line-height: 1.85;
-            font-size: 16px; 
-            color: var(--text-main); 
-        }
-
+        .canvas { width: 100%; max-width: 850px; background: var(--bg-card); min-height: 1100px; height: auto; padding: 72px 96px; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); margin-bottom: 80px; animation: canvasFade 0.5s ease; border: 1px solid var(--border); }
+        #editor-textarea { display: none; width: 100%; min-height: 900px; height: auto; overflow: hidden; border: none; resize: none; outline: none; font-size: 15px; line-height: 1.9; color: var(--text-main); background: transparent; font-family: 'Courier Prime', monospace; padding: 0; white-space: pre-wrap; }
+        #visual-editor { width: 100%; min-height: 900px; height: auto; outline: none; line-height: 1.85; font-size: 16px; color: var(--text-main); }
         #visual-editor:focus-visible { outline: none; }
-
-        /* ── VISUAL EDITOR TYPOGRAPHY ── */
         #visual-editor h1 { font-size: 2em; font-weight: 700; margin: 0.8em 0 0.4em; letter-spacing: -0.5px; }
         #visual-editor h2 { font-size: 1.5em; font-weight: 600; margin: 0.8em 0 0.4em; }
         #visual-editor p { margin-bottom: 0.8em; }
@@ -513,139 +263,260 @@
         #visual-editor a { color: var(--aura-primary); text-decoration: underline; text-underline-offset: 3px; }
         #visual-editor strong { font-weight: 700; }
         #visual-editor em { font-style: italic; }
-        #visual-editor code { 
-            font-family: 'Courier Prime', monospace; 
-            font-size: 0.88em;
-            background: rgba(224, 8, 246, 0.07); 
-            padding: 2px 6px; 
-            border-radius: 4px; 
-            color: var(--aura-primary); 
+        #visual-editor code { font-family: 'Courier Prime', monospace; font-size: 0.88em; background: rgba(224, 8, 246, 0.07); padding: 2px 6px; border-radius: 4px; color: var(--aura-primary); }
+        #visual-editor blockquote { border-left: 3px solid var(--aura-primary); padding-left: 16px; color: var(--text-secondary); font-style: italic; margin: 1em 0; }
+
+        /* ── NYRA PANEL ── */
+        #nyra-panel {
+            width: 0;
+            min-width: 0;
+            height: 100%;
+            background: var(--bg-card);
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: width 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+                        min-width 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            flex-shrink: 0;
+            position: relative;
         }
-        #visual-editor blockquote {
-            border-left: 3px solid var(--aura-primary);
-            padding-left: 16px;
-            color: var(--text-secondary);
-            font-style: italic;
-            margin: 1em 0;
+        #nyra-panel.open {
+            width: var(--nyra-panel);
+            min-width: var(--nyra-panel);
         }
 
-        /* ── COLLAB MODAL ── */
-        #collab-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.45);
-            z-index: 3000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(6px);
-            animation: fadeIn 0.2s ease;
-        }
-        .modal-box {
-            background: var(--bg-card);
-            padding: 28px;
-            border-radius: var(--radius-xl);
-            width: 90%;
-            max-width: 400px;
-            box-shadow: var(--shadow-xl);
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 1px solid var(--border);
-            animation: modalSlide 0.3s ease;
-        }
-        .modal-box h3 { 
-            font-size: 17px; 
-            font-weight: 600; 
-            margin-bottom: 20px;
+        .nyra-panel-head {
+            padding: 16px 18px 12px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: space-between;
+            gap: 10px;
+            background: var(--bg-card);
         }
-        .modal-box h3::before {
-            content: '';
-            width: 4px; height: 18px;
+        .nyra-panel-brand {
+            display: flex; align-items: center; gap: 8px;
+        }
+        .nyra-panel-icon {
+            width: 30px; height: 30px;
+            border-radius: 9px;
             background: var(--aura-gradient);
-            border-radius: 2px;
-            display: inline-block;
+            display: grid; place-items: center;
+            font-size: 13px; color: #fff;
+            box-shadow: 0 4px 12px rgba(224,8,246,0.3);
+            flex-shrink: 0;
         }
-
-        .search-results {
-            background: var(--bg-main);
+        .nyra-panel-title {
+            font-size: .9rem; font-weight: 700;
+            background: var(--aura-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nyra-panel-close {
+            background: none; border: none;
+            color: var(--text-muted); cursor: pointer;
+            width: 28px; height: 28px;
             border-radius: var(--radius-sm);
-            margin-top: 5px;
-            max-height: 160px;
-            overflow-y: auto;
-            border: 1px solid var(--border);
-            display: none;
-            box-shadow: var(--shadow-md);
+            display: grid; place-items: center;
+            transition: var(--transition); font-size: 13px;
         }
-        .search-item { 
-            padding: 10px 12px; 
-            cursor: pointer; 
-            border-bottom: 1px solid var(--border); 
-            font-size: 13px;
+        .nyra-panel-close:hover { background: var(--bg-main); color: var(--text-main); }
+
+        /* Quick actions */
+        .nyra-quick-actions {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .nyra-quick-label {
+            font-size: 10px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--text-muted); margin-bottom: 8px;
+        }
+        .nyra-quick-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        .nyra-quick-btn {
+            display: flex; align-items: center; gap: 6px;
+            padding: 9px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--bg-main);
+            color: var(--text-secondary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px; font-weight: 600;
+            cursor: pointer; transition: var(--transition);
+            text-align: left; line-height: 1.3;
+        }
+        .nyra-quick-btn i { font-size: 12px; color: var(--aura-primary); flex-shrink: 0; }
+        .nyra-quick-btn:hover {
+            background: rgba(224, 8, 246, 0.06);
+            border-color: rgba(224, 8, 246, 0.25);
+            color: var(--text-main);
+        }
+        .nyra-quick-btn:active { transform: scale(0.97); }
+
+        /* Chat area */
+        #nyra-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            scroll-behavior: smooth;
+        }
+        #nyra-chat-messages::-webkit-scrollbar { width: 4px; }
+        #nyra-chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+        .nyra-msg-block { display: flex; flex-direction: column; gap: 4px; }
+        .nyra-msg-block.user { align-items: flex-end; }
+        .nyra-msg-block.bot  { align-items: flex-start; }
+
+        .nyra-msg-label {
+            font-size: 10px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.06em;
+            color: var(--text-muted); padding: 0 4px;
+        }
+        .nyra-msg-block.user .nyra-msg-label { color: var(--aura-primary); }
+
+        .nyra-msg {
+            padding: 10px 13px;
+            border-radius: 14px;
+            font-size: 12.5px; font-weight: 400;
+            line-height: 1.6; word-break: break-word;
+            max-width: 90%;
+            animation: nyraIn 0.25s ease both;
+        }
+        @keyframes nyraIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+        .nyra-msg.user {
+            background: rgba(224, 8, 246, 0.1);
+            border: 1px solid rgba(224, 8, 246, 0.18);
+            border-bottom-right-radius: 4px;
+            color: var(--text-main);
+        }
+        .nyra-msg.bot {
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
+            color: var(--text-main);
+        }
+        .nyra-msg.bot p { margin-bottom: 6px; }
+        .nyra-msg.bot p:last-child { margin-bottom: 0; }
+        .nyra-msg.bot strong { font-weight: 700; }
+        .nyra-msg.bot em { font-style: italic; }
+        .nyra-msg.bot code { font-family: 'Courier Prime', monospace; font-size: 0.85em; background: rgba(224,8,246,0.07); padding: 1px 5px; border-radius: 3px; color: var(--aura-primary); }
+
+        /* Apply button inside bot message */
+        .nyra-apply-btn {
+            display: inline-flex; align-items: center; gap: 5px;
+            margin-top: 8px;
+            padding: 6px 12px;
+            border-radius: 50px;
+            background: var(--aura-gradient);
+            color: #fff;
+            border: none; cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px; font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 3px 10px rgba(224,8,246,0.25);
+        }
+        .nyra-apply-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(224,8,246,0.35); }
+        .nyra-apply-btn:active { transform: scale(0.96); }
+        .nyra-apply-btn i { font-size: 10px; }
+
+        /* Typing indicator */
+        .nyra-typing {
+            display: flex; align-items: center; gap: 4px;
+            padding: 10px 13px;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 14px; border-bottom-left-radius: 4px;
+            width: fit-content;
+        }
+        .nyra-typing span {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--aura-primary);
+            opacity: 0.4;
+            animation: nyraDot 1.2s infinite;
+        }
+        .nyra-typing span:nth-child(2) { animation-delay: 0.2s; }
+        .nyra-typing span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes nyraDot { 0%,60%,100%{ opacity:0.2; transform:scale(0.8); } 30%{ opacity:1; transform:scale(1.1); } }
+
+        /* Chat input */
+        .nyra-input-area {
+            padding: 12px 14px;
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+            background: var(--bg-card);
+        }
+        .nyra-input-row {
+            display: flex; align-items: flex-end; gap: 7px;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 6px 6px 6px 12px;
             transition: var(--transition);
         }
+        .nyra-input-row:focus-within { border-color: rgba(224, 8, 246, 0.4); background: var(--bg-card); }
+        #nyra-input {
+            flex: 1; background: none; border: none;
+            color: var(--text-main); font-family: 'Poppins', sans-serif;
+            font-size: 12.5px; font-weight: 400;
+            outline: none; resize: none;
+            max-height: 100px; min-height: 20px;
+            line-height: 1.5; padding: 4px 0;
+            overflow-y: auto;
+        }
+        #nyra-input::-webkit-scrollbar { display: none; }
+        #nyra-input::placeholder { color: var(--text-muted); }
+        #nyra-send-btn {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: var(--aura-gradient); color: #fff;
+            border: none; cursor: pointer;
+            display: grid; place-items: center;
+            flex-shrink: 0; font-size: 12px;
+            transition: var(--transition);
+            box-shadow: 0 3px 10px rgba(224,8,246,0.3);
+        }
+        #nyra-send-btn:hover { transform: scale(1.08); }
+        #nyra-send-btn:active { transform: scale(0.92); }
+        #nyra-send-btn:disabled { background: var(--border); box-shadow: none; opacity: 0.5; cursor: not-allowed; }
+
+        /* Context indicator */
+        .nyra-context-badge {
+            display: flex; align-items: center; gap: 5px;
+            font-size: 10px; color: var(--aura-primary);
+            font-weight: 600; padding: 4px 8px;
+            background: rgba(224,8,246,0.07);
+            border-radius: 20px; border: 1px solid rgba(224,8,246,0.15);
+            margin-bottom: 7px; width: fit-content;
+        }
+        .nyra-context-badge i { font-size: 9px; }
+
+        /* ── COLLAB MODAL ── */
+        #collab-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); z-index: 3000; justify-content: center; align-items: center; backdrop-filter: blur(6px); animation: fadeIn 0.2s ease; }
+        .modal-box { background: var(--bg-card); padding: 28px; border-radius: var(--radius-xl); width: 90%; max-width: 400px; box-shadow: var(--shadow-xl); max-height: 90vh; overflow-y: auto; border: 1px solid var(--border); animation: modalSlide 0.3s ease; }
+        .modal-box h3 { font-size: 17px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+        .modal-box h3::before { content: ''; width: 4px; height: 18px; background: var(--aura-gradient); border-radius: 2px; display: inline-block; }
+        .search-results { background: var(--bg-main); border-radius: var(--radius-sm); margin-top: 5px; max-height: 160px; overflow-y: auto; border: 1px solid var(--border); display: none; box-shadow: var(--shadow-md); }
+        .search-item { padding: 10px 12px; cursor: pointer; border-bottom: 1px solid var(--border); font-size: 13px; transition: var(--transition); }
         .search-item:last-child { border-bottom: none; }
         .search-item:hover { background: rgba(224, 8, 246, 0.06); }
-        
-        .collab-list { 
-            margin-top: 20px; 
-            border-top: 1px solid var(--border); 
-            padding-top: 16px; 
-        }
-        .collab-user { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 12px; 
-            font-size: 13px;
-            padding: 8px 10px;
-            border-radius: var(--radius-sm);
-            background: var(--bg-main);
-        }
-
-        .public-link-box {
-            margin-top: 20px;
-            padding: 16px;
-            background: rgba(224, 8, 246, 0.04);
-            border-radius: var(--radius-md);
-            border: 1px dashed rgba(224, 8, 246, 0.3);
-        }
-
-        /* ── MODAL FORM ELEMENTS ── */
-        .modal-input {
-            width: 100%;
-            padding: 11px 14px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
-            outline: none;
-            background: var(--bg-main);
-            color: var(--text-main);
-            font-size: 13px;
-            font-family: 'Poppins', sans-serif;
-            transition: var(--transition);
-        }
-        .modal-input:focus { 
-            border-color: var(--border-focus);
-            box-shadow: 0 0 0 3px rgba(224, 8, 246, 0.1);
-        }
-
-        .modal-btn-close {
-            width: 100%;
-            margin-top: 16px;
-            padding: 11px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            background: var(--bg-main);
-            color: var(--text-main);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: 'Poppins', sans-serif;
-            font-size: 13px;
-        }
+        .collab-list { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px; }
+        .collab-user { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; padding: 8px 10px; border-radius: var(--radius-sm); background: var(--bg-main); }
+        .public-link-box { margin-top: 20px; padding: 16px; background: rgba(224, 8, 246, 0.04); border-radius: var(--radius-md); border: 1px dashed rgba(224, 8, 246, 0.3); }
+        .modal-input { width: 100%; padding: 11px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); outline: none; background: var(--bg-main); color: var(--text-main); font-size: 13px; font-family: 'Poppins', sans-serif; transition: var(--transition); }
+        .modal-input:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(224, 8, 246, 0.1); }
+        .modal-btn-close { width: 100%; margin-top: 16px; padding: 11px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-main); color: var(--text-main); font-weight: 600; cursor: pointer; transition: var(--transition); font-family: 'Poppins', sans-serif; font-size: 13px; }
         .modal-btn-close:hover { border-color: var(--border-focus); }
 
         /* ── ANIMATIONS ── */
@@ -656,34 +527,20 @@
         @keyframes dropdownFade { from { opacity: 0; transform: translateY(-8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes modalSlide { from { opacity: 0; transform: translateY(20px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        /* ── SCROLLBAR ── */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
-        /* ── CHECKBOX TOGGLE ── */
-        input[type="checkbox"] {
-            appearance: none;
-            width: 36px; height: 20px;
-            border-radius: 10px;
-            background: var(--border);
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-        }
-        input[type="checkbox"]::after {
-            content: '';
-            position: absolute;
-            left: 3px; top: 3px;
-            width: 14px; height: 14px;
-            border-radius: 50%;
-            background: white;
-            transition: var(--transition);
-        }
+        input[type="checkbox"] { appearance: none; width: 36px; height: 20px; border-radius: 10px; background: var(--border); cursor: pointer; transition: var(--transition); position: relative; }
+        input[type="checkbox"]::after { content: ''; position: absolute; left: 3px; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: white; transition: var(--transition); }
         input[type="checkbox"]:checked { background: var(--aura-gradient); }
         input[type="checkbox"]:checked::after { transform: translateX(16px); }
 
+        @media (max-width: 768px) {
+            :root { --nyra-panel: 100vw; }
+            #nyra-panel.open { position: absolute; right: 0; top: 0; height: 100%; z-index: 200; box-shadow: var(--shadow-xl); }
+        }
         @media (max-width: 600px) {
             .canvas { padding: 40px 28px; }
             .toolbar { gap: 2px; padding: 6px 8px; }
@@ -724,6 +581,7 @@
     </div>
 </header>
 
+<!-- DASHBOARD -->
 <div id="dashboard-view">
     <div class="dashboard-header">
         <h2>I tuoi Documenti</h2>
@@ -734,58 +592,126 @@
     <div class="docs-grid" id="docs-grid"></div>
 </div>
 
+<!-- EDITOR -->
 <div id="editor-view">
-    <div class="toolbar">
-        <select id="font-family" onchange="execCmd('fontName', this.value)" title="Carattere">
-            <option value="Poppins">Poppins</option>
-            <option value="Roboto">Roboto</option>
-            <option value="Open Sans">Open Sans</option>
-            <option value="Playfair Display">Elegante</option>
-            <option value="Courier Prime">Monospace</option>
-        </select>
-        <input type="number" id="font-size" min="11" max="128" value="16" onchange="changeFontSize(this.value)" title="Dimensione" style="width: 56px;">
-        
-        <div class="toolbar-divider"></div>
-        
-        <button onclick="execCmd('bold')" title="Grassetto"><i class="fas fa-bold"></i></button>
-        <button onclick="execCmd('italic')" title="Corsivo"><i class="fas fa-italic"></i></button>
-        <button onclick="execCmd('underline')" title="Sottolineato"><i class="fas fa-underline"></i></button>
 
-        <div class="toolbar-divider"></div>
+    <!-- MAIN EDITOR AREA -->
+    <div id="editor-main">
+        <div class="toolbar">
+            <select id="font-family" onchange="execCmd('fontName', this.value)" title="Carattere">
+                <option value="Poppins">Poppins</option>
+                <option value="Roboto">Roboto</option>
+                <option value="Open Sans">Open Sans</option>
+                <option value="Playfair Display">Elegante</option>
+                <option value="Courier Prime">Monospace</option>
+            </select>
+            <input type="number" id="font-size" min="11" max="128" value="16" onchange="changeFontSize(this.value)" title="Dimensione" style="width: 56px;">
+            <div class="toolbar-divider"></div>
+            <button onclick="execCmd('bold')" title="Grassetto"><i class="fas fa-bold"></i></button>
+            <button onclick="execCmd('italic')" title="Corsivo"><i class="fas fa-italic"></i></button>
+            <button onclick="execCmd('underline')" title="Sottolineato"><i class="fas fa-underline"></i></button>
+            <div class="toolbar-divider"></div>
+            <button onclick="execCmd('formatBlock', 'H1')" title="Titolo 1"><b style="font-size:11px;">H1</b></button>
+            <button onclick="execCmd('formatBlock', 'H2')" title="Titolo 2"><b style="font-size:11px;">H2</b></button>
+            <button onclick="execCmd('formatBlock', 'H3')" title="Titolo 3"><b style="font-size:11px;">H3</b></button>
+            <div class="toolbar-divider"></div>
+            <button onclick="execCmd('insertUnorderedList')" title="Lista"><i class="fas fa-list-ul"></i></button>
+            <button onclick="execCmd('insertOrderedList')" title="Lista numerata"><i class="fas fa-list-ol"></i></button>
+            <button onclick="addLink()" title="Inserisci link"><i class="fas fa-link"></i></button>
+            <div class="toolbar-divider"></div>
+            <button onclick="execCmd('justifyLeft')" title="Allinea sinistra"><i class="fas fa-align-left"></i></button>
+            <button onclick="execCmd('justifyCenter')" title="Allinea centro"><i class="fas fa-align-center"></i></button>
+            <button onclick="execCmd('justifyRight')" title="Allinea destra"><i class="fas fa-align-right"></i></button>
+            <div class="toolbar-divider"></div>
+            <button onclick="openCollabModal()" title="Collaborazione"><i class="fas fa-user-plus"></i></button>
+            <button onclick="exportDoc()" title="Esporta"><i class="fas fa-file-export"></i></button>
+            <button id="btn-delete" onclick="deleteDoc()" title="Elimina documento" class="danger"><i class="fas fa-trash"></i></button>
+            <div class="toolbar-divider"></div>
+            <!-- NYRA BUTTON -->
+            <button class="nyra-btn" id="nyra-toolbar-btn" onclick="toggleNyraPanel()" title="Assistente Nyra AI"><i class="fas fa-wand-magic-sparkles"></i></button>
+        </div>
 
-        <button onclick="execCmd('formatBlock', 'H1')" title="Titolo 1"><b style="font-size:11px;">H1</b></button>
-        <button onclick="execCmd('formatBlock', 'H2')" title="Titolo 2"><b style="font-size:11px;">H2</b></button>
-        <button onclick="execCmd('formatBlock', 'H3')" title="Titolo 3"><b style="font-size:11px;">H3</b></button>
-
-        <div class="toolbar-divider"></div>
-
-        <button onclick="execCmd('insertUnorderedList')" title="Lista"><i class="fas fa-list-ul"></i></button>
-        <button onclick="execCmd('insertOrderedList')" title="Lista numerata"><i class="fas fa-list-ol"></i></button>
-        <button onclick="addLink()" title="Inserisci link"><i class="fas fa-link"></i></button>
-
-        <div class="toolbar-divider"></div>
-
-        <button onclick="execCmd('justifyLeft')" title="Allinea sinistra"><i class="fas fa-align-left"></i></button>
-        <button onclick="execCmd('justifyCenter')" title="Allinea centro"><i class="fas fa-align-center"></i></button>
-        <button onclick="execCmd('justifyRight')" title="Allinea destra"><i class="fas fa-align-right"></i></button>
-
-        <div class="toolbar-divider"></div>
-
-        <button onclick="openCollabModal()" title="Collaborazione"><i class="fas fa-user-plus"></i></button>
-        <button onclick="exportDoc()" title="Esporta"><i class="fas fa-file-export"></i></button>
-        <button id="btn-delete" onclick="deleteDoc()" title="Elimina documento" class="danger"><i class="fas fa-trash"></i></button>
+        <div class="canvas">
+            <div id="visual-editor" contenteditable="true" oninput="autoSave()"></div>
+            <textarea id="editor-textarea" oninput="autoSave(); autoResizeTextarea(this)"></textarea>
+        </div>
     </div>
-    <div class="canvas">
-        <div id="visual-editor" contenteditable="true" oninput="autoSave()"></div>
-        <textarea id="editor-textarea" oninput="autoSave()"></textarea>
+
+    <!-- NYRA PANEL -->
+    <div id="nyra-panel">
+        <div class="nyra-panel-head">
+            <div class="nyra-panel-brand">
+                <div class="nyra-panel-icon">✦</div>
+                <span class="nyra-panel-title">Nyra AI</span>
+            </div>
+            <button class="nyra-panel-close" onclick="toggleNyraPanel()" title="Chiudi">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Quick actions -->
+        <div class="nyra-quick-actions">
+            <div class="nyra-quick-label">Azioni rapide</div>
+            <div class="nyra-quick-grid">
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('migliora')">
+                    <i class="fas fa-wand-magic-sparkles"></i> Migliora testo
+                </button>
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('riassumi')">
+                    <i class="fas fa-compress-alt"></i> Riassumi
+                </button>
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('espandi')">
+                    <i class="fas fa-expand-alt"></i> Espandi
+                </button>
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('formale')">
+                    <i class="fas fa-briefcase"></i> Tono formale
+                </button>
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('informale')">
+                    <i class="fas fa-comment-smile"></i> Tono informale
+                </button>
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('correggi')">
+                    <i class="fas fa-spell-check"></i> Correggi errori
+                </button>
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('traduci-en')">
+                    <i class="fas fa-language"></i> Traduci EN
+                </button>
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('continua')">
+                    <i class="fas fa-pen-nib"></i> Continua testo
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat messages -->
+        <div id="nyra-chat-messages">
+            <!-- Welcome message -->
+            <div class="nyra-msg-block bot">
+                <div class="nyra-msg-label">Nyra</div>
+                <div class="nyra-msg bot">
+                    Ciao! 👋 Sono <strong>Nyra</strong>, la tua assistente AI integrata in Aura Docs.<br><br>
+                    Puoi usare le <strong>azioni rapide</strong> per modificare il tuo documento, oppure chiedermi qualsiasi cosa qui sotto.
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat input -->
+        <div class="nyra-input-area">
+            <div id="nyra-context-indicator" style="display:none;"></div>
+            <div class="nyra-input-row">
+                <textarea id="nyra-input" placeholder="Chiedi a Nyra..." rows="1"
+                    oninput="nyraAutoResize(this)"
+                    onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();nyraSend();}"></textarea>
+                <button id="nyra-send-btn" onclick="nyraSend()">
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+            </div>
+        </div>
     </div>
+
 </div>
 
 <!-- COLLAB MODAL -->
 <div id="collab-modal" onclick="closeCollabModal(event)">
     <div class="modal-box" onclick="event.stopPropagation()">
         <h3>Collaborazione</h3>
-        
         <div class="public-link-box">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                 <div>
@@ -798,12 +724,9 @@
                 <input type="text" id="public-url-input" readonly class="modal-input" style="font-size:11px; margin-top:4px;">
             </div>
         </div>
-
         <p style="font-size: 12px; color: var(--text-secondary); margin: 18px 0 8px; font-weight: 500;">Aggiungi collaboratore</p>
-        
         <input type="text" id="user-search-input" placeholder="Cerca per nome e cognome..." class="modal-input">
         <div id="search-results" class="search-results"></div>
-
         <div id="role-selector" style="display:none; margin-top:12px; background:rgba(224, 8, 246, 0.05); padding:12px; border-radius:var(--radius-sm);">
             <p id="selected-user-display" style="font-weight:600; font-size:13px; margin-bottom:10px;"></p>
             <div style="display:flex; gap:8px;">
@@ -814,13 +737,13 @@
                 <button onclick="addCollaborator()" style="background:var(--aura-gradient); color:white; border:none; padding:7px 18px; border-radius:var(--radius-sm); font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; font-size:12px; transition:var(--transition);">Aggiungi</button>
             </div>
         </div>
-
         <div class="collab-list" id="active-collabs-list"></div>
         <button class="modal-btn-close" onclick="document.getElementById('collab-modal').style.display='none'">Chiudi</button>
     </div>
 </div>
 
 <script>
+    // ── FIREBASE ──
     const firebaseConfig = {
         apiKey: "AIzaSyDsrHAtIh5bsYDHa1wz0LMcmciChAoRikU",
         authDomain: "myauraid-f03c6.firebaseapp.com",
@@ -834,19 +757,26 @@
     const db = firebase.firestore();
     const turndownService = new TurndownService();
 
+    // ── STATE ──
     let currentDocId = null;
     let saveTimeout = null;
     let currentMode = 'visual';
     let tempSelectedUser = null;
+
+    // Nyra state
+    let nyraIsOpen = false;
+    let nyraIsProcessing = false;
+    let nyraHistory = []; // cronologia messaggi per /nyra
+    let lastGeneratedText = ''; // ultimo testo generato da Nyra, per il pulsante "Applica"
 
     document.execCommand('defaultParagraphSeparator', false, 'p');
 
     // ── DROPDOWN ──
     const userTrigger = document.getElementById('user-trigger');
     const userDropdown = document.getElementById('user-dropdown');
-    userTrigger.addEventListener('click', (e) => { 
-        e.stopPropagation(); 
-        userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block'; 
+    userTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block';
     });
     window.addEventListener('click', () => userDropdown.style.display = 'none');
 
@@ -874,10 +804,8 @@
         const val = e.target.value.trim();
         const resultsBox = document.getElementById('search-results');
         if (val.length < 2) { resultsBox.style.display = 'none'; return; }
-
         const snap = await db.collection('users').where('nome', '>=', val).where('nome', '<=', val + '\uf8ff').limit(5).get();
         resultsBox.innerHTML = '';
-        
         if (snap.empty) {
             resultsBox.innerHTML = '<div class="search-item" style="color:var(--text-muted);">Nessun utente trovato</div>';
         } else {
@@ -887,9 +815,7 @@
                 div.className = 'search-item';
                 div.style.cssText = 'display:flex; align-items:center; gap:10px;';
                 const photoUrl = u.profileImage || 'images/default.png';
-                div.innerHTML = `
-                    <img src="${photoUrl}" style="width:26px; height:26px; border-radius:50%; object-fit:cover; border:1px solid var(--border);">
-                    <span>${u.nome} ${u.cognome}</span>`;
+                div.innerHTML = `<img src="${photoUrl}" style="width:26px; height:26px; border-radius:50%; object-fit:cover; border:1px solid var(--border);"><span>${u.nome} ${u.cognome}</span>`;
                 div.onclick = () => {
                     tempSelectedUser = { id: doc.id, name: `${u.nome} ${u.cognome}` };
                     document.getElementById('selected-user-display').textContent = tempSelectedUser.name;
@@ -919,17 +845,14 @@
         const doc = await db.collection('documents').doc(currentDocId).get();
         const listDiv = document.getElementById('active-collabs-list');
         const data = doc.data();
-        
         document.getElementById('public-check').checked = data.isPublic || false;
         document.getElementById('public-url-container').style.display = data.isPublic ? 'block' : 'none';
         if (data.isPublic) document.getElementById('public-url-input').value = `docs.aurastudioitalia.it/document?id=${currentDocId}`;
-
         listDiv.innerHTML = '<p style="font-weight:600; font-size:12px; margin-bottom:10px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Collaboratori</p>';
         const collabs = data.collaborators;
         for (const [uid, role] of Object.entries(collabs)) {
             const uDoc = await db.collection('users').doc(uid).get();
-            let name = uid;
-            let photoUrl = 'images/default.png';
+            let name = uid, photoUrl = 'images/default.png';
             if (uDoc.exists) {
                 const uData = uDoc.data();
                 name = `${uData.nome} ${uData.cognome}`;
@@ -968,7 +891,6 @@
         const visual = document.getElementById('visual-editor');
         document.getElementById('btn-visual').classList.toggle('active', mode === 'visual');
         document.getElementById('btn-literal').classList.toggle('active', mode === 'literal');
-
         if (mode === 'visual') {
             visual.innerHTML = marked.parse(textarea.value);
             visual.style.display = 'block';
@@ -977,14 +899,13 @@
             textarea.value = turndownService.turndown(visual.innerHTML);
             visual.style.display = 'none';
             textarea.style.display = 'block';
+            // Auto-resize in letterale mode
+            setTimeout(() => autoResizeTextarea(textarea), 10);
         }
     }
 
-    function execCmd(cmd, val = null) { 
-        if (currentMode === 'visual') { 
-            document.execCommand(cmd, false, val); 
-            autoSave(); 
-        } 
+    function execCmd(cmd, val = null) {
+        if (currentMode === 'visual') { document.execCommand(cmd, false, val); autoSave(); }
     }
 
     function addLink() {
@@ -999,8 +920,8 @@
         saveTimeout = setTimeout(() => {
             if (!currentDocId) return;
             const visualDiv = document.getElementById('visual-editor');
-            const content = currentMode === 'visual' 
-                ? turndownService.turndown(visualDiv.innerHTML) 
+            const content = currentMode === 'visual'
+                ? turndownService.turndown(visualDiv.innerHTML)
                 : document.getElementById('editor-textarea').value;
             db.collection('documents').doc(currentDocId).update({
                 title: document.getElementById('doc-title-input').value,
@@ -1057,27 +978,23 @@
 
     function openDoc(id, data) {
         currentDocId = id;
+        nyraHistory = []; // Reset cronologia Nyra ad ogni nuovo documento
         const role = data.collaborators[auth.currentUser.uid];
         const canEdit = role === 'Proprietario' || role === 'Editor';
         const visual = document.getElementById('visual-editor');
-        
         visual.contentEditable = canEdit;
         document.getElementById('doc-title-input').disabled = !canEdit;
         document.getElementById('btn-delete').style.display = (role === 'Proprietario') ? 'flex' : 'none';
-
         document.getElementById('dashboard-view').style.display = 'none';
         document.getElementById('editor-view').style.display = 'flex';
         document.getElementById('doc-title-container').style.display = 'flex';
         document.getElementById('close-editor').style.display = 'flex';
-        
         document.getElementById('doc-title-input').value = data.title || 'Senza titolo';
         document.getElementById('editor-textarea').value = data.content || '';
-        
         visual.style.fontSize = data.fontSize || "16px";
         visual.style.fontFamily = data.fontFamily || "Poppins";
         document.getElementById('font-size').value = parseInt(data.fontSize) || 16;
         document.getElementById('font-family').value = data.fontFamily || "Poppins";
-        
         visual.innerHTML = marked.parse(data.content || "");
         setMode('visual');
     }
@@ -1092,13 +1009,13 @@
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
             collaborators: { [auth.currentUser.uid]: "Proprietario" }
         });
-        // Auto-apri il nuovo documento
         const doc = await docRef.get();
         openDoc(docRef.id, doc.data());
     }
 
     function closeEditor() { location.reload(); }
     function closeCollabModal(e) { document.getElementById('collab-modal').style.display = 'none'; }
+
     function exportDoc() {
         const content = document.getElementById('visual-editor').innerHTML;
         const blob = new Blob([content], { type: 'text/html' });
@@ -1108,14 +1025,282 @@
         a.click();
     }
 
-    async function deleteDoc() { 
-        if (confirm("Eliminare definitivamente questo documento?")) { 
-            await db.collection('documents').doc(currentDocId).delete(); 
-            closeEditor(); 
-        } 
+    async function deleteDoc() {
+        if (confirm("Eliminare definitivamente questo documento?")) {
+            await db.collection('documents').doc(currentDocId).delete();
+            closeEditor();
+        }
     }
 
     document.getElementById('doc-title-input').addEventListener('input', autoSave);
+
+    // ════════════════════════════════════════════
+    // ── NYRA AI PANEL ──
+    // ════════════════════════════════════════════
+
+    function toggleNyraPanel() {
+        const panel = document.getElementById('nyra-panel');
+        const btn = document.getElementById('nyra-toolbar-btn');
+        nyraIsOpen = !nyraIsOpen;
+        panel.classList.toggle('open', nyraIsOpen);
+        btn.classList.toggle('active', nyraIsOpen);
+    }
+
+    function nyraAutoResize(el) {
+        el.style.height = 'auto';
+        el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+    }
+
+    // Restituisce il testo corrente del documento
+    function getDocumentText() {
+        const visual = document.getElementById('visual-editor');
+        const textarea = document.getElementById('editor-textarea');
+        if (currentMode === 'visual') {
+            return visual.innerText.trim();
+        }
+        return textarea.value.trim();
+    }
+
+    // Restituisce il testo selezionato (se presente) nel visual editor
+    function getSelectedText() {
+        const selection = window.getSelection();
+        if (selection && selection.toString().trim().length > 0) {
+            return selection.toString().trim();
+        }
+        return null;
+    }
+
+    // Applica il testo al documento (mette il markdown in Letterale e mostra in Visuale)
+    function applyTextToDoc(newText) {
+        const visual = document.getElementById('visual-editor');
+        const textarea = document.getElementById('editor-textarea');
+        // Salva sempre il raw markdown nel textarea (sorgente)
+        textarea.value = newText;
+        // Aggiorna il visual editor con il rendering
+        visual.innerHTML = marked.parse(newText);
+        // Assicurati di essere in modalità Visuale per mostrare il risultato
+        if (currentMode !== 'visual') {
+            setMode('visual');
+        }
+        autoSave();
+        // Auto-resize textarea
+        autoResizeTextarea(textarea);
+    }
+
+    // Auto-resize textarea in base al contenuto
+    function autoResizeTextarea(el) {
+        el.style.height = 'auto';
+        el.style.height = el.scrollHeight + 'px';
+    }
+
+    // Aggiunge un messaggio alla chat Nyra
+    function nyraAppendMessage(role, html, withApply = false, applyText = '') {
+        const container = document.getElementById('nyra-chat-messages');
+        const block = document.createElement('div');
+        block.className = `nyra-msg-block ${role}`;
+
+        const label = document.createElement('div');
+        label.className = 'nyra-msg-label';
+        label.textContent = role === 'user' ? 'Tu' : 'Nyra';
+        block.appendChild(label);
+
+        const bubble = document.createElement('div');
+        bubble.className = `nyra-msg ${role}`;
+
+        if (role === 'bot') {
+            try { bubble.innerHTML = marked.parse(html); } catch(e) { bubble.textContent = html; }
+        } else {
+            bubble.textContent = html;
+        }
+
+        // Pulsante "Applica al documento" — solo se c'è testo da applicare
+        if (withApply && applyText) {
+            const applyBtn = document.createElement('button');
+            applyBtn.className = 'nyra-apply-btn';
+            applyBtn.innerHTML = '<i class="fas fa-check"></i> Applica al documento';
+            applyBtn.onclick = () => {
+                applyTextToDoc(applyText);
+                applyBtn.innerHTML = '<i class="fas fa-check-double"></i> Applicato!';
+                applyBtn.disabled = true;
+                applyBtn.style.opacity = '0.6';
+            };
+            bubble.appendChild(document.createElement('br'));
+            bubble.appendChild(applyBtn);
+        }
+
+        block.appendChild(bubble);
+        container.appendChild(block);
+        container.scrollTop = container.scrollHeight;
+        return bubble;
+    }
+
+    // Mostra typing indicator
+    function nyraShowTyping() {
+        const container = document.getElementById('nyra-chat-messages');
+        const block = document.createElement('div');
+        block.className = 'nyra-msg-block bot';
+        block.id = 'nyra-typing-block';
+        const label = document.createElement('div');
+        label.className = 'nyra-msg-label';
+        label.textContent = 'Nyra';
+        block.appendChild(label);
+        const typing = document.createElement('div');
+        typing.className = 'nyra-typing';
+        typing.innerHTML = '<span></span><span></span><span></span>';
+        block.appendChild(typing);
+        container.appendChild(block);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function nyraHideTyping() {
+        const t = document.getElementById('nyra-typing-block');
+        if (t) t.remove();
+    }
+
+    // Mostra il context badge (selezione o tutto il doc)
+    function nyraUpdateContextBadge() {
+        const indicator = document.getElementById('nyra-context-indicator');
+        const selected = getSelectedText();
+        if (selected) {
+            indicator.style.display = 'flex';
+            indicator.innerHTML = `<div class="nyra-context-badge"><i class="fas fa-text-slash"></i> Testo selezionato (${selected.length} car.)</div>`;
+        } else {
+            indicator.style.display = 'none';
+        }
+    }
+
+    // Mostra il badge al click sul documento
+    document.getElementById('visual-editor').addEventListener('mouseup', nyraUpdateContextBadge);
+    document.getElementById('editor-textarea').addEventListener('mouseup', nyraUpdateContextBadge);
+
+    // ── AZIONI RAPIDE ──
+    const QUICK_PROMPTS = {
+        'migliora':    (t) => `Migliora la qualità e la leggibilità del seguente testo, mantenendo il significato originale. Restituisci solo il testo migliorato, senza spiegazioni:\n\n${t}`,
+        'riassumi':    (t) => `Riassumi il seguente testo in modo conciso e chiaro. Restituisci solo il riassunto:\n\n${t}`,
+        'espandi':     (t) => `Espandi e arricchisci il seguente testo aggiungendo dettagli, esempi e contenuto pertinente. Restituisci solo il testo espanso:\n\n${t}`,
+        'formale':     (t) => `Riscrivi il seguente testo con un tono professionale e formale. Restituisci solo il testo riscritto:\n\n${t}`,
+        'informale':   (t) => `Riscrivi il seguente testo con un tono informale, amichevole e naturale. Restituisci solo il testo riscritto:\n\n${t}`,
+        'correggi':    (t) => `Correggi tutti gli errori grammaticali, ortografici e di punteggiatura nel seguente testo. Restituisci solo il testo corretto:\n\n${t}`,
+        'traduci-en':  (t) => `Traduci il seguente testo in inglese. Restituisci solo la traduzione:\n\n${t}`,
+        'continua':    (t) => `Continua il seguente testo in modo coerente e naturale, mantenendo lo stile dell'autore. Restituisci solo la continuazione (non ripetere il testo originale):\n\n${t}`,
+    };
+
+    const QUICK_LABELS = {
+        'migliora':   '✨ Migliora testo',
+        'riassumi':   '📝 Riassumi',
+        'espandi':    '📖 Espandi',
+        'formale':    '💼 Tono formale',
+        'informale':  '💬 Tono informale',
+        'correggi':   '🔍 Correggi errori',
+        'traduci-en': '🌐 Traduci in inglese',
+        'continua':   '✍️ Continua testo',
+    };
+
+    async function nyraQuickAction(action) {
+        // Apri il pannello se chiuso
+        if (!nyraIsOpen) toggleNyraPanel();
+
+        const selected = getSelectedText();
+        const docText = getDocumentText();
+        const targetText = selected || docText;
+
+        if (!targetText) {
+            nyraAppendMessage('bot', '⚠️ Il documento è vuoto. Scrivi qualcosa prima di usare le azioni rapide.');
+            return;
+        }
+
+        const label = QUICK_LABELS[action] || action;
+        const contextNote = selected ? '*(testo selezionato)*' : '*(intero documento)*';
+
+        nyraAppendMessage('user', `${label} ${contextNote}`);
+        await nyraCallAPI(QUICK_PROMPTS[action](targetText), true);
+    }
+
+    // ── SEND MANUALE ──
+    async function nyraSend() {
+        if (nyraIsProcessing) return;
+        const input = document.getElementById('nyra-input');
+        const text = input.value.trim();
+        if (!text) return;
+
+        input.value = '';
+        input.style.height = 'auto';
+        nyraAppendMessage('user', text);
+
+        // Aggiungi contesto del documento se rilevante
+        const docText = getDocumentText();
+        const selected = getSelectedText();
+        let messageWithContext = text;
+
+        // Se l'utente chiede di fare qualcosa con il testo, aggiungiamo il contesto automaticamente
+        const needsContext = /\b(testo|documento|scritto|contenuto|paragrafo|frase|parole|articolo)\b/i.test(text);
+        if (needsContext && docText) {
+            const contextSnippet = selected || (docText.length > 1200 ? docText.substring(0, 1200) + '...' : docText);
+            messageWithContext = `${text}\n\nContesto del documento:\n---\n${contextSnippet}\n---`;
+        }
+
+        await nyraCallAPI(messageWithContext, false);
+    }
+
+    // ── CHIAMATA ALL'API /nyra ──
+    async function nyraCallAPI(message, isDocAction = false) {
+        if (nyraIsProcessing) return;
+        nyraIsProcessing = true;
+        document.getElementById('nyra-send-btn').disabled = true;
+
+        nyraShowTyping();
+
+        try {
+            const payload = {
+                message,
+                history: nyraHistory,
+                model: 'openai/gpt-5-nano',
+                temperature: 0.7,
+                systemPrompt: isDocAction
+                    ? 'Sei Nyra, assistente AI integrata in Aura Docs. Quando ti vengono chieste modifiche al testo, restituisci SOLO il testo modificato, senza preamboli, spiegazioni o commenti. Per le domande generali, rispondi normalmente in italiano.'
+                    : 'Sei Nyra, assistente AI integrata in Aura Docs. Aiuta l\'utente con il suo documento. Rispondi in italiano in modo conciso e utile.',
+            };
+
+            const response = await fetch('https://api.nyra.aurastudioitalia.it/nyra', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.error || `Errore ${response.status}`);
+            }
+
+            const data = await response.json();
+            const reply = data.reply || '';
+
+            if (!reply) throw new Error('Risposta vuota dal server.');
+
+            // Aggiorna la cronologia
+            if (Array.isArray(data.updatedHistory)) {
+                nyraHistory = data.updatedHistory;
+            } else {
+                nyraHistory.push({ role: 'user', content: message });
+                nyraHistory.push({ role: 'assistant', content: reply });
+            }
+
+            nyraHideTyping();
+
+            // Se è un'azione documento → mostra il pulsante "Applica"
+            nyraAppendMessage('bot', reply, isDocAction, reply);
+
+        } catch (err) {
+            nyraHideTyping();
+            nyraAppendMessage('bot', `⚠️ ${err.message || 'Errore di connessione. Riprova.'}`);
+        } finally {
+            nyraIsProcessing = false;
+            document.getElementById('nyra-send-btn').disabled = false;
+        }
+    }
+
+    // Aggiorna badge al focus sull'input Nyra
+    document.getElementById('nyra-input').addEventListener('focus', nyraUpdateContextBadge);
 </script>
 </body>
 </html>

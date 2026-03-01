@@ -42,21 +42,20 @@
             --toolbar-h: 52px;
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-main: #0d0e11;
-                --bg-card: #16181d;
-                --bg-hover: #1c1e24;
-                --text-main: #f1f3f5;
-                --text-secondary: #8b95a1;
-                --text-muted: #5a6272;
-                --border: #252830;
-                --border-focus: rgba(224, 8, 246, 0.5);
-                --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
-                --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
-                --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
-                --shadow-xl: 0 24px 64px rgba(0,0,0,0.6);
-            }
+        /* Dark theme via data attribute (set by JS) */
+        [data-theme="dark"] {
+            --bg-main: #0d0e11;
+            --bg-card: #16181d;
+            --bg-hover: #1c1e24;
+            --text-main: #f1f3f5;
+            --text-secondary: #8b95a1;
+            --text-muted: #5a6272;
+            --border: #252830;
+            --border-focus: rgba(224, 8, 246, 0.5);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
+            --shadow-xl: 0 24px 64px rgba(0,0,0,0.6);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -951,6 +950,173 @@
         #nyra-send-btn:active { transform: scale(0.9); }
         #nyra-send-btn:disabled { background: var(--border); box-shadow: none; opacity: 0.5; }
 
+
+        /* ── THEME PICKER (first-launch) ── */
+        #theme-picker {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 9000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            animation: fadeIn 0.3s ease;
+        }
+        .theme-picker-box {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 32px 24px 28px;
+            width: 90%; max-width: 340px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border);
+            animation: modalSlide 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+            text-align: center;
+        }
+        .theme-picker-icon {
+            width: 56px; height: 56px;
+            border-radius: 16px;
+            background: var(--aura-gradient);
+            display: grid; place-items: center;
+            font-size: 22px; color: #fff;
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 24px rgba(224,8,246,0.35);
+        }
+        .theme-picker-box h2 {
+            font-size: 17px; font-weight: 700;
+            margin-bottom: 6px; letter-spacing: -0.3px;
+        }
+        .theme-picker-box p {
+            font-size: 12px; color: var(--text-secondary);
+            margin-bottom: 24px; line-height: 1.5;
+        }
+        .theme-options {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 10px; margin-bottom: 0;
+        }
+        .theme-option {
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px 12px 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex; flex-direction: column;
+            align-items: center; gap: 8px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .theme-option:active { transform: scale(0.96); }
+        .theme-option.selected {
+            border-color: var(--aura-primary);
+            background: rgba(224, 8, 246, 0.06);
+            box-shadow: 0 0 0 3px rgba(224,8,246,0.12);
+        }
+        .theme-preview {
+            width: 52px; height: 36px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--border);
+            overflow: hidden; position: relative;
+            display: grid; grid-template-rows: 10px 1fr;
+        }
+        .theme-preview-bar { background: var(--c, #fff); }
+        .theme-preview-body { background: var(--b, #f4f5f8); }
+        .theme-preview.light { --c: #ffffff; --b: #f4f5f8; }
+        .theme-preview.dark  { --c: #16181d; --b: #0d0e11; }
+        .theme-option-label {
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            color: var(--text-secondary);
+        }
+        .theme-option.selected .theme-option-label { color: var(--aura-primary); }
+        .theme-confirm-btn {
+            width: 100%; margin-top: 16px;
+            padding: 13px;
+            background: var(--aura-gradient); color: #fff;
+            border: none; border-radius: var(--radius-md);
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px; font-weight: 700;
+            cursor: pointer; transition: var(--transition);
+            box-shadow: 0 4px 16px rgba(224,8,246,0.3);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .theme-confirm-btn:active { transform: scale(0.97); }
+        .theme-confirm-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* ── SETTINGS SHEET (in dropdown) ── */
+        #settings-sheet {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 5000;
+            justify-content: center;
+            align-items: flex-end;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            animation: fadeIn 0.2s ease;
+        }
+        .settings-box {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            width: 100%; max-width: 480px;
+            padding: 0 20px 32px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border); border-bottom: none;
+            animation: sheetSlide 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+            margin: 0 auto;
+        }
+        .settings-handle {
+            width: 40px; height: 4px;
+            background: var(--border); border-radius: 2px;
+            margin: 14px auto 0;
+        }
+        .settings-box h3 {
+            font-size: 16px; font-weight: 600;
+            margin: 20px 0 18px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .settings-box h3::before {
+            content: ''; width: 4px; height: 18px;
+            background: var(--aura-gradient); border-radius: 2px; display: inline-block;
+        }
+        .settings-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .settings-row:last-of-type { border-bottom: none; }
+        .settings-row-label { font-size: 14px; font-weight: 500; }
+        .settings-row-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+        .theme-toggle-row {
+            display: flex; gap: 8px;
+        }
+        .theme-pill {
+            padding: 6px 14px; border-radius: 50px;
+            font-size: 11px; font-weight: 700;
+            border: 1.5px solid var(--border);
+            background: var(--bg-main);
+            color: var(--text-secondary);
+            cursor: pointer; transition: var(--transition);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .theme-pill.active {
+            background: var(--aura-gradient); color: #fff;
+            border-color: transparent;
+            box-shadow: 0 3px 10px rgba(224,8,246,0.3);
+        }
+        .theme-pill:active { transform: scale(0.95); }
+
+        @media (min-width: 640px) {
+            #settings-sheet { align-items: center; }
+            .settings-box {
+                border-radius: var(--radius-xl);
+                border: 1px solid var(--border);
+                max-width: 360px;
+                animation: modalSlide 0.3s ease;
+                padding: 0 24px 28px;
+            }
+            .settings-handle { display: none; }
+            #theme-picker { animation: fadeIn 0.2s ease; }
+        }
+
         /* ── ANIMATIONS ── */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: translateX(0); } }
@@ -1110,7 +1276,7 @@
                 <span id="user-uid">...</span>
             </div>
             <div class="dropdown-divider"></div>
-            <a href="https://apps.aurastudioitalia.it"><i class="fas fa-th-large"></i> Launchboard</a>
+            <a href="#" onclick="openSettings(event)"><i class="fas fa-sliders"></i> Impostazioni</a>
             <div class="dropdown-divider"></div>
             <a href="#" style="color: #ef4444;" onclick="auth.signOut()"><i class="fas fa-sign-out-alt"></i> Esci</a>
         </div>
@@ -1859,6 +2025,104 @@
     }
 
     document.getElementById('nyra-input').addEventListener('focus', nyraUpdateContextBadge);
+
+    // ══════════════════════════════════════════
+    // ── TEMA ──
+    // ══════════════════════════════════════════
+
+    let _pendingTheme = null;
+
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : '');
+        localStorage.setItem('aura-theme', theme);
+        document.getElementById('pill-light').classList.toggle('active', theme === 'light');
+        document.getElementById('pill-dark').classList.toggle('active',  theme === 'dark');
+    }
+
+    function selectTheme(theme) {
+        _pendingTheme = theme;
+        document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : '');
+        document.getElementById('pick-light').classList.toggle('selected', theme === 'light');
+        document.getElementById('pick-dark').classList.toggle('selected',  theme === 'dark');
+        document.getElementById('theme-confirm-btn').disabled = false;
+    }
+
+    function confirmTheme() {
+        if (!_pendingTheme) return;
+        localStorage.setItem('aura-theme', _pendingTheme);
+        localStorage.setItem('aura-theme-set', '1');
+        document.getElementById('pill-light').classList.toggle('active', _pendingTheme === 'light');
+        document.getElementById('pill-dark').classList.toggle('active',  _pendingTheme === 'dark');
+        document.getElementById('theme-picker').style.display = 'none';
+        _pendingTheme = null;
+    }
+
+    function openSettings(e) {
+        if (e) e.preventDefault();
+        userDropdown.style.display = 'none';
+        const current = localStorage.getItem('aura-theme') || 'light';
+        document.getElementById('pill-light').classList.toggle('active', current === 'light');
+        document.getElementById('pill-dark').classList.toggle('active',  current === 'dark');
+        document.getElementById('settings-sheet').style.display = 'flex';
+    }
+
+    function closeSettings(e) {
+        if (!e || e.target === document.getElementById('settings-sheet') || !e.target) {
+            document.getElementById('settings-sheet').style.display = 'none';
+        }
+    }
+
+    // Init: apply saved theme or show first-launch picker
+    (function initTheme() {
+        const saved = localStorage.getItem('aura-theme');
+        const alreadySet = localStorage.getItem('aura-theme-set');
+        if (saved) applyTheme(saved);
+        if (!alreadySet) {
+            document.getElementById('theme-picker').style.display = 'flex';
+        }
+    })();
 </script>
+
+<!-- ── THEME PICKER (first launch) ── -->
+<div id="theme-picker">
+    <div class="theme-picker-box">
+        <div class="theme-picker-icon">✦</div>
+        <h2>Benvenuto in Aura Docs</h2>
+        <p>Scegli il tema che preferisci.<br>Potrai cambiarlo in qualsiasi momento dalle impostazioni.</p>
+        <div class="theme-options">
+            <div class="theme-option" id="pick-light" onclick="selectTheme('light')">
+                <div class="theme-preview light"></div>
+                <span class="theme-option-label">Chiaro</span>
+            </div>
+            <div class="theme-option" id="pick-dark" onclick="selectTheme('dark')">
+                <div class="theme-preview dark"></div>
+                <span class="theme-option-label">Scuro</span>
+            </div>
+        </div>
+        <button class="theme-confirm-btn" id="theme-confirm-btn" onclick="confirmTheme()" disabled>
+            Conferma
+        </button>
+    </div>
+</div>
+
+<!-- ── SETTINGS SHEET ── -->
+<div id="settings-sheet" onclick="closeSettings(event)">
+    <div class="settings-box" onclick="event.stopPropagation()">
+        <div class="settings-handle"></div>
+        <h3>Impostazioni</h3>
+        <div class="settings-row">
+            <div>
+                <div class="settings-row-label">Tema</div>
+                <div class="settings-row-desc">Scegli l'aspetto dell'interfaccia</div>
+            </div>
+            <div class="theme-toggle-row">
+                <button class="theme-pill" id="pill-light" onclick="applyTheme('light')">☀️ Chiaro</button>
+                <button class="theme-pill" id="pill-dark"  onclick="applyTheme('dark')">🌙 Scuro</button>
+            </div>
+        </div>
+        <button class="modal-btn-close" onclick="closeSettings()">Chiudi</button>
+    </div>
+</div>
+
 </body>
 </html>

@@ -478,6 +478,29 @@
         }
         .toolbar button.danger:active { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
 
+        /* ── NYRA BUTTON IN TOOLBAR ── */
+        .toolbar button.nyra-btn {
+            background: rgba(224, 8, 246, 0.08);
+            color: var(--aura-primary);
+            border: 1px solid rgba(224, 8, 246, 0.2);
+            font-size: 14px;
+        }
+        .toolbar button.nyra-btn:active,
+        .toolbar button.nyra-btn.active {
+            background: var(--aura-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 3px 12px rgba(224, 8, 246, 0.35);
+        }
+        @media (hover: hover) {
+            .toolbar button.nyra-btn:hover {
+                background: var(--aura-gradient);
+                color: white;
+                border-color: transparent;
+                box-shadow: 0 3px 12px rgba(224, 8, 246, 0.35);
+            }
+        }
+
         .toolbar select {
             background: var(--bg-main);
             border: 1px solid var(--border);
@@ -525,6 +548,7 @@
             max-width: 850px;
             background: var(--bg-card);
             min-height: 400px;
+            height: auto;
             padding: 32px 20px;
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-lg);
@@ -536,6 +560,8 @@
             display: none;
             width: 100%;
             min-height: 500px;
+            height: auto;
+            overflow: hidden;
             border: none;
             resize: none;
             outline: none;
@@ -550,7 +576,8 @@
 
         #visual-editor { 
             width: 100%; 
-            min-height: 500px; 
+            min-height: 500px;
+            height: auto;
             outline: none; 
             line-height: 1.85;
             font-size: 15px; 
@@ -611,8 +638,6 @@
             animation: sheetSlide 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
             margin: 0 auto;
         }
-
-        /* drag handle */
         .modal-box::before {
             content: '';
             display: block;
@@ -682,7 +707,6 @@
             border: 1px dashed rgba(224, 8, 246, 0.3);
         }
 
-        /* ── MODAL FORM ELEMENTS ── */
         .modal-input {
             width: 100%;
             padding: 11px 14px;
@@ -715,6 +739,217 @@
             font-size: 14px;
         }
         .modal-btn-close:active { border-color: var(--border-focus); }
+
+        /* ══════════════════════════════════════════
+           ── NYRA BOTTOM SHEET ──
+        ══════════════════════════════════════════ */
+        #nyra-sheet {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.45);
+            z-index: 3100;
+            justify-content: flex-end;
+            align-items: flex-end;
+            flex-direction: column;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            animation: fadeIn 0.2s ease;
+        }
+
+        .nyra-sheet-box {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            width: 100%;
+            box-shadow: var(--shadow-xl);
+            max-height: 88vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-bottom: none;
+            animation: sheetSlide 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .nyra-sheet-handle {
+            width: 40px; height: 4px;
+            background: var(--border); border-radius: 2px;
+            margin: 14px auto 0;
+            flex-shrink: 0;
+        }
+
+        .nyra-sheet-head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 18px 12px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .nyra-sheet-brand { display: flex; align-items: center; gap: 8px; }
+        .nyra-sheet-icon {
+            width: 30px; height: 30px; border-radius: 9px;
+            background: var(--aura-gradient);
+            display: grid; place-items: center;
+            font-size: 13px; color: #fff;
+            box-shadow: 0 4px 12px rgba(224,8,246,0.3);
+            flex-shrink: 0;
+        }
+        .nyra-sheet-title {
+            font-size: .9rem; font-weight: 700;
+            background: var(--aura-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nyra-sheet-close {
+            background: none; border: none;
+            color: var(--text-muted); cursor: pointer;
+            width: 32px; height: 32px; border-radius: var(--radius-sm);
+            display: grid; place-items: center;
+            font-size: 14px; flex-shrink: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nyra-sheet-close:active { background: var(--bg-main); color: var(--text-main); }
+
+        /* Quick actions */
+        .nyra-quick-actions {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .nyra-quick-label {
+            font-size: 10px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--text-muted); margin-bottom: 8px;
+        }
+        .nyra-quick-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        .nyra-quick-btn {
+            display: flex; align-items: center; gap: 6px;
+            padding: 10px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--bg-main);
+            color: var(--text-secondary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px; font-weight: 600;
+            cursor: pointer; transition: var(--transition);
+            text-align: left; line-height: 1.3;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nyra-quick-btn i { font-size: 12px; color: var(--aura-primary); flex-shrink: 0; }
+        .nyra-quick-btn:active { background: rgba(224, 8, 246, 0.08); border-color: rgba(224, 8, 246, 0.25); color: var(--text-main); transform: scale(0.97); }
+        @media (hover: hover) {
+            .nyra-quick-btn:hover { background: rgba(224, 8, 246, 0.06); border-color: rgba(224, 8, 246, 0.25); color: var(--text-main); }
+        }
+
+        /* Chat messages */
+        #nyra-chat-messages {
+            flex: 1; overflow-y: auto;
+            padding: 12px 14px;
+            display: flex; flex-direction: column; gap: 10px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            min-height: 100px;
+        }
+        #nyra-chat-messages::-webkit-scrollbar { width: 3px; }
+        #nyra-chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+        .nyra-msg-block { display: flex; flex-direction: column; gap: 4px; }
+        .nyra-msg-block.user { align-items: flex-end; }
+        .nyra-msg-block.bot  { align-items: flex-start; }
+
+        .nyra-msg-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); padding: 0 4px; }
+        .nyra-msg-block.user .nyra-msg-label { color: var(--aura-primary); }
+
+        .nyra-msg {
+            padding: 10px 13px; border-radius: 14px;
+            font-size: 13px; font-weight: 400;
+            line-height: 1.6; word-break: break-word;
+            max-width: 90%;
+            animation: nyraIn 0.25s ease both;
+        }
+        @keyframes nyraIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+        .nyra-msg.user { background: rgba(224, 8, 246, 0.1); border: 1px solid rgba(224, 8, 246, 0.18); border-bottom-right-radius: 4px; color: var(--text-main); }
+        .nyra-msg.bot { background: var(--bg-main); border: 1px solid var(--border); border-bottom-left-radius: 4px; color: var(--text-main); }
+        .nyra-msg.bot p { margin-bottom: 6px; }
+        .nyra-msg.bot p:last-child { margin-bottom: 0; }
+        .nyra-msg.bot strong { font-weight: 700; }
+        .nyra-msg.bot em { font-style: italic; }
+        .nyra-msg.bot code { font-family: 'Courier Prime', monospace; font-size: 0.85em; background: rgba(224,8,246,0.07); padding: 1px 5px; border-radius: 3px; color: var(--aura-primary); }
+
+        .nyra-apply-btn {
+            display: inline-flex; align-items: center; gap: 5px;
+            margin-top: 8px; padding: 7px 13px; border-radius: 50px;
+            background: var(--aura-gradient); color: #fff;
+            border: none; cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px; font-weight: 600;
+            box-shadow: 0 3px 10px rgba(224,8,246,0.25);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nyra-apply-btn:active { transform: scale(0.96); }
+        .nyra-apply-btn i { font-size: 10px; }
+
+        .nyra-typing {
+            display: flex; align-items: center; gap: 4px;
+            padding: 10px 13px;
+            background: var(--bg-main); border: 1px solid var(--border);
+            border-radius: 14px; border-bottom-left-radius: 4px;
+            width: fit-content;
+        }
+        .nyra-typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--aura-primary); opacity: 0.4; animation: nyraDot 1.2s infinite; }
+        .nyra-typing span:nth-child(2) { animation-delay: 0.2s; }
+        .nyra-typing span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes nyraDot { 0%,60%,100%{ opacity:0.2; transform:scale(0.8); } 30%{ opacity:1; transform:scale(1.1); } }
+
+        /* Chat input */
+        .nyra-input-area {
+            padding: 10px 14px 16px;
+            border-top: 1px solid var(--border);
+            flex-shrink: 0; background: var(--bg-card);
+        }
+        .nyra-context-badge {
+            display: flex; align-items: center; gap: 5px;
+            font-size: 10px; color: var(--aura-primary); font-weight: 600;
+            padding: 4px 8px; background: rgba(224,8,246,0.07);
+            border-radius: 20px; border: 1px solid rgba(224,8,246,0.15);
+            margin-bottom: 7px; width: fit-content;
+        }
+        .nyra-context-badge i { font-size: 9px; }
+        #nyra-context-indicator { display: none; }
+
+        .nyra-input-row {
+            display: flex; align-items: flex-end; gap: 7px;
+            background: var(--bg-main); border: 1px solid var(--border);
+            border-radius: 16px; padding: 6px 6px 6px 12px;
+            transition: var(--transition);
+        }
+        .nyra-input-row:focus-within { border-color: rgba(224, 8, 246, 0.4); background: var(--bg-card); }
+        #nyra-input {
+            flex: 1; background: none; border: none;
+            color: var(--text-main); font-family: 'Poppins', sans-serif;
+            font-size: 13px; font-weight: 400;
+            outline: none; resize: none;
+            max-height: 80px; min-height: 20px;
+            line-height: 1.5; padding: 4px 0;
+            overflow-y: auto;
+        }
+        #nyra-input::-webkit-scrollbar { display: none; }
+        #nyra-input::placeholder { color: var(--text-muted); }
+        #nyra-send-btn {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: var(--aura-gradient); color: #fff;
+            border: none; cursor: pointer;
+            display: grid; place-items: center;
+            flex-shrink: 0; font-size: 13px;
+            box-shadow: 0 3px 10px rgba(224,8,246,0.3);
+            -webkit-tap-highlight-color: transparent;
+        }
+        #nyra-send-btn:active { transform: scale(0.9); }
+        #nyra-send-btn:disabled { background: var(--border); box-shadow: none; opacity: 0.5; }
 
         /* ── ANIMATIONS ── */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -798,6 +1033,31 @@
                 padding: 28px;
             }
             .modal-box::before { display: none; }
+
+            /* Desktop: Nyra as right side panel */
+            #nyra-sheet {
+                background: none;
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                pointer-events: none;
+                justify-content: flex-end;
+                align-items: stretch;
+                top: var(--header-h);
+            }
+            #nyra-sheet.nyra-open { pointer-events: all; }
+            .nyra-sheet-box {
+                border-radius: 0;
+                border: none;
+                border-left: 1px solid var(--border);
+                max-height: 100%;
+                width: 340px;
+                animation: none;
+                transform: translateX(100%);
+                transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                box-shadow: var(--shadow-xl);
+            }
+            #nyra-sheet.nyra-open .nyra-sheet-box { transform: translateX(0); }
+            .nyra-sheet-handle { display: none; }
         }
         @keyframes modalSlide { from { opacity: 0; transform: translateY(20px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
@@ -806,7 +1066,6 @@
             .mode-switch { display: none; }
             .toolbar-mode-row { display: flex; }
             #save-status { display: none !important; }
-            /* save indicator in toolbar-mode-row */
             #save-status-mobile {
                 font-size: 10px;
                 color: var(--text-muted);
@@ -923,6 +1182,13 @@
                 <button onclick="openCollabModal()" title="Collaborazione"><i class="fas fa-user-plus"></i></button>
                 <button onclick="exportDoc()" title="Esporta"><i class="fas fa-file-export"></i></button>
                 <button id="btn-delete" onclick="deleteDoc()" title="Elimina documento" class="danger"><i class="fas fa-trash"></i></button>
+
+                <div class="toolbar-divider"></div>
+
+                <!-- NYRA AI BUTTON -->
+                <button class="nyra-btn" id="nyra-toolbar-btn" onclick="toggleNyraPanel()" title="Assistente Nyra AI">
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                </button>
             </div>
         </div>
 
@@ -930,7 +1196,7 @@
         <div class="editor-scroll">
             <div class="canvas">
                 <div id="visual-editor" contenteditable="true" oninput="autoSave()"></div>
-                <textarea id="editor-textarea" oninput="autoSave()"></textarea>
+                <textarea id="editor-textarea" oninput="autoSave(); autoResizeTextarea(this)"></textarea>
             </div>
         </div>
     </div>
@@ -976,6 +1242,64 @@
     </div>
 </div>
 
+<!-- ══════════════════════════════════════════
+     NYRA AI SHEET (bottom sheet mobile / side panel desktop)
+══════════════════════════════════════════ -->
+<div id="nyra-sheet" onclick="closeNyraOnVeil(event)">
+    <div class="nyra-sheet-box" onclick="event.stopPropagation()">
+        <div class="nyra-sheet-handle"></div>
+
+        <div class="nyra-sheet-head">
+            <div class="nyra-sheet-brand">
+                <div class="nyra-sheet-icon">✦</div>
+                <span class="nyra-sheet-title">Nyra AI</span>
+            </div>
+            <button class="nyra-sheet-close" onclick="toggleNyraPanel()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Quick actions -->
+        <div class="nyra-quick-actions">
+            <div class="nyra-quick-label">Azioni rapide</div>
+            <div class="nyra-quick-grid">
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('migliora')"><i class="fas fa-wand-magic-sparkles"></i> Migliora testo</button>
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('riassumi')"><i class="fas fa-compress-alt"></i> Riassumi</button>
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('espandi')"><i class="fas fa-expand-alt"></i> Espandi</button>
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('formale')"><i class="fas fa-briefcase"></i> Tono formale</button>
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('informale')"><i class="fas fa-comment"></i> Tono informale</button>
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('correggi')"><i class="fas fa-spell-check"></i> Correggi errori</button>
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('traduci-en')"><i class="fas fa-language"></i> Traduci EN</button>
+                <button class="nyra-quick-btn" onclick="nyraQuickAction('continua')"><i class="fas fa-pen-nib"></i> Continua testo</button>
+            </div>
+        </div>
+
+        <!-- Chat messages -->
+        <div id="nyra-chat-messages">
+            <div class="nyra-msg-block bot">
+                <div class="nyra-msg-label">Nyra</div>
+                <div class="nyra-msg bot">
+                    Ciao! 👋 Sono <strong>Nyra</strong>, la tua assistente AI.<br><br>
+                    Usa le <strong>azioni rapide</strong> o scrivimi qui sotto.
+                </div>
+            </div>
+        </div>
+
+        <!-- Input -->
+        <div class="nyra-input-area">
+            <div id="nyra-context-indicator"></div>
+            <div class="nyra-input-row">
+                <textarea id="nyra-input" placeholder="Chiedi a Nyra..." rows="1"
+                    oninput="nyraAutoResize(this)"
+                    onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();nyraSend();}"></textarea>
+                <button id="nyra-send-btn" onclick="nyraSend()">
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyDsrHAtIh5bsYDHa1wz0LMcmciChAoRikU",
@@ -994,6 +1318,11 @@
     let saveTimeout = null;
     let currentMode = 'visual';
     let tempSelectedUser = null;
+
+    // ── Nyra state ──
+    let nyraIsOpen = false;
+    let nyraIsProcessing = false;
+    let nyraHistory = [];
 
     document.execCommand('defaultParagraphSeparator', false, 'p');
 
@@ -1109,10 +1438,8 @@
 
     // ── SAVE STATUS ── (aggiorna sia desktop sia mobile)
     function showSaveStatus(state) {
-        // Desktop
         const el = document.getElementById('save-status');
         const text = document.getElementById('save-text');
-        // Mobile
         const elM = document.getElementById('save-status-mobile');
         const textM = document.getElementById('save-text-mobile');
 
@@ -1130,7 +1457,6 @@
             }
         });
 
-        // desktop-only show
         if (window.innerWidth >= 640) {
             el.style.display = state === 'saving' || state === 'saved' ? 'flex' : 'none';
         }
@@ -1142,7 +1468,6 @@
         const textarea = document.getElementById('editor-textarea');
         const visual = document.getElementById('visual-editor');
 
-        // update all mode buttons
         ['btn-visual','btn-literal','btn-visual-m','btn-literal-m'].forEach(id => {
             const el = document.getElementById(id);
             if (!el) return;
@@ -1160,6 +1485,7 @@
             textarea.value = turndownService.turndown(visual.innerHTML);
             visual.style.display = 'none';
             textarea.style.display = 'block';
+            setTimeout(() => autoResizeTextarea(textarea), 10);
         }
     }
 
@@ -1240,6 +1566,7 @@
 
     function openDoc(id, data) {
         currentDocId = id;
+        nyraHistory = []; // reset Nyra history on new doc
         const role = data.collaborators[auth.currentUser.uid];
         const canEdit = role === 'Proprietario' || role === 'Editor';
         const visual = document.getElementById('visual-editor');
@@ -1298,6 +1625,240 @@
     }
 
     document.getElementById('doc-title-input').addEventListener('input', autoSave);
+
+    // ══════════════════════════════════════════════
+    // ── NYRA AI ──
+    // ══════════════════════════════════════════════
+
+    function toggleNyraPanel() {
+        nyraIsOpen = !nyraIsOpen;
+        const sheet = document.getElementById('nyra-sheet');
+        const btn = document.getElementById('nyra-toolbar-btn');
+        // mobile: display flex / none; desktop: display stays flex (always mounted), use class
+        if (window.innerWidth < 640) {
+            sheet.style.display = nyraIsOpen ? 'flex' : 'none';
+        } else {
+            sheet.style.display = 'flex';
+            sheet.classList.toggle('nyra-open', nyraIsOpen);
+        }
+        btn.classList.toggle('active', nyraIsOpen);
+    }
+
+    function closeNyraOnVeil(e) {
+        if (e.target === document.getElementById('nyra-sheet')) {
+            nyraIsOpen = false;
+            const sheet = document.getElementById('nyra-sheet');
+            const btn = document.getElementById('nyra-toolbar-btn');
+            if (window.innerWidth < 640) {
+                sheet.style.display = 'none';
+            } else {
+                sheet.classList.remove('nyra-open');
+            }
+            btn.classList.remove('active');
+        }
+    }
+
+    function nyraAutoResize(el) {
+        el.style.height = 'auto';
+        el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+    }
+
+    // Auto-resize textarea in base al contenuto
+    function autoResizeTextarea(el) {
+        el.style.height = 'auto';
+        el.style.height = el.scrollHeight + 'px';
+    }
+
+    function getDocumentText() {
+        if (currentMode === 'visual') return document.getElementById('visual-editor').innerText.trim();
+        return document.getElementById('editor-textarea').value.trim();
+    }
+
+    function getSelectedText() {
+        const sel = window.getSelection();
+        return (sel && sel.toString().trim().length > 0) ? sel.toString().trim() : null;
+    }
+
+    // Applica il testo generato al documento (raw markdown → Letterale sorgente, rendered → Visuale)
+    function applyTextToDoc(newText) {
+        const visual = document.getElementById('visual-editor');
+        const textarea = document.getElementById('editor-textarea');
+        // Salva sempre il raw markdown nel textarea (sorgente Letterale)
+        textarea.value = newText;
+        // Aggiorna il visual editor con il rendering markdown
+        visual.innerHTML = marked.parse(newText);
+        // Torna in modalità Visuale per mostrare il risultato
+        if (currentMode !== 'visual') setMode('visual');
+        autoSave();
+        autoResizeTextarea(textarea);
+    }
+
+    function nyraAppendMessage(role, html, withApply = false, applyText = '') {
+        const container = document.getElementById('nyra-chat-messages');
+        const block = document.createElement('div');
+        block.className = `nyra-msg-block ${role}`;
+        const label = document.createElement('div');
+        label.className = 'nyra-msg-label';
+        label.textContent = role === 'user' ? 'Tu' : 'Nyra';
+        block.appendChild(label);
+        const bubble = document.createElement('div');
+        bubble.className = `nyra-msg ${role}`;
+        if (role === 'bot') {
+            try { bubble.innerHTML = marked.parse(html); } catch(e) { bubble.textContent = html; }
+        } else {
+            bubble.textContent = html;
+        }
+        if (withApply && applyText) {
+            const btn = document.createElement('button');
+            btn.className = 'nyra-apply-btn';
+            btn.innerHTML = '<i class="fas fa-check"></i> Applica al documento';
+            btn.onclick = () => {
+                applyTextToDoc(applyText);
+                btn.innerHTML = '<i class="fas fa-check-double"></i> Applicato!';
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+            };
+            bubble.appendChild(document.createElement('br'));
+            bubble.appendChild(btn);
+        }
+        block.appendChild(bubble);
+        container.appendChild(block);
+        container.scrollTop = container.scrollHeight;
+        return bubble;
+    }
+
+    function nyraShowTyping() {
+        const container = document.getElementById('nyra-chat-messages');
+        const block = document.createElement('div');
+        block.className = 'nyra-msg-block bot';
+        block.id = 'nyra-typing-block';
+        const label = document.createElement('div');
+        label.className = 'nyra-msg-label';
+        label.textContent = 'Nyra';
+        block.appendChild(label);
+        const typing = document.createElement('div');
+        typing.className = 'nyra-typing';
+        typing.innerHTML = '<span></span><span></span><span></span>';
+        block.appendChild(typing);
+        container.appendChild(block);
+        container.scrollTop = container.scrollHeight;
+    }
+    function nyraHideTyping() {
+        const t = document.getElementById('nyra-typing-block');
+        if (t) t.remove();
+    }
+
+    function nyraUpdateContextBadge() {
+        const indicator = document.getElementById('nyra-context-indicator');
+        const selected = getSelectedText();
+        if (selected) {
+            indicator.style.display = 'flex';
+            indicator.innerHTML = `<div class="nyra-context-badge"><i class="fas fa-i-cursor"></i> Selezione (${selected.length} car.)</div>`;
+        } else {
+            indicator.style.display = 'none';
+        }
+    }
+
+    document.getElementById('visual-editor').addEventListener('mouseup', nyraUpdateContextBadge);
+    document.getElementById('editor-textarea').addEventListener('mouseup', nyraUpdateContextBadge);
+
+    const QUICK_PROMPTS = {
+        'migliora':   t => `Migliora la qualità e la leggibilità del seguente testo, mantenendo il significato originale. Restituisci solo il testo migliorato, senza spiegazioni:\n\n${t}`,
+        'riassumi':   t => `Riassumi il seguente testo in modo conciso e chiaro. Restituisci solo il riassunto:\n\n${t}`,
+        'espandi':    t => `Espandi e arricchisci il seguente testo aggiungendo dettagli, esempi e contenuto pertinente. Restituisci solo il testo espanso:\n\n${t}`,
+        'formale':    t => `Riscrivi il seguente testo con un tono professionale e formale. Restituisci solo il testo riscritto:\n\n${t}`,
+        'informale':  t => `Riscrivi il seguente testo con un tono informale, amichevole e naturale. Restituisci solo il testo riscritto:\n\n${t}`,
+        'correggi':   t => `Correggi tutti gli errori grammaticali, ortografici e di punteggiatura nel seguente testo. Restituisci solo il testo corretto:\n\n${t}`,
+        'traduci-en': t => `Traduci il seguente testo in inglese. Restituisci solo la traduzione:\n\n${t}`,
+        'continua':   t => `Continua il seguente testo in modo coerente e naturale, mantenendo lo stile dell'autore. Restituisci solo la continuazione (non ripetere il testo originale):\n\n${t}`,
+    };
+
+    const QUICK_LABELS = {
+        'migliora': '✨ Migliora testo', 'riassumi': '📝 Riassumi',
+        'espandi': '📖 Espandi', 'formale': '💼 Tono formale',
+        'informale': '💬 Tono informale', 'correggi': '🔍 Correggi errori',
+        'traduci-en': '🌐 Traduci in inglese', 'continua': '✍️ Continua testo',
+    };
+
+    async function nyraQuickAction(action) {
+        if (!nyraIsOpen) toggleNyraPanel();
+        const selected = getSelectedText();
+        const docText = getDocumentText();
+        const targetText = selected || docText;
+        if (!targetText) {
+            nyraAppendMessage('bot', '⚠️ Il documento è vuoto. Scrivi qualcosa prima di usare le azioni rapide.');
+            return;
+        }
+        const label = QUICK_LABELS[action] || action;
+        const contextNote = selected ? '*(testo selezionato)*' : '*(intero documento)*';
+        nyraAppendMessage('user', `${label} ${contextNote}`);
+        await nyraCallAPI(QUICK_PROMPTS[action](targetText), true);
+    }
+
+    async function nyraSend() {
+        if (nyraIsProcessing) return;
+        const input = document.getElementById('nyra-input');
+        const text = input.value.trim();
+        if (!text) return;
+        input.value = '';
+        input.style.height = 'auto';
+        nyraAppendMessage('user', text);
+        const docText = getDocumentText();
+        const selected = getSelectedText();
+        let messageWithContext = text;
+        const needsContext = /\b(testo|documento|scritto|contenuto|paragrafo|frase|parole|articolo)\b/i.test(text);
+        if (needsContext && docText) {
+            const snippet = selected || (docText.length > 1200 ? docText.substring(0, 1200) + '...' : docText);
+            messageWithContext = `${text}\n\nContesto del documento:\n---\n${snippet}\n---`;
+        }
+        await nyraCallAPI(messageWithContext, false);
+    }
+
+    async function nyraCallAPI(message, isDocAction = false) {
+        if (nyraIsProcessing) return;
+        nyraIsProcessing = true;
+        document.getElementById('nyra-send-btn').disabled = true;
+        nyraShowTyping();
+        try {
+            const payload = {
+                message,
+                history: nyraHistory,
+                model: 'openai/gpt-5-nano',
+                temperature: 0.7,
+                systemPrompt: isDocAction
+                    ? 'Sei Nyra, assistente AI integrata in Aura Docs. Quando ti vengono chieste modifiche al testo, restituisci SOLO il testo modificato in formato Markdown, senza preamboli, spiegazioni o commenti. Per le domande generali, rispondi normalmente in italiano.'
+                    : 'Sei Nyra, assistente AI integrata in Aura Docs. Aiuta l\'utente con il suo documento. Rispondi in italiano in modo conciso e utile.',
+            };
+            const response = await fetch('https://api.nyra.aurastudioitalia.it/nyra', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.error || `Errore ${response.status}`);
+            }
+            const data = await response.json();
+            const reply = data.reply || '';
+            if (!reply) throw new Error('Risposta vuota dal server.');
+            if (Array.isArray(data.updatedHistory)) {
+                nyraHistory = data.updatedHistory;
+            } else {
+                nyraHistory.push({ role: 'user', content: message });
+                nyraHistory.push({ role: 'assistant', content: reply });
+            }
+            nyraHideTyping();
+            nyraAppendMessage('bot', reply, isDocAction, reply);
+        } catch (err) {
+            nyraHideTyping();
+            nyraAppendMessage('bot', `⚠️ ${err.message || 'Errore di connessione. Riprova.'}`);
+        } finally {
+            nyraIsProcessing = false;
+            document.getElementById('nyra-send-btn').disabled = false;
+        }
+    }
+
+    document.getElementById('nyra-input').addEventListener('focus', nyraUpdateContextBadge);
 </script>
 </body>
 </html>

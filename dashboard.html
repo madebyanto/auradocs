@@ -12,6 +12,8 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
         :root {
@@ -520,6 +522,113 @@
         .modal-btn-close:hover { border-color: var(--border-focus); }
 
         /* ── ANIMATIONS ── */
+        /* ── EXPORT SHEET ── */
+        #export-sheet {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 4000;
+            justify-content: center;
+            align-items: flex-end;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            animation: fadeIn 0.2s ease;
+        }
+        .export-box {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            width: 100%; max-width: 480px;
+            padding: 0 20px 40px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border); border-bottom: none;
+            animation: sheetSlide 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+            margin: 0 auto;
+        }
+        .export-handle {
+            width: 40px; height: 4px;
+            background: var(--border); border-radius: 2px;
+            margin: 14px auto 0;
+        }
+        .export-box h3 {
+            font-size: 16px; font-weight: 600;
+            margin: 20px 0 4px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .export-box h3::before {
+            content: ''; width: 4px; height: 18px;
+            background: var(--aura-gradient); border-radius: 2px; display: inline-block;
+        }
+        .export-subtitle {
+            font-size: 12px; color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+        .export-options { display: flex; flex-direction: column; gap: 10px; }
+        .export-option {
+            display: flex; align-items: center; gap: 14px;
+            padding: 15px 16px;
+            border-radius: var(--radius-md);
+            border: 1.5px solid var(--border);
+            background: var(--bg-main);
+            cursor: pointer; transition: var(--transition);
+            -webkit-tap-highlight-color: transparent;
+            position: relative; overflow: hidden;
+        }
+        .export-option:active { transform: scale(0.98); border-color: var(--aura-primary); }
+        @media (hover: hover) {
+            .export-option:hover {
+                border-color: rgba(224,8,246,0.4);
+                background: rgba(224,8,246,0.04);
+            }
+        }
+        .export-option.busy { pointer-events: none; opacity: 0.7; }
+        .export-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            display: grid; place-items: center;
+            font-size: 12px; font-weight: 800;
+            letter-spacing: -0.5px; flex-shrink: 0;
+        }
+        .export-icon.md   { background: rgba(99,102,241,0.1);  color: #6366f1; }
+        .export-icon.docx { background: rgba(37,99,235,0.1);   color: #2563eb; }
+        .export-icon.pdf  { background: rgba(239,68,68,0.1);   color: #ef4444; }
+        .export-info { flex: 1; min-width: 0; }
+        .export-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+        .export-desc { font-size: 11px; color: var(--text-muted); }
+        .export-caret { color: var(--text-muted); font-size: 11px; flex-shrink: 0; transition: var(--transition); }
+        .export-option:active .export-caret { color: var(--aura-primary); transform: translateX(3px); }
+        .export-spinner {
+            width: 16px; height: 16px;
+            border: 2px solid rgba(224,8,246,0.25);
+            border-top-color: var(--aura-primary);
+            border-radius: 50%; flex-shrink: 0;
+            animation: exportSpin 0.7s linear infinite;
+        }
+        @keyframes exportSpin { to { transform: rotate(360deg); } }
+        .export-toast {
+            position: fixed; bottom: 90px; left: 50%;
+            transform: translateX(-50%);
+            background: #1a1b1e; color: #fff;
+            padding: 11px 20px; border-radius: 50px;
+            font-size: 13px; font-weight: 500;
+            box-shadow: var(--shadow-xl); z-index: 9999;
+            white-space: nowrap; pointer-events: none;
+            animation: toastPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+        @keyframes toastPop {
+            from { opacity:0; transform: translateX(-50%) scale(0.85) translateY(6px); }
+            to   { opacity:1; transform: translateX(-50%) scale(1) translateY(0); }
+        }
+        @media (min-width: 640px) {
+            #export-sheet { align-items: center; }
+            .export-box {
+                border-radius: var(--radius-xl);
+                border: 1px solid var(--border);
+                max-width: 380px;
+                animation: modalSlide 0.3s ease;
+                padding: 0 24px 28px;
+            }
+            .export-handle { display: none; }
+        }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
@@ -1016,14 +1125,364 @@
     function closeEditor() { location.reload(); }
     function closeCollabModal(e) { document.getElementById('collab-modal').style.display = 'none'; }
 
+
+    // ── EXPORT ──
     function exportDoc() {
-        const content = document.getElementById('visual-editor').innerHTML;
-        const blob = new Blob([content], { type: 'text/html' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = (document.getElementById('doc-title-input').value || 'documento') + '.html';
-        a.click();
+        // Reset spinner states
+        ['exp-md','exp-docx','exp-pdf'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) { el.classList.remove('busy'); showCaret(id); }
+        });
+        document.getElementById('export-sheet').style.display = 'flex';
     }
+
+    function closeExportSheet(e) {
+        if (!e || e.target === document.getElementById('export-sheet') || !e.target) {
+            document.getElementById('export-sheet').style.display = 'none';
+        }
+    }
+
+    function getDocTitle() {
+        return document.getElementById('doc-title-input').value.trim() || 'documento';
+    }
+
+    function getMarkdownContent() {
+        if (currentMode === 'literal') return document.getElementById('editor-textarea').value;
+        return turndownService.turndown(document.getElementById('visual-editor').innerHTML);
+    }
+
+    function showSpinner(optId) {
+        const caret = document.querySelector(`#${optId} .export-caret`);
+        if (caret) caret.outerHTML = '<div class="export-spinner"></div>';
+        document.getElementById(optId).classList.add('busy');
+    }
+
+    function showCaret(optId) {
+        const spinner = document.querySelector(`#${optId} .export-spinner`);
+        if (spinner) spinner.outerHTML = '<i class="fas fa-chevron-right export-caret"></i>';
+        document.getElementById(optId).classList.remove('busy');
+    }
+
+    function showToast(msg) {
+        const el = document.createElement('div');
+        el.className = 'export-toast';
+        el.textContent = msg;
+        document.body.appendChild(el);
+        setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; setTimeout(() => el.remove(), 300); }, 2800);
+    }
+
+    // Save file: tries File System Access API (Android file picker) then falls back to <a> download
+    async function saveFile(blob, filename, mime) {
+        if (window.showSaveFilePicker) {
+            try {
+                const ext = '.' + filename.split('.').pop();
+                const handle = await window.showSaveFilePicker({
+                    suggestedName: filename,
+                    types: [{ description: ext.slice(1).toUpperCase() + ' file', accept: { [mime]: [ext] } }]
+                });
+                const writable = await handle.createWritable();
+                await writable.write(blob);
+                await writable.close();
+                return true;
+            } catch (e) {
+                if (e.name === 'AbortError') return false; // user cancelled picker
+                // API exists but failed → fall through to anchor download
+            }
+        }
+        // Classic download (triggers Android Downloads / whatever handler is set)
+        const url = URL.createObjectURL(blob);
+        const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1500);
+        return true;
+    }
+
+    async function runExport(format) {
+        const optId = { md: 'exp-md', docx: 'exp-docx', pdf: 'exp-pdf' }[format];
+        showSpinner(optId);
+        const title = getDocTitle();
+        const md = getMarkdownContent();
+
+        try {
+            if (format === 'md') {
+                const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+                const saved = await saveFile(blob, title + '.md', 'text/markdown');
+                if (saved) { document.getElementById('export-sheet').style.display = 'none'; showToast('✓ Markdown salvato'); }
+
+            } else if (format === 'docx') {
+                const blob = await buildDocx(md);
+                const saved = await saveFile(blob, title + '.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+                if (saved) { document.getElementById('export-sheet').style.display = 'none'; showToast('✓ Word salvato'); }
+
+            } else if (format === 'pdf') {
+                const blob = await buildPdf(md, title);
+                const saved = await saveFile(blob, title + '.pdf', 'application/pdf');
+                if (saved) { document.getElementById('export-sheet').style.display = 'none'; showToast('✓ PDF salvato'); }
+            }
+        } catch (err) {
+            console.error('Export error', err);
+            showToast('✗ Errore: ' + (err.message || 'esportazione fallita'));
+        } finally {
+            showCaret(optId);
+        }
+    }
+
+    // ── MD → DOCX (client-side, no server) ──
+    // ── MD → DOCX (JSZip + XML Word puro, zero dipendenze esterne) ──
+    async function buildDocx(md) {
+        function esc(s) {
+            return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+
+        const linkRels = [];
+        function inlineToXml(text) {
+            let xml = '';
+            const re = /(\[([^\]]*)\]\(([^)]*)\)|~~([^~]*)~~|`([^`]*)`|\*\*([^*]*)\*\*|__([^_]*)__|_([^_]*)_|\*([^*]*)\*|([^`*_~\[\]]+))/g;
+            let m;
+            while ((m = re.exec(text)) !== null) {
+                if (m[2] != null) {
+                    const rId = 'lnk' + (linkRels.length + 1);
+                    linkRels.push({ id: rId, url: m[3] });
+                    xml += `<w:hyperlink r:id="${rId}" w:history="1"><w:r><w:rPr><w:rStyle w:val="Hyperlink"/></w:rPr><w:t xml:space="preserve">${esc(m[2])}</w:t></w:r></w:hyperlink>`;
+                } else if (m[4] != null) {
+                    xml += `<w:r><w:rPr><w:strike/></w:rPr><w:t xml:space="preserve">${esc(m[4])}</w:t></w:r>`;
+                } else if (m[5] != null) {
+                    xml += `<w:r><w:rPr><w:rFonts w:ascii="Courier New" w:hAnsi="Courier New"/><w:sz w:val="18"/><w:color w:val="B005DB"/></w:rPr><w:t xml:space="preserve">${esc(m[5])}</w:t></w:r>`;
+                } else if (m[6] != null || m[7] != null) {
+                    xml += `<w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve">${esc(m[6] != null ? m[6] : m[7])}</w:t></w:r>`;
+                } else if (m[8] != null || m[9] != null) {
+                    xml += `<w:r><w:rPr><w:i/></w:rPr><w:t xml:space="preserve">${esc(m[8] != null ? m[8] : m[9])}</w:t></w:r>`;
+                } else if (m[10] != null) {
+                    xml += `<w:r><w:t xml:space="preserve">${esc(m[10])}</w:t></w:r>`;
+                }
+            }
+            return xml || `<w:r><w:t xml:space="preserve">${esc(text)}</w:t></w:r>`;
+        }
+
+        function para(styleId, content, extraPPr) {
+            return `<w:p><w:pPr><w:pStyle w:val="${styleId}"/>${extraPPr || ''}</w:pPr>${content}</w:p>`;
+        }
+
+        const bodyParts = [];
+        const lines = md.split('\n');
+        let inCode = false, codeLines = [];
+
+        for (const raw of lines) {
+            const line = raw.trimEnd();
+            if (line.startsWith('```')) {
+                if (!inCode) { inCode = true; codeLines = []; }
+                else {
+                    for (const cl of codeLines) {
+                        bodyParts.push(`<w:p><w:pPr><w:pStyle w:val="CodeBlock"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Courier New" w:hAnsi="Courier New"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(cl)}</w:t></w:r></w:p>`);
+                    }
+                    inCode = false; codeLines = [];
+                }
+                continue;
+            }
+            if (inCode) { codeLines.push(raw); continue; }
+
+            if (/^#### /.test(line))      bodyParts.push(para('Heading4', inlineToXml(line.slice(5))));
+            else if (/^### /.test(line))  bodyParts.push(para('Heading3', inlineToXml(line.slice(4))));
+            else if (/^## /.test(line))   bodyParts.push(para('Heading2', inlineToXml(line.slice(3))));
+            else if (/^# /.test(line))    bodyParts.push(para('Heading1', inlineToXml(line.slice(2))));
+            else if (/^> /.test(line))    bodyParts.push(para('BlockQuote', inlineToXml(line.slice(2))));
+            else if (/^[-*+] /.test(line)) bodyParts.push(para('ListBullet', inlineToXml(line.slice(2))));
+            else if (/^\d+\. /.test(line)) bodyParts.push(para('ListNumber', inlineToXml(line.replace(/^\d+\. /, ''))));
+            else if (/^(---|\*\*\*|___)$/.test(line.trim())) bodyParts.push(`<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:space="1" w:color="E5E7EB"/></w:pBdr></w:pPr></w:p>`);
+            else if (line.trim() === '')   bodyParts.push(`<w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr></w:p>`);
+            else                           bodyParts.push(para('Normal', inlineToXml(line)));
+        }
+
+        const relEntries = linkRels.map(r =>
+            `<Relationship Id="${r.id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="${esc(r.url)}" TargetMode="External"/>`
+        ).join('\n  ');
+
+        const contentTypes = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/><Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/></Types>`;
+
+        const relsMain = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
+
+        const wordRels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" Target="numbering.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/>${relEntries ? '\n  ' + relEntries : ''}</Relationships>`;
+
+        const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${bodyParts.join('')}<w:sectPr><w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+
+        const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="22"/><w:lang w:val="it-IT"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="160"/></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:styleId="Normal" w:default="1"><w:name w:val="Normal"/></w:style><w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:before="480" w:after="240"/></w:pPr><w:rPr><w:b/><w:sz w:val="48"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:before="320" w:after="160"/></w:pPr><w:rPr><w:b/><w:sz w:val="36"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Heading3"><w:name w:val="heading 3"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:before="240" w:after="120"/></w:pPr><w:rPr><w:b/><w:sz w:val="28"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Heading4"><w:name w:val="heading 4"/><w:basedOn w:val="Normal"/><w:rPr><w:b/><w:i/><w:sz w:val="24"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="BlockQuote"><w:name w:val="Block Quote"/><w:basedOn w:val="Normal"/><w:pPr><w:ind w:left="720"/><w:pBdr><w:left w:val="single" w:sz="12" w:space="8" w:color="e008f6"/></w:pBdr></w:pPr><w:rPr><w:i/><w:color w:val="6b7280"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="CodeBlock"><w:name w:val="Code Block"/><w:basedOn w:val="Normal"/><w:pPr><w:ind w:left="360"/><w:spacing w:after="0"/><w:shd w:val="clear" w:color="auto" w:fill="F3F4F6"/></w:pPr><w:rPr><w:rFonts w:ascii="Courier New" w:hAnsi="Courier New"/><w:sz w:val="18"/><w:color w:val="374151"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="ListBullet"><w:name w:val="List Bullet"/><w:basedOn w:val="Normal"/><w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr></w:pPr></w:style><w:style w:type="paragraph" w:styleId="ListNumber"><w:name w:val="List Number"/><w:basedOn w:val="Normal"/><w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="2"/></w:numPr></w:pPr></w:style><w:style w:type="character" w:styleId="Hyperlink"><w:name w:val="Hyperlink"/><w:rPr><w:color w:val="e008f6"/><w:u w:val="single"/></w:rPr></w:style></w:styles>`;
+
+        const numberingXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:abstractNum w:abstractNumId="0"><w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="•"/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="720" w:hanging="360"/></w:pPr></w:lvl></w:abstractNum><w:abstractNum w:abstractNumId="1"><w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="decimal"/><w:lvlText w:val="%1."/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="720" w:hanging="360"/></w:pPr></w:lvl></w:abstractNum><w:num w:numId="1"><w:abstractNumId w:val="0"/></w:num><w:num w:numId="2"><w:abstractNumId w:val="1"/></w:num></w:numbering>`;
+
+        const settingsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:defaultTabStop w:val="720"/></w:settings>`;
+
+        const zip = new JSZip();
+        zip.file('[Content_Types].xml', contentTypes);
+        zip.file('_rels/.rels', relsMain);
+        zip.file('word/document.xml', documentXml);
+        zip.file('word/styles.xml', stylesXml);
+        zip.file('word/numbering.xml', numberingXml);
+        zip.file('word/settings.xml', settingsXml);
+        zip.file('word/_rels/document.xml.rels', wordRels);
+
+        return zip.generateAsync({
+            type: 'blob',
+            mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            compression: 'DEFLATE'
+        });
+    }
+
+    // ── MD → PDF (client-side via jsPDF, text-based — no canvas needed) ──
+    async function buildPdf(md, title) {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+
+        const PAGE_W = 210, PAGE_H = 297;
+        const ML = 20, MR = 20, MT = 20, MB = 20;
+        const TW = PAGE_W - ML - MR; // text width
+
+        pdf.setFont('helvetica', 'normal');
+
+        let y = MT;
+
+        function newPage() {
+            pdf.addPage();
+            y = MT;
+        }
+
+        function ensureSpace(needed) {
+            if (y + needed > PAGE_H - MB) newPage();
+        }
+
+        function writeLine(text, size, style, color, indent) {
+            pdf.setFontSize(size);
+            pdf.setFont('helvetica', style || 'normal');
+            pdf.setTextColor(...(color || [26, 27, 30]));
+            const x = ML + (indent || 0);
+            const maxW = TW - (indent || 0);
+            const lines = pdf.splitTextToSize(text, maxW);
+            const lineH = size * 0.4;
+            ensureSpace(lineH * lines.length + 2);
+            pdf.text(lines, x, y);
+            y += lineH * lines.length + 2;
+        }
+
+        function stripInline(text) {
+            // Remove markdown inline syntax for plain PDF text
+            return text
+                .replace(/\*\*([^*]+)\*\*/g, '$1')
+                .replace(/__([^_]+)__/g, '$1')
+                .replace(/\*([^*]+)\*/g, '$1')
+                .replace(/_([^_]+)_/g, '$1')
+                .replace(/`([^`]+)`/g, '$1')
+                .replace(/~~([^~]+)~~/g, '$1')
+                .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+        }
+
+        const lines = md.split('\n');
+        let inCode = false, codeLines = [];
+
+        for (const raw of lines) {
+            const line = raw.trimEnd();
+
+            if (line.startsWith('```')) {
+                if (!inCode) { inCode = true; codeLines = []; continue; }
+                // Render code block
+                const blockH = codeLines.length * 4.5 + 4;
+                ensureSpace(blockH);
+                pdf.setFillColor(243, 244, 246);
+                pdf.rect(ML, y - 3, TW, blockH, 'F');
+                pdf.setDrawColor(229, 231, 235);
+                pdf.rect(ML, y - 3, TW, blockH, 'S');
+                for (const cl of codeLines) {
+                    pdf.setFont('courier', 'normal');
+                    pdf.setFontSize(9);
+                    pdf.setTextColor(55, 65, 81);
+                    const wrapped = pdf.splitTextToSize(cl, TW - 8);
+                    pdf.text(wrapped, ML + 4, y + 1);
+                    y += 4 * wrapped.length;
+                }
+                y += 4;
+                inCode = false; codeLines = []; continue;
+            }
+            if (inCode) { codeLines.push(raw); continue; }
+
+            if (/^# /.test(line)) {
+                y += 3;
+                writeLine(stripInline(line.slice(2)), 20, 'bold', [26, 27, 30]);
+                // Underline
+                pdf.setDrawColor(224, 8, 246);
+                pdf.setLineWidth(0.6);
+                pdf.line(ML, y - 1, ML + TW, y - 1);
+                y += 3;
+            } else if (/^## /.test(line)) {
+                y += 2;
+                writeLine(stripInline(line.slice(3)), 15, 'bold', [26, 27, 30]);
+                y += 1;
+            } else if (/^### /.test(line)) {
+                y += 1;
+                writeLine(stripInline(line.slice(4)), 12, 'bold', [26, 27, 30]);
+            } else if (/^#### /.test(line)) {
+                writeLine(stripInline(line.slice(5)), 11, 'bolditalic', [26, 27, 30]);
+            } else if (/^(---|\*\*\*|___)$/.test(line.trim())) {
+                y += 2;
+                pdf.setDrawColor(229, 231, 235);
+                pdf.setLineWidth(0.4);
+                pdf.line(ML, y, ML + TW, y);
+                y += 4;
+            } else if (/^> /.test(line)) {
+                ensureSpace(6);
+                pdf.setFillColor(224, 8, 246);
+                pdf.rect(ML, y - 3, 1.2, 5.5, 'F');
+                pdf.setFont('helvetica', 'italic');
+                pdf.setFontSize(10);
+                pdf.setTextColor(107, 114, 128);
+                const wrapped = pdf.splitTextToSize(stripInline(line.slice(2)), TW - 10);
+                pdf.text(wrapped, ML + 5, y);
+                y += 4 * wrapped.length + 1;
+            } else if (/^[-*+] /.test(line)) {
+                ensureSpace(5);
+                pdf.setFillColor(224, 8, 246);
+                pdf.circle(ML + 2.5, y - 1.2, 1.2, 'F');
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(10);
+                pdf.setTextColor(26, 27, 30);
+                const wrapped = pdf.splitTextToSize(stripInline(line.slice(2)), TW - 8);
+                pdf.text(wrapped, ML + 6, y);
+                y += 4 * wrapped.length + 0.5;
+            } else if (/^\d+\. /.test(line)) {
+                ensureSpace(5);
+                const num = line.match(/^(\d+)\./)[1];
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(10);
+                pdf.setTextColor(224, 8, 246);
+                pdf.text(num + '.', ML, y);
+                pdf.setFont('helvetica', 'normal');
+                pdf.setTextColor(26, 27, 30);
+                const rest = stripInline(line.replace(/^\d+\. /, ''));
+                const wrapped = pdf.splitTextToSize(rest, TW - 8);
+                pdf.text(wrapped, ML + 6, y);
+                y += 4 * wrapped.length + 0.5;
+            } else if (line.trim() === '') {
+                y += 3;
+            } else {
+                writeLine(stripInline(line), 10.5, 'normal', [26, 27, 30]);
+            }
+        }
+
+        // Footer: page numbers
+        const total = pdf.getNumberOfPages();
+        for (let p = 1; p <= total; p++) {
+            pdf.setPage(p);
+            pdf.setFont('helvetica', 'normal');
+            pdf.setFontSize(8);
+            pdf.setTextColor(156, 163, 175);
+            pdf.text(`${p} / ${total}`, PAGE_W / 2, PAGE_H - 8, { align: 'center' });
+            // Top accent line
+            pdf.setDrawColor(224, 8, 246);
+            pdf.setLineWidth(0.5);
+            pdf.line(ML, 12, ML + TW, 12);
+        }
+
+        return new Blob([pdf.output('arraybuffer')], { type: 'application/pdf' });
+    }
+
 
     async function deleteDoc() {
         if (confirm("Eliminare definitivamente questo documento?")) {
@@ -1302,5 +1761,44 @@
     // Aggiorna badge al focus sull'input Nyra
     document.getElementById('nyra-input').addEventListener('focus', nyraUpdateContextBadge);
 </script>
+<!-- ── EXPORT SHEET ── -->
+<div id="export-sheet" onclick="closeExportSheet(event)">
+    <div class="export-box" onclick="event.stopPropagation()">
+        <div class="export-handle"></div>
+        <h3>Esporta documento</h3>
+        <p class="export-subtitle">Scegli il formato. Ti verrà chiesto dove salvare il file.</p>
+        <div class="export-options">
+
+            <div class="export-option" id="exp-md" onclick="runExport('md')">
+                <div class="export-icon md">.MD</div>
+                <div class="export-info">
+                    <div class="export-name">Markdown</div>
+                    <div class="export-desc">Testo grezzo con sintassi Markdown</div>
+                </div>
+                <i class="fas fa-chevron-right export-caret"></i>
+            </div>
+
+            <div class="export-option" id="exp-docx" onclick="runExport('docx')">
+                <div class="export-icon docx">.DOCX</div>
+                <div class="export-info">
+                    <div class="export-name">Word Document</div>
+                    <div class="export-desc">Compatibile con Microsoft Word e Google Docs</div>
+                </div>
+                <i class="fas fa-chevron-right export-caret"></i>
+            </div>
+
+            <div class="export-option" id="exp-pdf" onclick="runExport('pdf')">
+                <div class="export-icon pdf">.PDF</div>
+                <div class="export-info">
+                    <div class="export-name">PDF</div>
+                    <div class="export-desc">Pronto per stampa e condivisione</div>
+                </div>
+                <i class="fas fa-chevron-right export-caret"></i>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

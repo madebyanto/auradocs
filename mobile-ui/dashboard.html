@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Aura Docs</title>
+    <title>Aura Docs Mobile</title>
     <link rel="icon" href="/images/auradocs.svg" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto:wght@300;400;700&family=Open+Sans:wght@300;400;600&family=Playfair+Display:wght@400;700&family=Courier+Prime&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -267,13 +267,21 @@
             justify-content: space-between;
             align-items: center;
             max-width: 1200px;
-            margin: 0 auto 24px;
+            margin: 0 auto 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .dashboard-header h2 {
             font-weight: 600;
             font-size: 20px;
             letter-spacing: -0.3px;
+        }
+
+        .dashboard-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-new {
@@ -294,6 +302,100 @@
             flex-shrink: 0;
         }
         .btn-new:active { transform: scale(0.97); }
+
+        .btn-new-folder {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 14px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1.5px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .btn-new-folder:active { border-color: rgba(224, 8, 246, 0.4); color: var(--aura-primary); }
+
+        /* ── FOLDERS ── */
+        .folders-section {
+            max-width: 1200px;
+            margin: 0 auto 20px;
+        }
+        .folders-section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+        .folders-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .folder-chip {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 12px 7px 10px;
+            border-radius: 30px;
+            border: 1.5px solid var(--border);
+            background: var(--bg-card);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 12px;
+            font-weight: 500;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .folder-chip:active { border-color: rgba(224,8,246,0.3); transform: scale(0.97); }
+        .folder-chip.active { border-color: var(--aura-primary); background: rgba(224,8,246,0.05); }
+        .folder-chip.all-chip { border-style: dashed; }
+        .folder-chip-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+        .folder-chip-count {
+            font-size: 10px; font-weight: 700;
+            color: var(--text-muted);
+            background: var(--bg-main);
+            padding: 1px 5px; border-radius: 10px;
+        }
+        .folder-chip-menu-btn {
+            background: none; border: none;
+            cursor: pointer; color: var(--text-muted);
+            font-size: 10px; padding: 0 0 0 2px;
+            line-height: 1; display: inline-flex;
+            transition: var(--transition);
+        }
+        .folder-chip-menu-btn:active { color: var(--text-main); }
+
+        /* Docs section label */
+        .docs-section-label {
+            max-width: 1200px;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .docs-section-label span {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+        .docs-section-label .folder-badge {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 13px; font-weight: 600; color: var(--text-main);
+        }
+        .docs-section-label .folder-badge-dot { width: 9px; height: 9px; border-radius: 50%; }
 
         .docs-grid {
             display: grid;
@@ -385,6 +487,7 @@
             background: rgba(224, 8, 246, 0.08);
             color: var(--aura-primary);
         }
+        .doc-folder-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
         .empty-state {
             grid-column: 1 / -1;
@@ -540,12 +643,12 @@
             align-items: center;
         }
 
-        /* ── CANVAS ── */
+        /* ── CANVAS ── dinamico in altezza ── */
         .canvas {
             width: 100%;
             max-width: 850px;
             background: var(--bg-card);
-            min-height: 400px;
+            min-height: auto;
             height: auto;
             padding: 32px 20px;
             border-radius: var(--radius-md);
@@ -558,7 +661,7 @@
         #editor-textarea {
             display: none;
             width: 100%;
-            min-height: 500px;
+            min-height: 400px;
             height: auto;
             overflow: hidden;
             border: none;
@@ -575,7 +678,7 @@
 
         #visual-editor {
             width: 100%;
-            min-height: 500px;
+            min-height: 400px;
             height: auto;
             outline: none;
             line-height: 1.85;
@@ -633,8 +736,8 @@
         /* ── IMAGE IN EDITOR ── */
         .editor-img-wrap {
             position: relative;
-            display: inline-block;
-            max-width: 100%;
+            display: block;
+            width: fit-content;
             margin: 8px 0;
             user-select: none;
         }
@@ -642,14 +745,16 @@
             display: block;
             max-width: 100%;
             border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-md);
         }
         .editor-img-wrap.selected img {
             outline: 2px solid var(--aura-primary);
             outline-offset: 2px;
+            box-shadow: 0 0 0 4px rgba(224,8,246,0.15), var(--shadow-md);
         }
-        .editor-img-wrap.align-left  { float: left; margin-right: 16px; }
-        .editor-img-wrap.align-right { float: right; margin-left: 16px; }
-        .editor-img-wrap.align-center { display: block; margin-left: auto; margin-right: auto; }
+        .editor-img-wrap.align-left  { margin-right: auto; margin-left: 0; }
+        .editor-img-wrap.align-right { margin-left: auto; margin-right: 0; }
+        .editor-img-wrap.align-center { margin-left: auto; margin-right: auto; }
 
         /* Resize handle */
         .img-resize-handle {
@@ -672,20 +777,23 @@
         .img-toolbar {
             display: none;
             position: absolute;
-            top: -38px; left: 0;
+            top: -38px; left: 50%;
+            transform: translateX(-50%);
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
+            border-radius: 30px;
             box-shadow: var(--shadow-md);
-            padding: 3px;
+            padding: 4px 6px;
             gap: 2px;
             flex-direction: row;
+            align-items: center;
             z-index: 100;
+            white-space: nowrap;
         }
         .editor-img-wrap.selected .img-toolbar { display: flex; }
         .img-tb-btn {
             width: 28px; height: 28px;
-            border-radius: 5px;
+            border-radius: 50%;
             border: none;
             background: transparent;
             cursor: pointer;
@@ -695,6 +803,7 @@
             transition: var(--transition);
         }
         .img-tb-btn:active, .img-tb-btn.active { background: rgba(224,8,246,0.1); color: var(--aura-primary); }
+        .img-tb-divider { width: 1px; height: 16px; background: var(--border); margin: 0 2px; }
 
         /* ── IMAGE MODAL ── */
         #image-modal {
@@ -746,7 +855,7 @@
             font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 600;
             cursor: pointer; transition: var(--transition);
         }
-        .img-tab.active { background: var(--bg-card); color: var(--text-main); box-shadow: var(--shadow-sm); }
+        .img-tab.active { background: var(--aura-gradient); color: white; box-shadow: 0 2px 8px rgba(224,8,246,0.3); }
 
         .img-tab-panel { display: none; }
         .img-tab-panel.active { display: block; }
@@ -795,6 +904,82 @@
             }
             .image-modal-handle { display: none; }
         }
+
+        /* ── FOLDER MODAL ── */
+        #folder-modal {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 5500;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        .folder-modal-box {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            width: 100%; max-width: 480px;
+            padding: 0 20px 36px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border); border-bottom: none;
+            animation: sheetSlide 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+            margin: 0 auto;
+        }
+        .folder-modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 14px auto 0; }
+        .folder-modal-box h3 {
+            font-size: 16px; font-weight: 600; margin: 20px 0 16px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .folder-modal-box h3::before {
+            content: ''; width: 4px; height: 18px;
+            background: var(--aura-gradient); border-radius: 2px; display: inline-block;
+        }
+        .folder-color-picker {
+            display: flex; flex-wrap: wrap; gap: 8px;
+            margin: 12px 0 20px;
+        }
+        .folder-color-swatch {
+            width: 28px; height: 28px; border-radius: 50%;
+            cursor: pointer; border: 2px solid transparent;
+            transition: var(--transition); flex-shrink: 0;
+        }
+        .folder-color-swatch:active { transform: scale(1.15); }
+        .folder-color-swatch.selected { border-color: var(--text-main); transform: scale(1.1); }
+        .folder-modal-actions { display: flex; gap: 8px; margin-top: 4px; }
+        .folder-modal-actions button {
+            flex: 1; padding: 13px; border-radius: var(--radius-sm);
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            font-family: 'Poppins', sans-serif; transition: var(--transition); border: none;
+        }
+        .btn-folder-cancel { background: var(--bg-main); color: var(--text-secondary); border: 1px solid var(--border) !important; }
+        .btn-folder-cancel:active { border-color: var(--border-focus) !important; }
+        .btn-folder-save { background: var(--aura-gradient); color: white; box-shadow: 0 3px 10px rgba(224,8,246,0.25); }
+        .btn-folder-save:active { transform: scale(0.97); }
+
+        @media (min-width: 640px) {
+            #folder-modal { align-items: center; }
+            .folder-modal-box { border-radius: var(--radius-xl); border: 1px solid var(--border); max-width: 360px; animation: modalSlide 0.3s ease; padding: 0 24px 28px; }
+            .folder-modal-handle { display: none; }
+        }
+
+        /* ── FOLDER CONTEXT MENU ── */
+        .folder-ctx-menu {
+            position: fixed; z-index: 9999;
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-md); padding: 6px;
+            box-shadow: var(--shadow-xl); min-width: 160px;
+            animation: dropdownFade 0.15s ease;
+        }
+        .folder-ctx-item {
+            display: flex; align-items: center; gap: 9px;
+            padding: 9px 12px; border-radius: var(--radius-sm);
+            font-size: 13px; font-weight: 500; cursor: pointer;
+            transition: var(--transition); color: var(--text-main);
+        }
+        .folder-ctx-item:active { background: var(--bg-main); }
+        .folder-ctx-item.danger { color: #ef4444; }
+        .folder-ctx-item.danger:active { background: rgba(239,68,68,0.06); }
+        .folder-ctx-item i { width: 14px; text-align: center; font-size: 12px; color: var(--text-secondary); }
+        .folder-ctx-item.danger i { color: #ef4444; }
 
         /* ── COLLAB MODAL ── */
         #collab-modal {
@@ -1350,7 +1535,7 @@
             }
 
             .editor-scroll { padding: 24px 20px 80px; }
-            .canvas { padding: 72px 96px; min-height: 1100px; }
+            .canvas { padding: 72px 96px; }
             #visual-editor { font-size: 16px; min-height: 900px; }
             #editor-textarea { font-size: 15px; min-height: 900px; }
 
@@ -1443,10 +1628,30 @@
     <div id="dashboard-view">
         <div class="dashboard-header">
             <h2>I tuoi Documenti</h2>
-            <button class="btn-new" onclick="createNewDoc()">
-                <i class="fas fa-plus"></i> Nuovo
-            </button>
+            <div class="dashboard-header-actions">
+                <button class="btn-new-folder" onclick="openFolderModal()">
+                    <i class="fas fa-folder-plus"></i> Cartella
+                </button>
+                <button class="btn-new" onclick="createNewDoc()">
+                    <i class="fas fa-plus"></i> Nuovo
+                </button>
+            </div>
         </div>
+
+        <!-- Folders row -->
+        <div class="folders-section" id="folders-section" style="display:none;">
+            <div class="folders-section-header">
+                <i class="fas fa-folder" style="color:var(--aura-primary); font-size:10px;"></i>
+                Cartelle
+            </div>
+            <div class="folders-grid" id="folders-grid"></div>
+        </div>
+
+        <!-- Docs label -->
+        <div class="docs-section-label" id="docs-section-label">
+            <span>Tutti i documenti</span>
+        </div>
+
         <div class="docs-grid" id="docs-grid"></div>
     </div>
 
@@ -1484,7 +1689,7 @@
                 <button onclick="execCmd('formatBlock', 'H1')" title="Titolo 1"><b style="font-size:10px;">H1</b></button>
                 <button onclick="execCmd('formatBlock', 'H2')" title="Titolo 2"><b style="font-size:10px;">H2</b></button>
                 <button onclick="execCmd('formatBlock', 'H3')" title="Titolo 3"><b style="font-size:10px;">H3</b></button>
-                <button onclick="execCmd('formatBlock', 'blockquote')" title="Citazione"><i class="fas fa-quote-right"></i></button>
+                <button onclick="insertBlockquote()" title="Citazione"><i class="fas fa-quote-right"></i></button>
                 <button onclick="insertCodeBlock()" title="Blocco codice"><i class="fas fa-code"></i></button>
 
                 <div class="toolbar-divider"></div>
@@ -1561,6 +1766,27 @@
         <div class="collab-list" id="active-collabs-list"></div>
         <button class="modal-btn-close" onclick="document.getElementById('collab-modal').style.display='none'">Chiudi</button>
     </div>
+</div>
+
+<!-- FOLDER MODAL -->
+<div id="folder-modal" onclick="if(event.target===this)closeFolderModal()">
+    <div class="folder-modal-box" onclick="event.stopPropagation()">
+        <div class="folder-modal-handle"></div>
+        <h3 id="folder-modal-title">Nuova cartella</h3>
+        <input type="text" class="modal-input" id="folder-name-input" placeholder="Nome cartella...">
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-muted); margin-top:14px; margin-bottom:0;">Colore</div>
+        <div class="folder-color-picker" id="folder-color-picker"></div>
+        <div class="folder-modal-actions">
+            <button class="btn-folder-cancel" onclick="closeFolderModal()">Annulla</button>
+            <button class="btn-folder-save" onclick="saveFolder()">Salva</button>
+        </div>
+    </div>
+</div>
+
+<!-- FOLDER CONTEXT MENU -->
+<div id="folder-ctx-menu" class="folder-ctx-menu" style="display:none;">
+    <div class="folder-ctx-item" onclick="folderCtxEdit()"><i class="fas fa-pencil"></i> Rinomina / Colore</div>
+    <div class="folder-ctx-item danger" onclick="folderCtxDelete()"><i class="fas fa-trash"></i> Elimina cartella</div>
 </div>
 
 <!-- IMAGE MODAL -->
@@ -1768,6 +1994,18 @@ let nyraHistory = [];
 let imgAlign = 'none';
 let savedRange = null;
 
+// ── Folder state ──
+const FOLDER_COLORS = [
+    '#e008f6','#803afb','#3b82f6','#10b981','#f59e0b',
+    '#ef4444','#ec4899','#06b6d4','#84cc16','#f97316',
+    '#6366f1','#14b8a6','#a855f7','#64748b','#1a1b1e'
+];
+let currentFolderFilter = null;
+let editingFolderId = null;
+let selectedFolderColor = FOLDER_COLORS[0];
+let ctxMenuFolderId = null;
+let allFolders = {};
+
 document.execCommand('defaultParagraphSeparator', false, 'p');
 
 // ══════════════════════════════════════════════
@@ -1778,13 +2016,7 @@ const isAndroidWebView = (() => {
     return /wv|WebView/.test(ua) && /Android/.test(ua);
 })();
 
-/**
- * Saves a file: uses Android WebView bridge if available,
- * File System Access API on modern browsers,
- * or falls back to classic <a> download.
- */
 async function saveFile(blob, filename, mime) {
-    // 1) Android WebView bridge (native save dialog)
     if (isAndroidWebView && window.AndroidBridge && typeof window.AndroidBridge.saveFile === 'function') {
         return new Promise((resolve) => {
             const reader = new FileReader();
@@ -1796,22 +2028,14 @@ async function saveFile(blob, filename, mime) {
             reader.readAsDataURL(blob);
         });
     }
-
-    // 2) postMessage fallback for WebView without native bridge
     if (isAndroidWebView) {
         return new Promise((resolve) => {
             const reader = new FileReader();
             reader.onloadend = () => {
                 const base64 = reader.result.split(',')[1];
                 try {
-                    window.postMessage(JSON.stringify({
-                        type: 'AURA_SAVE_FILE',
-                        filename,
-                        mime,
-                        data: base64
-                    }), '*');
+                    window.postMessage(JSON.stringify({ type: 'AURA_SAVE_FILE', filename, mime, data: base64 }), '*');
                 } catch(e) {
-                    // last resort: data URL
                     const a = document.createElement('a');
                     a.href = reader.result;
                     a.download = filename;
@@ -1824,8 +2048,6 @@ async function saveFile(blob, filename, mime) {
             reader.readAsDataURL(blob);
         });
     }
-
-    // 3) File System Access API (modern desktop/Android Chrome 86+)
     if (window.showSaveFilePicker) {
         try {
             const ext = '.' + filename.split('.').pop();
@@ -1839,11 +2061,8 @@ async function saveFile(blob, filename, mime) {
             return true;
         } catch (e) {
             if (e.name === 'AbortError') return false;
-            // Fall through
         }
     }
-
-    // 4) Classic <a> download
     const url = URL.createObjectURL(blob);
     const a = Object.assign(document.createElement('a'), { href: url, download: filename });
     document.body.appendChild(a);
@@ -1861,7 +2080,12 @@ userTrigger.addEventListener('click', (e) => {
     e.stopPropagation();
     userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block';
 });
-window.addEventListener('click', () => userDropdown.style.display = 'none');
+window.addEventListener('click', (e) => {
+    userDropdown.style.display = 'none';
+    if (!e.target.closest('#folder-ctx-menu') && !e.target.closest('.folder-chip-menu-btn')) {
+        document.getElementById('folder-ctx-menu').style.display = 'none';
+    }
+});
 
 // ══════════════════════════════════════════════
 // FONT
@@ -1878,6 +2102,214 @@ function changeFontFamily(family) {
         document.getElementById('visual-editor').style.fontFamily = family;
         autoSave();
     }
+}
+
+// ══════════════════════════════════════════════
+// FOLDERS
+// ══════════════════════════════════════════════
+function loadFolders() {
+    if (!auth.currentUser) return;
+    db.collection('folders')
+        .where('uid', '==', auth.currentUser.uid)
+        .onSnapshot(snap => {
+            allFolders = {};
+            snap.forEach(doc => { allFolders[doc.id] = doc.data(); });
+            renderFolders();
+        });
+}
+
+function renderFolders() {
+    const grid = document.getElementById('folders-grid');
+    const section = document.getElementById('folders-section');
+    grid.innerHTML = '';
+    const ids = Object.keys(allFolders);
+    if (ids.length === 0) {
+        section.style.display = 'none';
+    } else {
+        section.style.display = 'block';
+        // "Tutti" chip
+        const all = document.createElement('div');
+        all.className = 'folder-chip all-chip' + (currentFolderFilter === null ? ' active' : '');
+        all.innerHTML = `<span style="font-size:12px;">📁</span><span>Tutti</span>`;
+        all.onclick = () => { currentFolderFilter = null; renderFolders(); loadDocs(); };
+        grid.appendChild(all);
+
+        ids.forEach(id => {
+            const f = allFolders[id];
+            const chip = document.createElement('div');
+            chip.className = 'folder-chip' + (currentFolderFilter === id ? ' active' : '');
+            chip.innerHTML = `
+                <div class="folder-chip-dot" style="background:${f.color || '#e008f6'};"></div>
+                <span>${f.name}</span>
+                <span class="folder-chip-count" id="folder-count-${id}">–</span>
+                <button class="folder-chip-menu-btn" onclick="openFolderCtxMenu(event,'${id}')"><i class="fas fa-ellipsis-h"></i></button>
+            `;
+            chip.addEventListener('click', (e) => {
+                if (e.target.closest('.folder-chip-menu-btn')) return;
+                currentFolderFilter = id;
+                renderFolders();
+                loadDocs();
+            });
+            grid.appendChild(chip);
+        });
+        updateFolderCounts();
+    }
+    updateDocsSectionLabel();
+}
+
+async function updateFolderCounts() {
+    if (!auth.currentUser) return;
+    const snap = await db.collection('documents')
+        .where(`collaborators.${auth.currentUser.uid}`, 'in', ['Proprietario', 'Editor', 'Visualizzatore'])
+        .get();
+    const counts = {};
+    snap.forEach(doc => {
+        const fid = doc.data().folderId || null;
+        if (fid) counts[fid] = (counts[fid] || 0) + 1;
+    });
+    Object.keys(allFolders).forEach(id => {
+        const el = document.getElementById('folder-count-' + id);
+        if (el) el.textContent = counts[id] || 0;
+    });
+}
+
+function updateDocsSectionLabel() {
+    const label = document.getElementById('docs-section-label');
+    if (currentFolderFilter && allFolders[currentFolderFilter]) {
+        const f = allFolders[currentFolderFilter];
+        label.innerHTML = `
+            <div class="folder-badge">
+                <div class="folder-badge-dot" style="background:${f.color};"></div>
+                <span>${f.name}</span>
+            </div>
+            <span style="font-size:11px; color:var(--text-muted); cursor:pointer;" onclick="currentFolderFilter=null; renderFolders(); loadDocs();">
+                <i class="fas fa-times"></i> Tutti
+            </span>`;
+    } else {
+        label.innerHTML = `<span>Tutti i documenti</span>`;
+    }
+}
+
+function openFolderModal(editId = null) {
+    editingFolderId = editId;
+    const title = document.getElementById('folder-modal-title');
+    const nameInput = document.getElementById('folder-name-input');
+    title.textContent = editId ? 'Modifica cartella' : 'Nuova cartella';
+    if (editId && allFolders[editId]) {
+        nameInput.value = allFolders[editId].name;
+        selectedFolderColor = allFolders[editId].color || FOLDER_COLORS[0];
+    } else {
+        nameInput.value = '';
+        selectedFolderColor = FOLDER_COLORS[0];
+    }
+    renderColorPicker();
+    document.getElementById('folder-modal').style.display = 'flex';
+    setTimeout(() => nameInput.focus(), 100);
+}
+
+function closeFolderModal() {
+    document.getElementById('folder-modal').style.display = 'none';
+    editingFolderId = null;
+}
+
+function renderColorPicker() {
+    const picker = document.getElementById('folder-color-picker');
+    picker.innerHTML = '';
+    FOLDER_COLORS.forEach(color => {
+        const swatch = document.createElement('div');
+        swatch.className = 'folder-color-swatch' + (color === selectedFolderColor ? ' selected' : '');
+        swatch.style.background = color;
+        swatch.onclick = () => { selectedFolderColor = color; renderColorPicker(); };
+        picker.appendChild(swatch);
+    });
+}
+
+async function saveFolder() {
+    const name = document.getElementById('folder-name-input').value.trim();
+    if (!name) { document.getElementById('folder-name-input').focus(); return; }
+    if (editingFolderId) {
+        await db.collection('folders').doc(editingFolderId).update({ name, color: selectedFolderColor });
+    } else {
+        await db.collection('folders').add({
+            uid: auth.currentUser.uid,
+            name, color: selectedFolderColor,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    }
+    closeFolderModal();
+}
+
+function openFolderCtxMenu(e, folderId) {
+    e.stopPropagation();
+    ctxMenuFolderId = folderId;
+    const menu = document.getElementById('folder-ctx-menu');
+    menu.style.display = 'block';
+    const rect = e.currentTarget.getBoundingClientRect();
+    let left = rect.left;
+    let top = rect.bottom + 4;
+    if (left + 180 > window.innerWidth) left = window.innerWidth - 190;
+    if (top + 100 > window.innerHeight) top = rect.top - 104;
+    menu.style.left = left + 'px';
+    menu.style.top = top + 'px';
+}
+
+function folderCtxEdit() {
+    document.getElementById('folder-ctx-menu').style.display = 'none';
+    openFolderModal(ctxMenuFolderId);
+}
+
+async function folderCtxDelete() {
+    document.getElementById('folder-ctx-menu').style.display = 'none';
+    if (!ctxMenuFolderId) return;
+    const fname = allFolders[ctxMenuFolderId]?.name || 'questa cartella';
+    if (!confirm(`Eliminare "${fname}"? I documenti al suo interno non verranno eliminati.`)) return;
+    const snap = await db.collection('documents')
+        .where(`collaborators.${auth.currentUser.uid}`, 'in', ['Proprietario', 'Editor', 'Visualizzatore'])
+        .where('folderId', '==', ctxMenuFolderId)
+        .get();
+    const batch = db.batch();
+    snap.forEach(doc => batch.update(doc.ref, { folderId: firebase.firestore.FieldValue.delete() }));
+    batch.delete(db.collection('folders').doc(ctxMenuFolderId));
+    await batch.commit();
+    if (currentFolderFilter === ctxMenuFolderId) currentFolderFilter = null;
+    ctxMenuFolderId = null;
+}
+
+// Long-press on doc card to assign folder (mobile-friendly)
+function openDocFolderMenu(e, docId) {
+    e.preventDefault();
+    e.stopPropagation();
+    document.querySelectorAll('.doc-folder-popup').forEach(el => el.remove());
+    const folderIds = Object.keys(allFolders);
+    if (folderIds.length === 0) return;
+    const menu = document.createElement('div');
+    menu.className = 'folder-ctx-menu doc-folder-popup';
+    const x = Math.min((e.clientX || e.touches?.[0]?.clientX || 20), window.innerWidth - 180);
+    const y = e.clientY || e.touches?.[0]?.clientY || 80;
+    menu.style.cssText = `position:fixed; z-index:9999; left:${x}px; top:${y + 4}px;`;
+    menu.innerHTML = `<div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-muted); padding:6px 12px 4px;">Sposta in cartella</div>`;
+    const noneItem = document.createElement('div');
+    noneItem.className = 'folder-ctx-item';
+    noneItem.innerHTML = `<i class="fas fa-times" style="color:var(--text-muted);"></i> Nessuna cartella`;
+    noneItem.onclick = async () => {
+        await db.collection('documents').doc(docId).update({ folderId: firebase.firestore.FieldValue.delete() });
+        menu.remove();
+    };
+    menu.appendChild(noneItem);
+    folderIds.forEach(fid => {
+        const f = allFolders[fid];
+        const item = document.createElement('div');
+        item.className = 'folder-ctx-item';
+        item.innerHTML = `<span style="width:10px;height:10px;border-radius:50%;background:${f.color};display:inline-block;flex-shrink:0;"></span> ${f.name}`;
+        item.onclick = async () => {
+            await db.collection('documents').doc(docId).update({ folderId: fid });
+            menu.remove();
+            if (currentFolderFilter !== null) loadDocs();
+        };
+        menu.appendChild(item);
+    });
+    document.body.appendChild(menu);
+    setTimeout(() => document.addEventListener('click', () => menu.remove(), { once: true }), 0);
 }
 
 // ══════════════════════════════════════════════
@@ -1930,6 +2362,20 @@ async function addCollaborator() {
     renderCollabsList();
 }
 
+async function updateCollaboratorRole(uid, newRole) {
+    if (!currentDocId) return;
+    await db.collection('documents').doc(currentDocId).update({ [`collaborators.${uid}`]: newRole });
+    renderCollabsList();
+}
+
+async function removeCollaborator(uid) {
+    if (!currentDocId) return;
+    if (confirm("Rimuovere questo collaboratore?")) {
+        await db.collection('documents').doc(currentDocId).update({ [`collaborators.${uid}`]: firebase.firestore.FieldValue.delete() });
+        renderCollabsList();
+    }
+}
+
 async function renderCollabsList() {
     const doc = await db.collection('documents').doc(currentDocId).get();
     const listDiv = document.getElementById('active-collabs-list');
@@ -1947,7 +2393,26 @@ async function renderCollabsList() {
             name = `${uData.nome} ${uData.cognome}`;
             photoUrl = uData.profileImage || 'images/default.png';
         }
-        listDiv.innerHTML += `<div class="collab-user"><div style="display:flex;align-items:center;gap:10px;"><img src="${photoUrl}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid var(--aura-primary);"><span style="font-weight:500;">${name}</span></div><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:3px 8px;border-radius:20px;background:rgba(224,8,246,0.1);color:var(--aura-primary);">${role}</span></div>`;
+        const isOwner = role === 'Proprietario';
+        let roleControls = '';
+        if (isOwner) {
+            roleControls = `<span style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; padding:3px 8px; border-radius:20px; background:rgba(224,8,246,0.1); color:var(--aura-primary);">${role}</span>`;
+        } else {
+            roleControls = `<div style="display:flex; align-items:center; gap:6px;">
+                <select onchange="updateCollaboratorRole('${uid}', this.value)" style="font-size:10px; padding:4px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--bg-main); color:var(--text-main); outline:none;">
+                    <option value="Editor" ${role==='Editor'?'selected':''}>Editor</option>
+                    <option value="Visualizzatore" ${role==='Visualizzatore'?'selected':''}>Visualizzatore</option>
+                </select>
+                <button onclick="removeCollaborator('${uid}')" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:12px;" title="Rimuovi"><i class="fas fa-trash"></i></button>
+            </div>`;
+        }
+        listDiv.innerHTML += `<div class="collab-user">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <img src="${photoUrl}" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:1.5px solid var(--aura-primary);">
+                <span style="font-weight:500; font-size:12px;">${name}</span>
+            </div>
+            ${roleControls}
+        </div>`;
     }
 }
 
@@ -2021,27 +2486,54 @@ function addLink() {
     if (url) execCmd('createLink', url);
 }
 
+function insertBlockquote() {
+    if (currentMode !== 'visual') return;
+    const visual = document.getElementById('visual-editor');
+    visual.focus();
+    const sel = window.getSelection();
+    const selectedText = sel ? sel.toString() : '';
+    const bq = document.createElement('blockquote');
+    bq.textContent = selectedText || 'Testo della citazione';
+    if (sel && sel.rangeCount > 0) {
+        const range = sel.getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(bq);
+        const newRange = document.createRange();
+        newRange.setStartAfter(bq);
+        newRange.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(newRange);
+    } else { visual.appendChild(bq); }
+    const p = document.createElement('p');
+    p.innerHTML = '<br>';
+    bq.parentNode.insertBefore(p, bq.nextSibling);
+    autoSave();
+}
+
 function insertCodeBlock() {
     if (currentMode !== 'visual') return;
+    const visual = document.getElementById('visual-editor');
+    visual.focus();
     const sel = window.getSelection();
-    const selectedText = sel && sel.toString() ? sel.toString() : 'codice';
+    const selectedText = sel ? sel.toString() : '';
     const pre = document.createElement('pre');
     const code = document.createElement('code');
-    code.textContent = selectedText;
+    code.textContent = selectedText || '// codice';
+    code.contentEditable = 'true';
     pre.appendChild(code);
     if (sel && sel.rangeCount > 0) {
         const range = sel.getRangeAt(0);
         range.deleteContents();
         range.insertNode(pre);
-        // Move cursor after
         const newRange = document.createRange();
-        newRange.setStartAfter(pre);
-        newRange.collapse(true);
+        newRange.setStart(code, 0);
+        newRange.setEnd(code, code.childNodes.length);
         sel.removeAllRanges();
         sel.addRange(newRange);
-    } else {
-        document.getElementById('visual-editor').appendChild(pre);
-    }
+    } else { visual.appendChild(pre); }
+    const p = document.createElement('p');
+    p.innerHTML = '<br>';
+    pre.parentNode.insertBefore(p, pre.nextSibling);
     autoSave();
 }
 
@@ -2060,14 +2552,12 @@ document.getElementById('visual-editor').addEventListener('keyup', saveSelection
 function openImageModal() {
     if (currentMode !== 'visual') return;
     saveSelectionRange();
-    // Reset
     document.getElementById('img-url-input').value = '';
     document.getElementById('img-gdrive-input').value = '';
     document.getElementById('img-preview').style.display = 'none';
     imgAlign = 'none';
     document.querySelectorAll('.img-align-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('align-none').classList.add('active');
-    // Switch to URL tab
     switchImgTab('url', document.querySelector('.img-tab'));
     document.getElementById('image-modal').style.display = 'flex';
 }
@@ -2101,14 +2591,13 @@ function previewGdriveImg(val) {
 
 function gdriveToDirectUrl(val) {
     if (!val) return null;
-    // Extract ID from various Drive URL formats
     let id = null;
     const m1 = val.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
     const m2 = val.match(/id=([a-zA-Z0-9_-]+)/);
     if (m1) id = m1[1];
     else if (m2) id = m2[1];
     else if (/^[a-zA-Z0-9_-]{20,}$/.test(val.trim())) id = val.trim();
-    return id ? `https://drive.google.com/uc?export=view&id=${id}` : null;
+    return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w600` : null;
 }
 
 function setImgAlign(align, btn) {
@@ -2118,7 +2607,6 @@ function setImgAlign(align, btn) {
 }
 
 function insertImage() {
-    // Get URL from active tab
     const activePanel = document.querySelector('.img-tab-panel.active');
     let url = '';
     if (activePanel.id === 'img-panel-url') {
@@ -2128,7 +2616,6 @@ function insertImage() {
     }
     if (!url) { showToast('⚠️ Inserisci un URL valido'); return; }
 
-    // Restore selection
     const visual = document.getElementById('visual-editor');
     visual.focus();
     if (savedRange) {
@@ -2137,29 +2624,52 @@ function insertImage() {
         sel.addRange(savedRange);
     }
 
-    // Build wrapper
+    const wrap = createImageWrapper(url, imgAlign);
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0) {
+        const range = sel.getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(wrap);
+        const p = document.createElement('p');
+        p.innerHTML = '<br>';
+        wrap.parentNode.insertBefore(p, wrap.nextSibling);
+        const newRange = document.createRange();
+        newRange.setStartAfter(p);
+        newRange.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(newRange);
+    } else {
+        visual.appendChild(wrap);
+        const p = document.createElement('p'); p.innerHTML = '<br>';
+        visual.appendChild(p);
+    }
+
+    document.getElementById('image-modal').style.display = 'none';
+    autoSave();
+}
+
+function createImageWrapper(src, align) {
     const wrap = document.createElement('div');
-    wrap.className = 'editor-img-wrap' + (imgAlign !== 'none' ? ' align-' + imgAlign : '');
+    wrap.className = 'editor-img-wrap' + (align !== 'none' ? ' align-' + align : '');
     wrap.contentEditable = 'false';
 
     const imgEl = document.createElement('img');
-    imgEl.src = url;
+    imgEl.src = src;
     imgEl.alt = '';
     imgEl.style.width = '100%';
     imgEl.draggable = false;
     wrap.appendChild(imgEl);
 
-    // Image toolbar (align buttons + remove)
     const toolbar = document.createElement('div');
     toolbar.className = 'img-toolbar';
     toolbar.innerHTML = `
-        <button class="img-tb-btn${imgAlign==='left'?' active':''}" onclick="changeImgAlign(this,'left')" title="Sinistra"><i class="fas fa-align-left"></i></button>
-        <button class="img-tb-btn${imgAlign==='center'?' active':''}" onclick="changeImgAlign(this,'center')" title="Centro"><i class="fas fa-align-center"></i></button>
-        <button class="img-tb-btn${imgAlign==='right'?' active':''}" onclick="changeImgAlign(this,'right')" title="Destra"><i class="fas fa-align-right"></i></button>
+        <button class="img-tb-btn${align==='left'?' active':''}" onclick="changeImgAlign(this,'left')" title="Sinistra"><i class="fas fa-align-left"></i></button>
+        <button class="img-tb-btn${align==='center'?' active':''}" onclick="changeImgAlign(this,'center')" title="Centro"><i class="fas fa-align-center"></i></button>
+        <button class="img-tb-btn${align==='right'?' active':''}" onclick="changeImgAlign(this,'right')" title="Destra"><i class="fas fa-align-right"></i></button>
+        <div class="img-tb-divider"></div>
         <button class="img-tb-btn" onclick="removeImgWrap(this)" title="Rimuovi" style="color:#ef4444;"><i class="fas fa-trash-alt"></i></button>`;
     wrap.appendChild(toolbar);
 
-    // Resize handle
     const handle = document.createElement('div');
     handle.className = 'img-resize-handle';
     handle.innerHTML = '<i class="fas fa-expand-alt"></i>';
@@ -2167,26 +2677,7 @@ function insertImage() {
 
     setupImgResize(handle, imgEl);
     attachImgClickHandler(wrap);
-
-    // Insert at cursor or at end
-    const sel = window.getSelection();
-    if (sel && sel.rangeCount > 0) {
-        const range = sel.getRangeAt(0);
-        range.deleteContents();
-        range.insertNode(wrap);
-        // Add paragraph after
-        const p = document.createElement('p');
-        p.innerHTML = '<br>';
-        wrap.parentNode.insertBefore(p, wrap.nextSibling);
-    } else {
-        visual.appendChild(wrap);
-        const p = document.createElement('p');
-        p.innerHTML = '<br>';
-        visual.appendChild(p);
-    }
-
-    document.getElementById('image-modal').style.display = 'none';
-    autoSave();
+    return wrap;
 }
 
 function changeImgAlign(btn, align) {
@@ -2212,7 +2703,6 @@ function attachImgClickHandler(wrap) {
     });
 }
 
-// Deselect images when clicking elsewhere
 document.getElementById('visual-editor').addEventListener('click', (e) => {
     if (!e.target.closest('.editor-img-wrap')) {
         document.querySelectorAll('.editor-img-wrap.selected').forEach(w => w.classList.remove('selected'));
@@ -2233,7 +2723,6 @@ function setupImgResize(handle, img) {
     let startX, startY, startW;
     const onMove = (e) => {
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
         const dx = clientX - startX;
         const newW = Math.max(60, startW + dx);
         img.style.width = newW + 'px';
@@ -2248,14 +2737,14 @@ function setupImgResize(handle, img) {
     };
     handle.addEventListener('mousedown', (e) => {
         e.preventDefault(); e.stopPropagation();
-        startX = e.clientX; startY = e.clientY;
+        startX = e.clientX;
         startW = img.offsetWidth;
         document.addEventListener('mousemove', onMove);
         document.addEventListener('mouseup', onEnd);
     });
     handle.addEventListener('touchstart', (e) => {
         e.preventDefault(); e.stopPropagation();
-        startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+        startX = e.touches[0].clientX;
         startW = img.offsetWidth;
         document.addEventListener('touchmove', onMove, { passive: false });
         document.addEventListener('touchend', onEnd);
@@ -2296,6 +2785,7 @@ auth.onAuthStateChanged(user => {
             document.getElementById('user-uid').textContent = user.uid;
         }
     });
+    loadFolders();
     loadDocs();
 });
 
@@ -2306,15 +2796,41 @@ function loadDocs() {
         .onSnapshot(snap => {
             const grid = document.getElementById('docs-grid');
             grid.innerHTML = '';
-            if (snap.empty) {
-                grid.innerHTML = `<div class="empty-state"><i class="fas fa-file-alt"></i><p>Nessun documento trovato.<br>Creane uno nuovo!</p></div>`;
+            let docs = [];
+            snap.forEach(doc => docs.push({ id: doc.id, data: doc.data() }));
+
+            // Filter by folder
+            if (currentFolderFilter !== null) {
+                docs = docs.filter(d => d.data.folderId === currentFolderFilter);
+            }
+
+            if (docs.length === 0) {
+                const msg = currentFolderFilter ? 'Nessun documento in questa cartella.' : 'Nessun documento trovato.<br>Creane uno nuovo!';
+                grid.innerHTML = `<div class="empty-state"><i class="fas fa-file-alt"></i><p>${msg}</p></div>`;
                 return;
             }
-            snap.forEach(doc => {
-                const data = doc.data();
+
+            docs.forEach(({ id, data }) => {
                 const card = document.createElement('div');
                 card.className = 'doc-card';
-                card.onclick = () => openDoc(doc.id, data);
+                card.onclick = () => openDoc(id, data);
+
+                // Long-press per assegnare cartella
+                let pressTimer = null;
+                card.addEventListener('touchstart', (e) => {
+                    pressTimer = setTimeout(() => { openDocFolderMenu(e, id); }, 600);
+                }, { passive: true });
+                card.addEventListener('touchend', () => { clearTimeout(pressTimer); });
+                card.addEventListener('touchmove', () => { clearTimeout(pressTimer); });
+                card.oncontextmenu = (e) => { if (Object.keys(allFolders).length > 0) openDocFolderMenu(e, id); };
+
+                // folder dot indicator
+                let folderDot = '';
+                if (data.folderId && allFolders[data.folderId]) {
+                    const f = allFolders[data.folderId];
+                    folderDot = `<div class="doc-folder-dot" style="background:${f.color};" title="Cartella: ${f.name}"></div>`;
+                }
+
                 card.innerHTML = `
                     <div>
                         <div class="doc-card-icon"><i class="fas fa-file-alt"></i></div>
@@ -2323,9 +2839,12 @@ function loadDocs() {
                     </div>
                     <div class="doc-card-footer">
                         <span class="doc-role-badge">${data.collaborators[auth.currentUser.uid]}</span>
+                        ${folderDot}
                     </div>`;
                 grid.appendChild(card);
             });
+
+            updateFolderCounts();
         });
 }
 
@@ -2358,7 +2877,7 @@ function openDoc(id, data) {
 }
 
 async function createNewDoc() {
-    const docRef = await db.collection('documents').add({
+    const newDocData = {
         title: "Senza titolo",
         content: "",
         fontSize: "16px",
@@ -2366,7 +2885,9 @@ async function createNewDoc() {
         isPublic: false,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         collaborators: { [auth.currentUser.uid]: "Proprietario" }
-    });
+    };
+    if (currentFolderFilter) newDocData.folderId = currentFolderFilter;
+    const docRef = await db.collection('documents').add(newDocData);
     const doc = await docRef.get();
     openDoc(docRef.id, doc.data());
 }
@@ -2453,21 +2974,12 @@ async function buildDocx(md) {
         const re = /(\[([^\]]*)\]\(([^)]*)\)|~~([^~]*)~~|`([^`]*)`|\*\*([^*]*)\*\*|__([^_]*)__|_([^_]*)_|\*([^*]*)\*|([^`*_~\[\]]+))/g;
         let m;
         while ((m = re.exec(text)) !== null) {
-            if (m[2] != null) {
-                const rId = 'lnk' + (linkRels.length + 1);
-                linkRels.push({ id: rId, url: m[3] });
-                xml += `<w:hyperlink r:id="${rId}" w:history="1"><w:r><w:rPr><w:rStyle w:val="Hyperlink"/></w:rPr><w:t xml:space="preserve">${esc(m[2])}</w:t></w:r></w:hyperlink>`;
-            } else if (m[4] != null) {
-                xml += `<w:r><w:rPr><w:strike/></w:rPr><w:t xml:space="preserve">${esc(m[4])}</w:t></w:r>`;
-            } else if (m[5] != null) {
-                xml += `<w:r><w:rPr><w:rFonts w:ascii="Courier New" w:hAnsi="Courier New"/><w:sz w:val="18"/><w:color w:val="B005DB"/></w:rPr><w:t xml:space="preserve">${esc(m[5])}</w:t></w:r>`;
-            } else if (m[6] != null || m[7] != null) {
-                xml += `<w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve">${esc(m[6] != null ? m[6] : m[7])}</w:t></w:r>`;
-            } else if (m[8] != null || m[9] != null) {
-                xml += `<w:r><w:rPr><w:i/></w:rPr><w:t xml:space="preserve">${esc(m[8] != null ? m[8] : m[9])}</w:t></w:r>`;
-            } else if (m[10] != null) {
-                xml += `<w:r><w:t xml:space="preserve">${esc(m[10])}</w:t></w:r>`;
-            }
+            if (m[2] != null) { const rId = 'lnk' + (linkRels.length + 1); linkRels.push({ id: rId, url: m[3] }); xml += `<w:hyperlink r:id="${rId}" w:history="1"><w:r><w:rPr><w:rStyle w:val="Hyperlink"/></w:rPr><w:t xml:space="preserve">${esc(m[2])}</w:t></w:r></w:hyperlink>`; }
+            else if (m[4] != null) { xml += `<w:r><w:rPr><w:strike/></w:rPr><w:t xml:space="preserve">${esc(m[4])}</w:t></w:r>`; }
+            else if (m[5] != null) { xml += `<w:r><w:rPr><w:rFonts w:ascii="Courier New" w:hAnsi="Courier New"/><w:sz w:val="18"/><w:color w:val="B005DB"/></w:rPr><w:t xml:space="preserve">${esc(m[5])}</w:t></w:r>`; }
+            else if (m[6] != null || m[7] != null) { xml += `<w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve">${esc(m[6] != null ? m[6] : m[7])}</w:t></w:r>`; }
+            else if (m[8] != null || m[9] != null) { xml += `<w:r><w:rPr><w:i/></w:rPr><w:t xml:space="preserve">${esc(m[8] != null ? m[8] : m[9])}</w:t></w:r>`; }
+            else if (m[10] != null) { xml += `<w:r><w:t xml:space="preserve">${esc(m[10])}</w:t></w:r>`; }
         }
         return xml || `<w:r><w:t xml:space="preserve">${esc(text)}</w:t></w:r>`;
     }
@@ -2479,23 +2991,20 @@ async function buildDocx(md) {
         const line = raw.trimEnd();
         if (line.startsWith('```')) {
             if (!inCode) { inCode = true; codeLines = []; }
-            else {
-                for (const cl of codeLines) { bodyParts.push(`<w:p><w:pPr><w:pStyle w:val="CodeBlock"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Courier New" w:hAnsi="Courier New"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(cl)}</w:t></w:r></w:p>`); }
-                inCode = false; codeLines = [];
-            }
+            else { for (const cl of codeLines) { bodyParts.push(`<w:p><w:pPr><w:pStyle w:val="CodeBlock"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Courier New" w:hAnsi="Courier New"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(cl)}</w:t></w:r></w:p>`); } inCode = false; codeLines = []; }
             continue;
         }
         if (inCode) { codeLines.push(raw); continue; }
-        if (/^#### /.test(line))       bodyParts.push(para('Heading4', inlineToXml(line.slice(5))));
-        else if (/^### /.test(line))   bodyParts.push(para('Heading3', inlineToXml(line.slice(4))));
-        else if (/^## /.test(line))    bodyParts.push(para('Heading2', inlineToXml(line.slice(3))));
-        else if (/^# /.test(line))     bodyParts.push(para('Heading1', inlineToXml(line.slice(2))));
-        else if (/^> /.test(line))     bodyParts.push(para('BlockQuote', inlineToXml(line.slice(2))));
+        if (/^#### /.test(line)) bodyParts.push(para('Heading4', inlineToXml(line.slice(5))));
+        else if (/^### /.test(line)) bodyParts.push(para('Heading3', inlineToXml(line.slice(4))));
+        else if (/^## /.test(line)) bodyParts.push(para('Heading2', inlineToXml(line.slice(3))));
+        else if (/^# /.test(line)) bodyParts.push(para('Heading1', inlineToXml(line.slice(2))));
+        else if (/^> /.test(line)) bodyParts.push(para('BlockQuote', inlineToXml(line.slice(2))));
         else if (/^[-*+] /.test(line)) bodyParts.push(para('ListBullet', inlineToXml(line.slice(2))));
         else if (/^\d+\. /.test(line)) bodyParts.push(para('ListNumber', inlineToXml(line.replace(/^\d+\. /, ''))));
         else if (/^(---|\*\*\*|___)$/.test(line.trim())) bodyParts.push(`<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:space="1" w:color="E5E7EB"/></w:pBdr></w:pPr></w:p>`);
-        else if (line.trim() === '')   bodyParts.push(`<w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr></w:p>`);
-        else                           bodyParts.push(para('Normal', inlineToXml(line)));
+        else if (line.trim() === '') bodyParts.push(`<w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr></w:p>`);
+        else bodyParts.push(para('Normal', inlineToXml(line)));
     }
     const relEntries = linkRels.map(r => `<Relationship Id="${r.id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="${esc(r.url)}" TargetMode="External"/>`).join('\n  ');
     const contentTypes = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/><Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/></Types>`;
@@ -2614,7 +3123,6 @@ async function buildPdf(md, title) {
         }
     }
 
-    // Footer: page numbers + accent line
     const total = pdf.getNumberOfPages();
     for (let p = 1; p <= total; p++) {
         pdf.setPage(p);

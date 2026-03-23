@@ -1274,7 +1274,7 @@ async function togglePublic() {
     const isPublic = document.getElementById('public-check').checked;
     const container = document.getElementById('public-url-container');
     container.style.display = isPublic ? 'block' : 'none';
-    if (isPublic) document.getElementById('public-url-input').value = `docs.aurastudioitalia.it/document?id=${currentDocId}`;
+    if (isPublic) document.getElementById('public-url-input').value = `https://docs.aurastudioitalia.it/document?id=${currentDocId}`;
     await db.collection('documents').doc(currentDocId).update({ isPublic });
 }
 
@@ -1338,7 +1338,7 @@ async function renderCollabsList() {
     const data = doc.data();
     document.getElementById('public-check').checked = data.isPublic || false;
     document.getElementById('public-url-container').style.display = data.isPublic ? 'block' : 'none';
-    if (data.isPublic) document.getElementById('public-url-input').value = `docs.aurastudioitalia.it/document?id=${currentDocId}`;
+    if (data.isPublic) document.getElementById('public-url-input').value = `https://docs.aurastudioitalia.it/document?id=${currentDocId}`;
     listDiv.innerHTML = '<p style="font-weight:600; font-size:12px; margin-bottom:10px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Collaboratori</p>';
     const collabs = data.collaborators;
     for (const [uid, role] of Object.entries(collabs)) {

@@ -138,7 +138,8 @@
         #save-status.saving { color: var(--aura-primary); }
         #save-status.saved { color: #22c55e; }
 
-        .user-section { position: relative; cursor: pointer; z-index: 1001; }
+        .user-section { position: relative; cursor: pointer; z-index: 1001; display: none; }
+        .user-section.editor-visible { display: block; }
         .avatar { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--aura-primary); transition: var(--transition); object-fit: cover; }
         .avatar:hover { box-shadow: var(--aura-glow); transform: scale(1.05); }
 
@@ -157,108 +158,235 @@
         .dropdown a i { width: 16px; text-align: center; color: var(--text-secondary); }
         .dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
 
-        /* ── DASHBOARD ── */
-        #dashboard-view { padding: 40px 32px; overflow-y: auto; height: calc(100vh - 58px); animation: fadeIn 0.4s ease; }
-        .dashboard-header { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 28px; }
-        .dashboard-header h2 { font-weight: 600; font-size: 24px; letter-spacing: -0.3px; }
-        .dashboard-header-actions { display: flex; align-items: center; gap: 10px; }
-        .btn-new {
-            display: flex; align-items: center; gap: 8px;
-            padding: 10px 22px; border-radius: 50px;
+        /* ── NEW DASHBOARD LAYOUT ── */
+        #dashboard-view {
+            display: flex;
+            height: calc(100vh - 58px);
+            overflow: hidden;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* ── SIDEBAR ── */
+        #dashboard-sidebar {
+            width: 220px;
+            min-width: 220px;
+            height: 100%;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 14px 10px 12px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-search {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 7px 12px;
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+        .sidebar-search:focus-within { border-color: var(--border-focus); }
+        .sidebar-search i { color: var(--text-muted); font-size: 12px; flex-shrink: 0; }
+        .sidebar-search input {
+            border: none; background: transparent;
+            color: var(--text-main); font-family: 'Poppins', sans-serif;
+            font-size: 12px; outline: none; width: 100%;
+        }
+        .sidebar-search input::placeholder { color: var(--text-muted); }
+
+        .sidebar-btn-new {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 9px 14px; border-radius: 50px;
             font-size: 13px; font-weight: 600;
             background: var(--aura-gradient); color: white;
             border: none; cursor: pointer; transition: var(--transition);
-            box-shadow: 0 4px 16px rgba(224, 8, 246, 0.3);
+            box-shadow: 0 4px 14px rgba(224, 8, 246, 0.3);
+            margin-bottom: 16px; width: 100%;
         }
-        .btn-new:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(224, 8, 246, 0.4); }
-        .btn-new:active { transform: translateY(0); }
-        .btn-new-folder {
-            display: flex; align-items: center; gap: 8px;
-            padding: 10px 18px; border-radius: 50px;
-            font-size: 13px; font-weight: 600;
-            background: transparent; color: var(--text-secondary);
-            border: 1.5px solid var(--border); cursor: pointer; transition: var(--transition);
-        }
-        .btn-new-folder:hover { border-color: rgba(224, 8, 246, 0.4); color: var(--aura-primary); background: rgba(224, 8, 246, 0.04); }
+        .sidebar-btn-new:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(224, 8, 246, 0.4); }
+        .sidebar-btn-new:active { transform: translateY(0); }
 
-        /* ── FOLDERS SECTION ── */
-        .folders-section { max-width: 1200px; margin: 0 auto 32px; }
-        .folders-section-header {
-            display: flex; align-items: center; gap: 8px;
-            margin-bottom: 14px;
-            font-size: 12px; font-weight: 700;
+        .sidebar-section-label {
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: 10px; font-weight: 700;
             text-transform: uppercase; letter-spacing: 0.08em;
             color: var(--text-muted);
+            padding: 2px 6px 6px; 
         }
-        .folders-grid {
-            display: flex; flex-wrap: wrap; gap: 10px;
+        .sidebar-section-label button {
+            background: none; border: none; cursor: pointer;
+            color: var(--text-muted); font-size: 12px;
+            width: 22px; height: 22px; border-radius: 4px;
+            display: grid; place-items: center;
+            transition: var(--transition);
         }
-        .folder-chip {
-            display: flex; align-items: center; gap: 8px;
-            padding: 8px 14px 8px 10px;
-            border-radius: 30px;
-            border: 1.5px solid var(--border);
-            background: var(--bg-card);
+        .sidebar-section-label button:hover { color: var(--text-main); background: var(--bg-main); }
+
+        .sidebar-nav-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 7px 10px; border-radius: var(--radius-sm);
+            font-size: 13px; font-weight: 500; color: var(--text-secondary);
             cursor: pointer; transition: var(--transition);
-            font-size: 13px; font-weight: 500;
-            position: relative;
+            text-decoration: none; border: none; background: none; width: 100%; text-align: left;
         }
-        .folder-chip:hover { border-color: rgba(224,8,246,0.3); box-shadow: var(--shadow-md); transform: translateY(-1px); }
-        .folder-chip.active { border-color: var(--aura-primary); background: rgba(224,8,246,0.05); }
-        .folder-chip-dot {
-            width: 10px; height: 10px; border-radius: 50%;
+        .sidebar-nav-item:hover { background: var(--bg-hover); color: var(--text-main); }
+        .sidebar-nav-item.active { background: rgba(224,8,246,0.08); color: var(--aura-primary); font-weight: 600; }
+        .sidebar-nav-item i { width: 16px; text-align: center; font-size: 13px; flex-shrink: 0; }
+
+        .sidebar-folders-scroll { flex: 1; overflow-y: auto; margin-top: 4px; }
+        .sidebar-folders-scroll::-webkit-scrollbar { width: 3px; }
+        .sidebar-folders-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+        .sidebar-folder-item {
+            display: flex; align-items: center; gap: 9px;
+            padding: 7px 10px; border-radius: var(--radius-sm);
+            font-size: 13px; font-weight: 500; color: var(--text-secondary);
+            cursor: pointer; transition: var(--transition);
+            border: none; background: none; width: 100%; text-align: left;
+        }
+        .sidebar-folder-item:hover { background: var(--bg-hover); color: var(--text-main); }
+        .sidebar-folder-item.active { background: rgba(224,8,246,0.07); color: var(--text-main); font-weight: 600; }
+        .sidebar-folder-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+        .sidebar-folder-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .sidebar-folder-count {
+            font-size: 10px; font-weight: 700;
+            color: var(--text-muted); background: var(--bg-main);
+            padding: 1px 6px; border-radius: 10px; flex-shrink: 0;
+        }
+
+        .sidebar-user-area {
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
+            margin-top: 8px;
             flex-shrink: 0;
         }
-        .folder-chip-count {
-            font-size: 10px; font-weight: 700;
-            color: var(--text-muted);
+        .sidebar-user-card {
+            display: flex; align-items: center; gap: 10px;
+            padding: 8px 10px; border-radius: var(--radius-sm);
+            cursor: pointer; transition: var(--transition);
+            position: relative;
+        }
+        .sidebar-user-card:hover { background: var(--bg-hover); }
+        .sidebar-user-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid var(--aura-primary); flex-shrink: 0; }
+        .sidebar-user-info { flex: 1; min-width: 0; }
+        .sidebar-user-name { font-size: 12px; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sidebar-user-uid-text { font-size: 10px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sidebar-user-chevron { color: var(--text-muted); font-size: 11px; flex-shrink: 0; }
+
+        /* Sidebar user dropdown */
+        .sidebar-user-dropdown {
+            display: none; position: absolute; bottom: 50px; left: 0;
+            width: 200px; background: var(--bg-card);
+            border-radius: var(--radius-md); border: 1px solid var(--border);
+            padding: 6px; z-index: 9999;
+            box-shadow: var(--shadow-xl); animation: dropdownFade 0.2s ease;
+        }
+        .sidebar-user-dropdown a { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: var(--radius-sm); text-decoration: none; color: var(--text-main); font-size: 13px; font-weight: 500; transition: var(--transition); }
+        .sidebar-user-dropdown a:hover { background: var(--bg-main); }
+        .sidebar-user-dropdown a i { width: 14px; text-align: center; color: var(--text-secondary); font-size: 12px; }
+
+        /* ── MAIN AREA (new dashboard) ── */
+        #dashboard-main {
+            flex: 1;
+            overflow-y: auto;
             background: var(--bg-main);
-            padding: 1px 6px; border-radius: 10px;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
         }
-        .folder-chip-menu-btn {
-            background: none; border: none; cursor: pointer;
-            color: var(--text-muted); font-size: 10px;
-            padding: 0 0 0 2px; line-height: 1;
-            display: none; transition: var(--transition);
-        }
-        .folder-chip:hover .folder-chip-menu-btn { display: inline-flex; }
-        .folder-chip-menu-btn:hover { color: var(--text-main); }
 
-        /* All docs chip */
-        .folder-chip.all-chip { border-style: dashed; }
-
-        /* Docs section label */
-        .docs-section-label {
-            max-width: 1200px; margin: 0 auto 14px;
+        /* ── FILE LIST ── */
+        .filelist-header {
+            padding: 22px 28px 10px;
             display: flex; align-items: center; justify-content: space-between;
         }
-        .docs-section-label span {
-            font-size: 12px; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.08em;
-            color: var(--text-muted);
-        }
-        .docs-section-label .folder-badge {
-            display: flex; align-items: center; gap: 6px;
-            font-size: 13px; font-weight: 600; color: var(--text-main);
-        }
-        .docs-section-label .folder-badge-dot {
-            width: 10px; height: 10px; border-radius: 50%;
+        .filelist-header h2 { font-size: 18px; font-weight: 600; }
+
+        .filelist-table {
+            flex: 1;
+            min-height: 0;
         }
 
-        .docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
-        .doc-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; cursor: pointer; height: 190px; transition: var(--transition-slow); display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
-        .doc-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--aura-gradient); opacity: 0; transition: var(--transition); }
-        .doc-card:hover { border-color: rgba(224, 8, 246, 0.3); transform: translateY(-6px); box-shadow: var(--shadow-lg); }
-        .doc-card:hover::before { opacity: 1; }
-        .doc-card-icon { width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(224, 8, 246, 0.08); display: flex; align-items: center; justify-content: center; color: var(--aura-primary); font-size: 15px; margin-bottom: 12px; }
-        .doc-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .doc-card p { font-size: 12px; color: var(--text-secondary); line-height: 1.6; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .doc-card-footer { display: flex; align-items: center; justify-content: space-between; }
-        .doc-role-badge { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 3px 8px; border-radius: 20px; background: rgba(224, 8, 246, 0.08); color: var(--aura-primary); }
-        .doc-folder-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-        .empty-state { grid-column: 1 / -1; text-align: center; padding: 80px 20px; color: var(--text-muted); }
-        .empty-state i { font-size: 48px; margin-bottom: 16px; opacity: 0.3; display: block; }
-        .empty-state p { font-size: 15px; }
+        .filelist-table-header {
+            display: grid;
+            grid-template-columns: 1fr 160px 170px 200px 44px;
+            padding: 7px 28px;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.07em;
+            color: var(--text-muted);
+            background: var(--bg-main);
+            position: sticky; top: 0; z-index: 10;
+        }
+        .filelist-col-sortable {
+            display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none;
+            transition: color 0.15s;
+        }
+        .filelist-col-sortable:hover { color: var(--text-main); }
+        .filelist-col-sortable i { font-size: 10px; }
+
+        .filelist-group-label {
+            padding: 16px 28px 6px;
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.07em;
+            color: var(--text-muted);
+        }
+
+        .filelist-row {
+            display: grid;
+            grid-template-columns: 1fr 160px 170px 200px 44px;
+            padding: 10px 28px;
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.12s;
+        }
+        .filelist-row:hover { background: var(--bg-card); }
+
+        .filelist-name {
+            display: flex; align-items: center; gap: 10px;
+            min-width: 0;
+        }
+        .filelist-icon {
+            width: 28px; height: 28px; border-radius: 6px;
+            background: rgba(224,8,246,0.08);
+            display: grid; place-items: center;
+            color: var(--aura-primary); font-size: 13px; flex-shrink: 0;
+        }
+        .filelist-title { font-size: 13px; font-weight: 500; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .filelist-cell { font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+        .filelist-creator-avatar { width: 18px; height: 18px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid var(--border); }
+
+        .filelist-location { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
+        .filelist-location i { font-size: 12px; color: var(--text-muted); }
+
+        .filelist-menu-btn {
+            background: none; border: none; cursor: pointer; color: var(--text-muted);
+            width: 28px; height: 28px; border-radius: 6px;
+            display: grid; place-items: center; font-size: 13px;
+            opacity: 0; transition: opacity 0.12s, background 0.12s;
+        }
+        .filelist-row:hover .filelist-menu-btn { opacity: 1; }
+        .filelist-menu-btn:hover { background: var(--bg-main); color: var(--text-main); }
+
+        .filelist-empty { padding: 80px 28px; text-align: center; color: var(--text-muted); }
+        .filelist-empty i { font-size: 42px; margin-bottom: 14px; opacity: 0.25; display: block; }
+        .filelist-empty p { font-size: 14px; }
+
+        @media (max-width: 768px) {
+            #dashboard-sidebar { display: none; }
+            .filelist-table-header,
+            .filelist-row { grid-template-columns: 1fr 44px; }
+            .filelist-col-visto, .filelist-col-creato, .filelist-col-loc,
+            .filelist-cell-visto, .filelist-cell-creato, .filelist-cell-loc { display: none; }
+        }
 
         /* ── EDITOR LAYOUT ── */
         #editor-view {
@@ -289,14 +417,12 @@
             background: var(--bg-card);
             padding: 8px 12px;
             border: 1px solid var(--border);
-            -radius: var(--radius-lg);
             margin-bottom: 20px;
             position: sticky; 
             top: 10px;
             z-index: 500;
             box-shadow: var(--shadow-md);
             align-items: center;
-            -wrap: wrap;
             max-width: fit-content;
             width: auto; 
             height: auto;
@@ -358,7 +484,6 @@
         .toolbar input[type="number"]:focus { border-color: var(--border-focus); }
 
         /* ── CANVAS ── */
-        /* FIX: rimosso min-height fisso, il foglio cresce con il contenuto */
         .canvas {
             width: 100%;
             max-width: 850px;
@@ -415,9 +540,10 @@
         /* ── IMAGES IN EDITOR ── */
         .doc-image-wrapper {
             display: block;
-            margin: 12px 0;
+            margin: 16px 0;
             position: relative;
             width: fit-content;
+            max-width: 100%;
         }
         .doc-image-wrapper.align-left  { margin-right: auto; margin-left: 0; }
         .doc-image-wrapper.align-center { margin-left: auto; margin-right: auto; }
@@ -426,7 +552,8 @@
         .doc-image-wrapper img {
             display: block;
             max-width: 100%;
-            border-radius: 6px;
+            height: auto;
+            border-radius: 8px;
             box-shadow: var(--shadow-md);
             cursor: default;
             transition: box-shadow 0.2s;
@@ -434,6 +561,16 @@
         .doc-image-wrapper.selected img {
             outline: 2px solid var(--aura-primary);
             box-shadow: 0 0 0 4px rgba(224,8,246,0.15), var(--shadow-md);
+        }
+
+        /* Plain img tags from markdown (not yet wrapped) */
+        #visual-editor img:not(.doc-image-wrapper img) {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+            margin: 16px 0;
         }
 
         .img-toolbar {
@@ -760,15 +897,6 @@
         .folder-ctx-item i { width: 14px; text-align: center; font-size: 12px; color: var(--text-secondary); }
         .folder-ctx-item.danger i { color: #ef4444; }
 
-        /* Move-to-folder dropdown inside doc card area */
-        .doc-card-move {
-            display: none; position: absolute; bottom: 50px; left: 0; right: 0;
-            background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: var(--radius-md); padding: 6px;
-            box-shadow: var(--shadow-xl); z-index: 200;
-            animation: dropdownFade 0.15s ease;
-        }
-
         /* ── IMAGE INSERT MODAL ── */
         #image-modal {
             display: none; position: fixed; inset: 0;
@@ -786,8 +914,8 @@
         .image-modal-box h3::before { content: ''; width: 4px; height: 18px; background: var(--aura-gradient); border-radius: 2px; display: inline-block; }
         .image-tabs { display: flex; gap: 4px; margin-bottom: 16px; background: var(--bg-main); padding: 3px; border-radius: 10px; border: 1px solid var(--border); }
         .image-tab {
-            flex: 1; padding: 7px 10px; border-radius: 8px;
-            font-size: 12px; font-weight: 600; cursor: pointer; border: none;
+            flex: 1; padding: 6px 8px; border-radius: 8px;
+            font-size: 11px; font-weight: 600; cursor: pointer; border: none;
             background: transparent; color: var(--text-secondary);
             transition: var(--transition); font-family: 'Poppins', sans-serif;
         }
@@ -893,12 +1021,13 @@
         @media (max-width: 768px) {
             :root { --nyra-panel: 100vw; }
             #nyra-panel.open { position: absolute; right: 0; top: 0; height: 100%; z-index: 200; box-shadow: var(--shadow-xl); }
+            #dashboard-sidebar { display: none; }
+            .filelist-table-header,
+            .filelist-row { grid-template-columns: 1fr 44px; }
         }
         @media (max-width: 600px) {
             .canvas { padding: 40px 28px; }
             .toolbar { gap: 1px; padding: 5px 6px; }
-            #dashboard-view { padding: 28px 16px; }
-            .docs-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
         }
     </style>
 </head>
@@ -934,34 +1063,87 @@
     </div>
 </header>
 
+<!-- NEW DASHBOARD: sidebar + main -->
 <div id="dashboard-view">
-    <div class="dashboard-header">
-        <h2>I tuoi Documenti</h2>
-        <div class="dashboard-header-actions">
-            <button class="btn-new-folder" onclick="openFolderModal()">
-                <i class="fas fa-folder-plus"></i> Nuova cartella
-            </button>
-            <button class="btn-new" onclick="createNewDoc()">
-                <i class="fas fa-plus"></i> Nuovo documento
-            </button>
+
+    <!-- SIDEBAR -->
+    <div id="dashboard-sidebar">
+        <!-- Search -->
+        <div class="sidebar-search">
+            <i class="fas fa-search"></i>
+            <input type="text" id="sidebar-search-input" placeholder="Cerca recenti" oninput="filterDocsFromSidebar(this.value)">
+        </div>
+
+        <!-- New button -->
+        <button class="sidebar-btn-new" onclick="createNewDoc()">
+            <i class="fas fa-plus"></i> Nuovo
+        </button>
+
+        <!-- Recents section -->
+        <div class="sidebar-section-label">
+            <span>Recenti</span>
+            <button onclick="loadDocs()" title="Aggiorna"><i class="fas fa-rotate-right"></i></button>
+        </div>
+
+        <button class="sidebar-nav-item active" id="nav-recenti" onclick="setSidebarFilter('recenti')">
+            <i class="fas fa-clock-rotate-left"></i> Recenti
+        </button>
+        <button class="sidebar-nav-item" id="nav-documenti" onclick="setSidebarFilter('docs')">
+            <i class="fas fa-file-lines"></i> Documenti
+        </button>
+
+        <!-- Folders list -->
+        <div class="sidebar-folders-scroll" id="sidebar-folders-list"></div>
+
+        <!-- New folder button -->
+        <button class="sidebar-nav-item" onclick="openFolderModal()" style="margin-top:4px; color:var(--text-muted);">
+            <i class="fas fa-folder-plus"></i> Nuova cartella
+        </button>
+
+        <!-- User area -->
+        <div class="sidebar-user-area">
+            <div class="sidebar-user-card" id="sidebar-user-trigger" onclick="toggleSidebarUserDropdown()">
+                <img id="sidebar-user-avatar" src="images/default.png" class="sidebar-user-avatar">
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-name" id="sidebar-user-name">...</div>
+                    <div class="sidebar-user-uid-text" id="sidebar-user-uid" title=""></div>
+                </div>
+                <i class="fas fa-chevron-up sidebar-user-chevron"></i>
+                <div class="sidebar-user-dropdown" id="sidebar-user-dropdown">
+                    <a href="https://apps.aurastudioitalia.it"><i class="fas fa-th-large"></i> Launchboard</a>
+                    <div style="height:1px; background:var(--border); margin:4px 0;"></div>
+                    <a href="#" style="color:#ef4444;" onclick="auth.signOut()"><i class="fas fa-sign-out-alt"></i> Esci</a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Folders row -->
-    <div class="folders-section" id="folders-section" style="display:none;">
-        <div class="folders-section-header">
-            <i class="fas fa-folder" style="color:var(--aura-primary); font-size:11px;"></i>
-            Cartelle
+    <!-- MAIN FILE LIST AREA -->
+    <div id="dashboard-main">
+        <div class="filelist-header">
+            <h2 id="filelist-title">Recenti</h2>
         </div>
-        <div class="folders-grid" id="folders-grid"></div>
+
+        <div class="filelist-table">
+            <!-- Table header -->
+            <div class="filelist-table-header">
+                <div>Nome</div>
+                <div class="filelist-col-sortable filelist-col-visto">
+                    Visto <i class="fas fa-arrow-down"></i>
+                </div>
+                <div class="filelist-col-creato">Creato da</div>
+                <div class="filelist-col-loc">Localizzazione</div>
+                <div></div>
+            </div>
+
+            <!-- Group label -->
+            <div class="filelist-group-label" id="filelist-group-label">Oggi</div>
+
+            <!-- Rows -->
+            <div id="filelist-rows"></div>
+        </div>
     </div>
 
-    <!-- Docs label -->
-    <div class="docs-section-label" id="docs-section-label">
-        <span>Tutti i documenti</span>
-    </div>
-
-    <div class="docs-grid" id="docs-grid"></div>
 </div>
 
 <div id="editor-view">
@@ -1128,7 +1310,35 @@
 <!-- FOLDER CONTEXT MENU -->
 <div id="folder-ctx-menu" class="folder-ctx-menu" style="display:none;">
     <div class="folder-ctx-item" onclick="folderCtxEdit()"><i class="fas fa-pencil"></i> Rinomina / Colore</div>
+    <div class="folder-ctx-item" onclick="folderCtxShare()"><i class="fas fa-user-plus"></i> Condividi cartella</div>
     <div class="folder-ctx-item danger" onclick="folderCtxDelete()"><i class="fas fa-trash"></i> Elimina cartella</div>
+</div>
+
+<!-- FOLDER SHARE MODAL -->
+<div id="folder-share-modal" onclick="if(event.target===this)closeFolderShareModal()" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:4000; justify-content:center; align-items:center; backdrop-filter:blur(6px); animation:fadeIn 0.2s ease;">
+    <div class="modal-box" onclick="event.stopPropagation()" style="max-width:420px;">
+        <h3>Condividi cartella</h3>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:18px; padding:10px 12px; background:rgba(224,8,246,0.05); border-radius:var(--radius-sm); border:1px solid rgba(224,8,246,0.15);">
+            <div id="folder-share-dot" style="width:10px;height:10px;border-radius:50%;flex-shrink:0;"></div>
+            <span id="folder-share-name" style="font-weight:600; font-size:14px;"></span>
+            <span style="font-size:11px; color:var(--text-muted); margin-left:auto;">Cartella</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:8px; font-weight:500;">Aggiungi collaboratore</p>
+        <input type="text" id="folder-share-search" placeholder="Cerca per nome e cognome..." class="modal-input" oninput="folderShareSearch(this.value)">
+        <div id="folder-share-search-results" class="search-results"></div>
+        <div id="folder-share-role-selector" style="display:none; margin-top:12px; background:rgba(224,8,246,0.05); padding:12px; border-radius:var(--radius-sm);">
+            <p id="folder-share-selected-user" style="font-weight:600; font-size:13px; margin-bottom:10px;"></p>
+            <div style="display:flex; gap:8px;">
+                <select id="folder-share-role" style="flex:1; padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--bg-main); color:var(--text-main); font-family:'Poppins',sans-serif; font-size:12px; outline:none;">
+                    <option value="Editor">Editor</option>
+                    <option value="Visualizzatore">Visualizzatore</option>
+                </select>
+                <button onclick="addFolderCollaborator()" style="background:var(--aura-gradient); color:white; border:none; padding:7px 18px; border-radius:var(--radius-sm); font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; font-size:12px; transition:var(--transition);">Aggiungi</button>
+            </div>
+        </div>
+        <div id="folder-share-collabs-list" style="margin-top:16px; border-top:1px solid var(--border); padding-top:14px;"></div>
+        <button class="modal-btn-close" onclick="closeFolderShareModal()">Chiudi</button>
+    </div>
 </div>
 
 <!-- IMAGE MODAL -->
@@ -1138,6 +1348,8 @@
         <div class="image-tabs">
             <button class="image-tab active" onclick="switchImgTab('url', this)">Da URL</button>
             <button class="image-tab" onclick="switchImgTab('gdrive', this)">Google Drive</button>
+            <button class="image-tab" onclick="switchImgTab('proton', this)">Proton Drive</button>
+            <button class="image-tab" onclick="switchImgTab('dropbox', this)">Dropbox</button>
         </div>
 
         <div class="image-tab-content active" id="img-tab-url">
@@ -1159,6 +1371,34 @@
                 Il file deve essere condiviso come «Chiunque abbia il link».
             </p>
             <div class="image-modal-preview" id="img-preview-gdrive">
+                <span>Anteprima</span>
+            </div>
+        </div>
+
+        <div class="image-tab-content" id="img-tab-proton">
+            <input type="text" class="image-modal-input" id="img-proton-input"
+                placeholder="Incolla link di condivisione Proton Drive"
+                oninput="previewProton(this.value)">
+            <p class="gdrive-hint">
+                <i class="fas fa-info-circle" style="color:var(--aura-primary);"></i>
+                Apri il file su Proton Drive, clicca «Condividi» → «Ottieni link» e incolla qui il link.<br>
+                Assicurati che il link sia impostato come pubblico.
+            </p>
+            <div class="image-modal-preview" id="img-preview-proton">
+                <span>Anteprima</span>
+            </div>
+        </div>
+
+        <div class="image-tab-content" id="img-tab-dropbox">
+            <input type="text" class="image-modal-input" id="img-dropbox-input"
+                placeholder="Incolla link di condivisione Dropbox"
+                oninput="previewDropbox(this.value)">
+            <p class="gdrive-hint">
+                <i class="fas fa-info-circle" style="color:var(--aura-primary);"></i>
+                Copia il link di condivisione Dropbox (es. <code style="font-size:10px;">dropbox.com/s/...</code>).<br>
+                Il file verrà convertito automaticamente in link diretto.
+            </p>
+            <div class="image-modal-preview" id="img-preview-dropbox">
                 <span>Anteprima</span>
             </div>
         </div>
@@ -1238,15 +1478,18 @@ const FOLDER_COLORS = [
     '#ef4444','#ec4899','#06b6d4','#84cc16','#f97316',
     '#6366f1','#14b8a6','#a855f7','#64748b','#1a1b1e'
 ];
-let currentFolderFilter = null; // null = tutti
+let currentFolderFilter = null;
+let sidebarFilter = 'recenti'; // 'recenti' | 'docs' | folderId
 let editingFolderId = null;
 let selectedFolderColor = FOLDER_COLORS[0];
 let ctxMenuFolderId = null;
-let allFolders = {}; // { folderId: { name, color } }
+let allFolders = {};
+let allDocsCache = [];
+let searchQuery = '';
 
 document.execCommand('defaultParagraphSeparator', false, 'p');
 
-// ── DROPDOWN ──
+// ── HEADER DROPDOWN ──
 const userTrigger = document.getElementById('user-trigger');
 const userDropdown = document.getElementById('user-dropdown');
 userTrigger.addEventListener('click', (e) => {
@@ -1255,11 +1498,53 @@ userTrigger.addEventListener('click', (e) => {
 });
 window.addEventListener('click', (e) => {
     userDropdown.style.display = 'none';
-    // close folder ctx menu
     if (!e.target.closest('#folder-ctx-menu') && !e.target.closest('.folder-chip-menu-btn')) {
-        document.getElementById('folder-ctx-menu').style.display = 'none';
+        const ctxMenu = document.getElementById('folder-ctx-menu');
+        if (ctxMenu) ctxMenu.style.display = 'none';
     }
+    if (!e.target.closest('#sidebar-user-trigger')) {
+        const dd = document.getElementById('sidebar-user-dropdown');
+        if (dd) dd.style.display = 'none';
+    }
+    if (!e.target.closest('#folder-share-search') && !e.target.closest('#folder-share-search-results')) {
+        const res = document.getElementById('folder-share-search-results');
+        if (res) res.style.display = 'none';
+    }
+    document.querySelectorAll('.doc-folder-popup').forEach(el => el.remove());
 });
+
+// ── SIDEBAR USER DROPDOWN ──
+function toggleSidebarUserDropdown() {
+    const dd = document.getElementById('sidebar-user-dropdown');
+    dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+}
+
+// ── SIDEBAR FILTER ──
+function setSidebarFilter(filter) {
+    sidebarFilter = filter;
+    currentFolderFilter = (filter !== 'recenti' && filter !== 'docs') ? filter : null;
+    // Update active nav items
+    document.getElementById('nav-recenti').classList.toggle('active', filter === 'recenti');
+    document.getElementById('nav-documenti').classList.toggle('active', filter === 'docs');
+    // Update sidebar folder items
+    document.querySelectorAll('.sidebar-folder-item').forEach(el => {
+        el.classList.toggle('active', el.dataset.folderId === filter);
+    });
+    // Update title
+    if (filter === 'recenti') {
+        document.getElementById('filelist-title').textContent = 'Recenti';
+    } else if (filter === 'docs') {
+        document.getElementById('filelist-title').textContent = 'Documenti';
+    } else if (allFolders[filter]) {
+        document.getElementById('filelist-title').textContent = allFolders[filter].name;
+    }
+    renderFileList();
+}
+
+function filterDocsFromSidebar(query) {
+    searchQuery = query.toLowerCase();
+    renderFileList();
+}
 
 // ── FONT SIZE ──
 function changeFontSize(size) {
@@ -1384,6 +1669,7 @@ function setMode(mode) {
     document.getElementById('btn-literal').classList.toggle('active', mode === 'literal');
     if (mode === 'visual') {
         visual.innerHTML = marked.parse(textarea.value);
+        rewrapImages();
         visual.style.display = 'block';
         textarea.style.display = 'none';
     } else {
@@ -1466,8 +1752,12 @@ function openImageModal() {
     if (sel && sel.rangeCount > 0) savedSelectionRange = sel.getRangeAt(0).cloneRange();
     document.getElementById('img-url-input').value = '';
     document.getElementById('img-gdrive-input').value = '';
+    document.getElementById('img-proton-input').value = '';
+    document.getElementById('img-dropbox-input').value = '';
     document.getElementById('img-preview-url').innerHTML = '<span>Anteprima</span>';
     document.getElementById('img-preview-gdrive').innerHTML = '<span>Anteprima</span>';
+    document.getElementById('img-preview-proton').innerHTML = '<span>Anteprima</span>';
+    document.getElementById('img-preview-dropbox').innerHTML = '<span>Anteprima</span>';
     pendingImageSrc = '';
     document.getElementById('image-modal').style.display = 'flex';
 }
@@ -1504,6 +1794,51 @@ function previewGdrive(val) {
     const src = `https://drive.google.com/thumbnail?id=${id}&sz=w600`;
     pendingImageSrc = src;
     prev.innerHTML = `<img src="${src}" onerror="this.parentNode.innerHTML='<span style=\\'color:#ef4444;\\'>File non accessibile. Controlla i permessi di condivisione.</span>'" alt="preview">`;
+}
+
+function previewProton(val) {
+    const prev = document.getElementById('img-preview-proton');
+    val = val.trim();
+    if (!val) { prev.innerHTML = '<span>Anteprima</span>'; pendingImageSrc = ''; return; }
+    // Proton Drive shared links can't be embedded directly; use as direct src
+    // Convert proton.me/drive/urls to direct links if possible
+    let src = val;
+    // proton.me/drive/file/ or drive.proton.me links - use as-is, user must set public
+    pendingImageSrc = src;
+    prev.innerHTML = `<img src="${src}" onerror="this.parentNode.innerHTML='<span style=\\'color:#ef4444;\\'>Anteprima non disponibile. L\\'immagine verrà inserita con il link fornito.</span>'" alt="preview">`;
+}
+
+function dropboxDirectUrl(val) {
+    val = val.trim();
+    // Convert dropbox.com sharing links to direct download links
+    // https://www.dropbox.com/s/xxx/file.jpg?dl=0  →  https://dl.dropboxusercontent.com/s/xxx/file.jpg
+    // Also handle dl=1 links and /scl/fi/ links
+    if (!val) return null;
+    // Already a direct dl.dropboxusercontent.com link
+    if (val.includes('dl.dropboxusercontent.com')) return val;
+    // /scl/fi/ new-style links
+    const sclMatch = val.match(/dropbox\.com\/scl\/fi\/([^?]+)/);
+    if (sclMatch) {
+        return `https://dl.dropboxusercontent.com/scl/fi/${sclMatch[1]}`;
+    }
+    // Old /s/ links
+    const sMatch = val.match(/dropbox\.com\/s\/([^?]+)/);
+    if (sMatch) {
+        return `https://dl.dropboxusercontent.com/s/${sMatch[1]}`;
+    }
+    // Fallback: replace dl=0 with dl=1
+    if (val.includes('dropbox.com')) {
+        return val.replace('dl=0', 'dl=1').replace('?raw=1', '').replace(/\?.*$/, '') + '?raw=1';
+    }
+    return val;
+}
+
+function previewDropbox(val) {
+    const prev = document.getElementById('img-preview-dropbox');
+    const src = dropboxDirectUrl(val);
+    if (!src) { prev.innerHTML = '<span>Anteprima</span>'; pendingImageSrc = ''; return; }
+    pendingImageSrc = src;
+    prev.innerHTML = `<img src="${src}" onerror="this.parentNode.innerHTML='<span style=\\'color:#ef4444;\\'>File non accessibile. Controlla il link e i permessi.</span>'" alt="preview">`;
 }
 
 function insertImageFromModal() {
@@ -1630,9 +1965,18 @@ auth.onAuthStateChanged(user => {
     if (!user) return;
     db.collection('users').doc(user.uid).get().then(doc => {
         if (doc.exists) {
-            document.getElementById('user-name').textContent = doc.data().nome + " " + doc.data().cognome;
-            document.getElementById('user-avatar').src = doc.data().profileImage || 'images/default.png';
+            const d = doc.data();
+            const fullName = d.nome + " " + d.cognome;
+            // Header avatar (hidden on dashboard)
+            document.getElementById('user-name').textContent = fullName;
+            document.getElementById('user-avatar').src = d.profileImage || 'images/default.png';
             document.getElementById('user-uid').textContent = user.uid;
+            // Sidebar user
+            document.getElementById('sidebar-user-name').textContent = fullName;
+            document.getElementById('sidebar-user-avatar').src = d.profileImage || 'images/default.png';
+            const uidEl = document.getElementById('sidebar-user-uid');
+            uidEl.textContent = user.uid;
+            uidEl.title = user.uid;
         }
     });
     loadFolders();
@@ -1642,94 +1986,274 @@ auth.onAuthStateChanged(user => {
 // ── FOLDERS ──
 function loadFolders() {
     if (!auth.currentUser) return;
-    db.collection('folders')
-        .where('uid', '==', auth.currentUser.uid)
+    const uid = auth.currentUser.uid;
+    // Listen to owned folders
+    db.collection('folders').where('uid', '==', uid)
         .onSnapshot(snap => {
-            allFolders = {};
-            snap.forEach(doc => { allFolders[doc.id] = doc.data(); });
-            renderFolders();
-        });
-}
-
-function renderFolders() {
-    const grid = document.getElementById('folders-grid');
-    const section = document.getElementById('folders-section');
-    grid.innerHTML = '';
-
-    const ids = Object.keys(allFolders);
-    if (ids.length === 0) {
-        section.style.display = 'none';
-    } else {
-        section.style.display = 'block';
-
-        // "Tutti" chip
-        const all = document.createElement('div');
-        all.className = 'folder-chip all-chip' + (currentFolderFilter === null ? ' active' : '');
-        all.innerHTML = `<span style="font-size:13px;">📁</span> <span>Tutti</span>`;
-        all.onclick = () => { currentFolderFilter = null; renderFolders(); loadDocs(); };
-        grid.appendChild(all);
-
-        ids.forEach(id => {
-            const f = allFolders[id];
-            const chip = document.createElement('div');
-            chip.className = 'folder-chip' + (currentFolderFilter === id ? ' active' : '');
-            chip.innerHTML = `
-                <div class="folder-chip-dot" style="background:${f.color || '#e008f6'};"></div>
-                <span>${f.name}</span>
-                <span class="folder-chip-count" id="folder-count-${id}">–</span>
-                <button class="folder-chip-menu-btn" onclick="openFolderCtxMenu(event,'${id}')"><i class="fas fa-ellipsis-h"></i></button>
-            `;
-            chip.addEventListener('click', (e) => {
-                if (e.target.closest('.folder-chip-menu-btn')) return;
-                currentFolderFilter = id;
-                renderFolders();
-                loadDocs();
+            // Remove previously owned folders, keep shared ones
+            Object.keys(allFolders).forEach(id => {
+                if (allFolders[id]._owned) delete allFolders[id];
             });
-            grid.appendChild(chip);
+            snap.forEach(doc => {
+                allFolders[doc.id] = { ...doc.data(), _owned: true };
+            });
+            renderSidebarFolders();
         });
-
-        // update counts
-        updateFolderCounts();
-    }
-
-    // update docs section label
-    updateDocsSectionLabel();
+    // Listen to folders shared with current user
+    db.collection('folders').where(`collaborators.${uid}`, 'in', ['Editor', 'Visualizzatore'])
+        .onSnapshot(snap => {
+            // Remove previously shared folders
+            Object.keys(allFolders).forEach(id => {
+                if (!allFolders[id]._owned) delete allFolders[id];
+            });
+            snap.forEach(doc => {
+                allFolders[doc.id] = { ...doc.data(), _shared: true };
+            });
+            renderSidebarFolders();
+        });
 }
 
-async function updateFolderCounts() {
+function renderSidebarFolders() {
+    const list = document.getElementById('sidebar-folders-list');
+    list.innerHTML = '';
+    Object.entries(allFolders).forEach(([id, f]) => {
+        const isOwned = f._owned;
+        const isShared = f._shared;
+        const btn = document.createElement('button');
+        btn.className = 'sidebar-folder-item' + (sidebarFilter === id ? ' active' : '');
+        btn.dataset.folderId = id;
+        btn.innerHTML = `
+            <div class="sidebar-folder-dot" style="background:${f.color || '#e008f6'};"></div>
+            <span class="sidebar-folder-name">${f.name}</span>
+            ${isShared ? `<i class="fas fa-share-nodes" style="font-size:9px;color:var(--text-muted);flex-shrink:0;" title="Condivisa con te"></i>` : ''}
+        `;
+        btn.onclick = () => setSidebarFilter(id);
+        if (isOwned) {
+            btn.oncontextmenu = (e) => { e.preventDefault(); openFolderCtxMenu(e, id); };
+        }
+        list.appendChild(btn);
+    });
+    updateSidebarFolderCounts();
+}
+
+async function updateSidebarFolderCounts() {
     if (!auth.currentUser) return;
-    const snap = await db.collection('documents')
-        .where(`collaborators.${auth.currentUser.uid}`, 'in', ['Proprietario', 'Editor', 'Visualizzatore'])
-        .get();
     const counts = {};
-    snap.forEach(doc => {
-        const fid = doc.data().folderId || null;
-        if (fid) counts[fid] = (counts[fid] || 0) + 1;
+    allDocsCache.forEach(d => {
+        if (d.folderId) counts[d.folderId] = (counts[d.folderId] || 0) + 1;
     });
     Object.keys(allFolders).forEach(id => {
-        const el = document.getElementById('folder-count-' + id);
+        const el = document.getElementById('sfolder-count-' + id);
         if (el) el.textContent = counts[id] || 0;
     });
 }
 
-function updateDocsSectionLabel() {
-    const label = document.getElementById('docs-section-label');
-    if (currentFolderFilter && allFolders[currentFolderFilter]) {
-        const f = allFolders[currentFolderFilter];
-        label.innerHTML = `
-            <div class="folder-badge">
-                <div class="folder-badge-dot" style="background:${f.color};"></div>
-                <span>${f.name}</span>
-            </div>
-            <span style="font-size:11px; color:var(--text-muted); cursor:pointer;" onclick="currentFolderFilter=null; renderFolders(); loadDocs();">
-                <i class="fas fa-times"></i> Mostra tutti
-            </span>`;
-    } else {
-        label.innerHTML = `<span>Tutti i documenti</span>`;
-    }
+// ── FILE LIST RENDERING ──
+function formatRelativeTime(ts) {
+    if (!ts) return 'Proprio ora';
+    const date = ts.toDate ? ts.toDate() : new Date(ts);
+    const now = new Date();
+    const diff = now - date;
+    const mins = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    if (mins < 1) return 'Proprio ora';
+    if (mins < 60) return `${mins} min fa`;
+    if (hours < 24) return `${hours} ore fa`;
+    if (days === 1) return 'Ieri';
+    if (days < 7) return `${days} giorni fa`;
+    return date.toLocaleDateString('it-IT');
 }
 
-// Folder Modal
+function groupDocsByTime(docs) {
+    const groups = { oggi: [], settimana: [], precedenti: [] };
+    const now = new Date();
+    docs.forEach(d => {
+        const ts = d.data.updatedAt;
+        if (!ts) { groups.oggi.push(d); return; }
+        const date = ts.toDate ? ts.toDate() : new Date(ts);
+        const diff = now - date;
+        const days = diff / 86400000;
+        if (days < 1) groups.oggi.push(d);
+        else if (days < 7) groups.settimana.push(d);
+        else groups.precedenti.push(d);
+    });
+    return groups;
+}
+
+function renderFileList() {
+    const container = document.getElementById('filelist-rows');
+    const groupLabel = document.getElementById('filelist-group-label');
+    container.innerHTML = '';
+
+    // Filter docs
+    let docs = [...allDocsCache];
+
+    if (sidebarFilter === 'recenti') {
+        // Last 3 opened (already sorted by updatedAt desc)
+        docs = docs.slice(0, 3);
+    } else if (sidebarFilter === 'docs') {
+        // All docs — no filter
+    } else {
+        // Folder filter
+        docs = docs.filter(d => d.data.folderId === sidebarFilter);
+    }
+
+    if (searchQuery) {
+        docs = docs.filter(d => (d.data.title || '').toLowerCase().includes(searchQuery));
+    }
+
+    if (docs.length === 0) {
+        groupLabel.style.display = 'none';
+        container.innerHTML = `<div class="filelist-empty"><i class="fas fa-file-alt"></i><p>Nessun documento trovato.</p></div>`;
+        return;
+    }
+
+    // Group by time
+    const groups = groupDocsByTime(docs);
+    const groupDefs = [
+        { key: 'oggi', label: 'Oggi' },
+        { key: 'settimana', label: 'Questa settimana' },
+        { key: 'precedenti', label: 'Precedenti' },
+    ];
+
+    let firstGroup = true;
+    groupDefs.forEach(({ key, label }) => {
+        const gDocs = groups[key];
+        if (gDocs.length === 0) return;
+        if (firstGroup) {
+            groupLabel.style.display = 'block';
+            groupLabel.textContent = label;
+            firstGroup = false;
+        } else {
+            const gl = document.createElement('div');
+            gl.className = 'filelist-group-label';
+            gl.textContent = label;
+            container.appendChild(gl);
+        }
+        gDocs.forEach(({ id, data }) => renderFileRow(container, id, data));
+    });
+}
+
+function renderFileRow(container, id, data) {
+    const row = document.createElement('div');
+    row.className = 'filelist-row';
+    row.onclick = () => openDoc(id, data);
+    row.oncontextmenu = (e) => { if (Object.keys(allFolders).length > 0) openDocFolderMenu(e, id); };
+
+    const timeStr = formatRelativeTime(data.updatedAt);
+    const role = auth.currentUser ? (data.collaborators[auth.currentUser.uid] || '') : '';
+    const isMe = role === 'Proprietario';
+
+    // Location: folder name or "I miei file"
+    let locationHtml = '';
+    if (data.folderId && allFolders[data.folderId]) {
+        const f = allFolders[data.folderId];
+        locationHtml = `<span style="width:8px;height:8px;border-radius:50%;background:${f.color};display:inline-block;flex-shrink:0;"></span> ${f.name}`;
+    } else {
+        locationHtml = `<i class="fas fa-inbox"></i> I miei file`;
+    }
+
+    row.innerHTML = `
+        <div class="filelist-name">
+            <div class="filelist-icon"><i class="fas fa-file-lines"></i></div>
+            <span class="filelist-title">${data.title || 'Senza titolo'}</span>
+        </div>
+        <div class="filelist-cell filelist-cell-visto">${timeStr}</div>
+        <div class="filelist-cell filelist-cell-creato">
+            <img class="filelist-creator-avatar" src="images/default.png" alt="">
+            <span>${isMe ? 'Io' : role}</span>
+        </div>
+        <div class="filelist-location filelist-cell-loc">${locationHtml}</div>
+        <div style="display:flex; justify-content:center;">
+            <button class="filelist-menu-btn" onclick="event.stopPropagation(); openDocFolderMenu(event, '${id}')">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+    `;
+
+    container.appendChild(row);
+}
+
+// ── LOAD DOCS ──
+function loadDocs() {
+    if (!auth.currentUser) return;
+    db.collection('documents')
+        .where(`collaborators.${auth.currentUser.uid}`, 'in', ['Proprietario', 'Editor', 'Visualizzatore'])
+        .onSnapshot(snap => {
+            allDocsCache = [];
+            snap.forEach(doc => allDocsCache.push({ id: doc.id, data: doc.data() }));
+            // Sort by updatedAt desc
+            allDocsCache.sort((a, b) => {
+                const ta = a.data.updatedAt?.toDate?.() || new Date(0);
+                const tb = b.data.updatedAt?.toDate?.() || new Date(0);
+                return tb - ta;
+            });
+            renderFileList();
+            updateSidebarFolderCounts();
+        });
+}
+
+// ── REWRAP PLAIN IMAGES ──
+// After markdown parse, plain <img> tags get wrapped in our custom wrapper
+function rewrapImages() {
+    const visual = document.getElementById('visual-editor');
+    const imgs = visual.querySelectorAll('img:not(.doc-image-wrapper img)');
+    imgs.forEach(img => {
+        const src = img.src || img.getAttribute('src');
+        if (!src) return;
+        const width = img.naturalWidth || img.offsetWidth || 400;
+        const wrapper = createImageWrapper(src, Math.min(width, 680));
+        img.parentNode.replaceChild(wrapper, img);
+    });
+}
+
+function openDoc(id, data) {
+    currentDocId = id;
+    nyraHistory = [];
+    const role = data.collaborators[auth.currentUser.uid];
+    const canEdit = role === 'Proprietario' || role === 'Editor';
+    const visual = document.getElementById('visual-editor');
+    visual.contentEditable = canEdit;
+    document.getElementById('doc-title-input').disabled = !canEdit;
+    document.getElementById('btn-delete').style.display = (role === 'Proprietario') ? 'flex' : 'none';
+    document.getElementById('dashboard-view').style.display = 'none';
+    document.getElementById('editor-view').style.display = 'flex';
+    document.getElementById('doc-title-container').style.display = 'flex';
+    document.getElementById('close-editor').style.display = 'flex';
+    document.getElementById('user-trigger').classList.add('editor-visible');
+    document.getElementById('doc-title-input').value = data.title || 'Senza titolo';
+    document.getElementById('editor-textarea').value = data.content || '';
+    visual.style.fontSize = data.fontSize || "16px";
+    visual.style.fontFamily = data.fontFamily || "Poppins";
+    document.getElementById('font-size').value = parseInt(data.fontSize) || 16;
+    document.getElementById('font-family').value = data.fontFamily || "Poppins";
+    visual.innerHTML = marked.parse(data.content || "");
+    rewrapImages();
+    setMode('visual');
+}
+
+async function createNewDoc() {
+    if (!auth.currentUser) return;
+    const newDocData = {
+        title: "Senza titolo",
+        content: "",
+        fontSize: "16px",
+        fontFamily: "Poppins",
+        isPublic: false,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        collaborators: { [auth.currentUser.uid]: "Proprietario" }
+    };
+    if (currentFolderFilter) newDocData.folderId = currentFolderFilter;
+    const docRef = await db.collection('documents').add(newDocData);
+    const doc = await docRef.get();
+    openDoc(docRef.id, doc.data());
+}
+
+function closeEditor() { location.reload(); }
+function closeCollabModal(e) { document.getElementById('collab-modal').style.display = 'none'; }
+
+// ── FOLDER MODAL ──
 function openFolderModal(editId = null) {
     editingFolderId = editId;
     const title = document.getElementById('folder-modal-title');
@@ -1759,10 +2283,7 @@ function renderColorPicker() {
         const swatch = document.createElement('div');
         swatch.className = 'folder-color-swatch' + (color === selectedFolderColor ? ' selected' : '');
         swatch.style.background = color;
-        swatch.onclick = () => {
-            selectedFolderColor = color;
-            renderColorPicker();
-        };
+        swatch.onclick = () => { selectedFolderColor = color; renderColorPicker(); };
         picker.appendChild(swatch);
     });
 }
@@ -1783,15 +2304,14 @@ async function saveFolder() {
     closeFolderModal();
 }
 
-// Folder context menu
 function openFolderCtxMenu(e, folderId) {
     e.stopPropagation();
     ctxMenuFolderId = folderId;
     const menu = document.getElementById('folder-ctx-menu');
     menu.style.display = 'block';
-    const rect = e.currentTarget.getBoundingClientRect();
-    let left = rect.left;
-    let top = rect.bottom + 4;
+    const rect = e.currentTarget ? e.currentTarget.getBoundingClientRect() : null;
+    let left = rect ? rect.left : e.clientX;
+    let top = rect ? rect.bottom + 4 : e.clientY + 4;
     if (left + 180 > window.innerWidth) left = window.innerWidth - 190;
     menu.style.left = left + 'px';
     menu.style.top = top + 'px';
@@ -1807,7 +2327,6 @@ async function folderCtxDelete() {
     if (!ctxMenuFolderId) return;
     const fname = allFolders[ctxMenuFolderId]?.name || 'questa cartella';
     if (!confirm(`Eliminare "${fname}"? I documenti al suo interno non verranno eliminati.`)) return;
-    // remove folderId from all docs in this folder
     const snap = await db.collection('documents')
         .where(`collaborators.${auth.currentUser.uid}`, 'in', ['Proprietario', 'Editor', 'Visualizzatore'])
         .where('folderId', '==', ctxMenuFolderId)
@@ -1816,23 +2335,187 @@ async function folderCtxDelete() {
     snap.forEach(doc => batch.update(doc.ref, { folderId: firebase.firestore.FieldValue.delete() }));
     batch.delete(db.collection('folders').doc(ctxMenuFolderId));
     await batch.commit();
-    if (currentFolderFilter === ctxMenuFolderId) { currentFolderFilter = null; }
+    if (sidebarFilter === ctxMenuFolderId) { setSidebarFilter('recenti'); }
     ctxMenuFolderId = null;
 }
 
-// Assign doc to folder (right-click on doc card)
+// ── FOLDER SHARING ──
+let folderShareTempUser = null;
+
+function folderCtxShare() {
+    document.getElementById('folder-ctx-menu').style.display = 'none';
+    if (!ctxMenuFolderId) return;
+    openFolderShareModal(ctxMenuFolderId);
+}
+
+function openFolderShareModal(folderId) {
+    const f = allFolders[folderId];
+    if (!f) return;
+    ctxMenuFolderId = folderId;
+    document.getElementById('folder-share-dot').style.background = f.color || '#e008f6';
+    document.getElementById('folder-share-name').textContent = f.name;
+    document.getElementById('folder-share-search').value = '';
+    document.getElementById('folder-share-search-results').style.display = 'none';
+    document.getElementById('folder-share-search-results').innerHTML = '';
+    document.getElementById('folder-share-role-selector').style.display = 'none';
+    folderShareTempUser = null;
+    document.getElementById('folder-share-modal').style.display = 'flex';
+    renderFolderShareCollabs(folderId);
+}
+
+function closeFolderShareModal() {
+    document.getElementById('folder-share-modal').style.display = 'none';
+    folderShareTempUser = null;
+    ctxMenuFolderId = null;
+}
+
+async function folderShareSearch(val) {
+    val = val.trim();
+    const resultsBox = document.getElementById('folder-share-search-results');
+    if (val.length < 2) { resultsBox.style.display = 'none'; return; }
+    const snap = await db.collection('users')
+        .where('nome', '>=', val).where('nome', '<=', val + '\uf8ff').limit(5).get();
+    resultsBox.innerHTML = '';
+    if (snap.empty) {
+        resultsBox.innerHTML = '<div class="search-item" style="color:var(--text-muted);">Nessun utente trovato</div>';
+    } else {
+        snap.forEach(doc => {
+            const u = doc.data();
+            if (doc.id === auth.currentUser.uid) return; // skip self
+            const div = document.createElement('div');
+            div.className = 'search-item';
+            div.style.cssText = 'display:flex; align-items:center; gap:10px;';
+            const photoUrl = u.profileImage || 'images/default.png';
+            div.innerHTML = `<img src="${photoUrl}" style="width:26px;height:26px;border-radius:50%;object-fit:cover;border:1px solid var(--border);"><span>${u.nome} ${u.cognome}</span>`;
+            div.onclick = () => {
+                folderShareTempUser = { id: doc.id, name: `${u.nome} ${u.cognome}`, photo: photoUrl };
+                document.getElementById('folder-share-selected-user').textContent = folderShareTempUser.name;
+                document.getElementById('folder-share-role-selector').style.display = 'block';
+                resultsBox.style.display = 'none';
+                document.getElementById('folder-share-search').value = '';
+            };
+            resultsBox.appendChild(div);
+        });
+        resultsBox.style.display = 'block';
+    }
+}
+
+async function addFolderCollaborator() {
+    if (!folderShareTempUser || !ctxMenuFolderId) return;
+    const role = document.getElementById('folder-share-role').value;
+    const folderId = ctxMenuFolderId;
+    // Save collaborator on folder document
+    await db.collection('folders').doc(folderId).update({
+        [`collaborators.${folderShareTempUser.id}`]: role
+    });
+    // Also share all documents in this folder with this user (same role)
+    const snap = await db.collection('documents')
+        .where(`collaborators.${auth.currentUser.uid}`, '==', 'Proprietario')
+        .where('folderId', '==', folderId)
+        .get();
+    const batch = db.batch();
+    snap.forEach(doc => {
+        batch.update(doc.ref, { [`collaborators.${folderShareTempUser.id}`]: role });
+    });
+    await batch.commit();
+    folderShareTempUser = null;
+    document.getElementById('folder-share-role-selector').style.display = 'none';
+    document.getElementById('folder-share-search').value = '';
+    renderFolderShareCollabs(folderId);
+    showToast(`✓ Cartella condivisa con ${role === 'Editor' ? 'permessi di modifica' : 'accesso in lettura'}`);
+}
+
+async function renderFolderShareCollabs(folderId) {
+    const listDiv = document.getElementById('folder-share-collabs-list');
+    listDiv.innerHTML = '<p style="font-weight:600; font-size:12px; margin-bottom:10px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Collaboratori</p>';
+    const folderDoc = await db.collection('folders').doc(folderId).get();
+    const data = folderDoc.data();
+    const collabs = data.collaborators || {};
+    // Always show owner
+    const ownerUid = data.uid;
+    const ownerDoc = await db.collection('users').doc(ownerUid).get();
+    let ownerName = ownerUid, ownerPhoto = 'images/default.png';
+    if (ownerDoc.exists) {
+        const od = ownerDoc.data();
+        ownerName = `${od.nome} ${od.cognome}`;
+        ownerPhoto = od.profileImage || 'images/default.png';
+    }
+    listDiv.innerHTML += `
+        <div class="collab-user">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <img src="${ownerPhoto}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid var(--aura-primary);">
+                <span style="font-weight:500;">${ownerDoc.id === auth.currentUser.uid ? 'Io' : ownerName}</span>
+            </div>
+            <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:3px 8px;border-radius:20px;background:rgba(224,8,246,0.1);color:var(--aura-primary);">Proprietario</span>
+        </div>`;
+    for (const [uid, role] of Object.entries(collabs)) {
+        const uDoc = await db.collection('users').doc(uid).get();
+        let name = uid, photo = 'images/default.png';
+        if (uDoc.exists) {
+            const ud = uDoc.data();
+            name = `${ud.nome} ${ud.cognome}`;
+            photo = ud.profileImage || 'images/default.png';
+        }
+        listDiv.innerHTML += `
+            <div class="collab-user">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <img src="${photo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid var(--border);">
+                    <span style="font-weight:500;">${name}</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <select onchange="updateFolderCollabRole('${folderId}','${uid}',this.value)" style="font-size:10px;padding:4px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-main);color:var(--text-main);outline:none;">
+                        <option value="Editor" ${role==='Editor'?'selected':''}>Editor</option>
+                        <option value="Visualizzatore" ${role==='Visualizzatore'?'selected':''}>Visualizzatore</option>
+                    </select>
+                    <button onclick="removeFolderCollab('${folderId}','${uid}')" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:12px;" title="Rimuovi"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>`;
+    }
+    if (Object.keys(collabs).length === 0) {
+        listDiv.innerHTML += `<p style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px 0;">Nessun collaboratore ancora.</p>`;
+    }
+}
+
+async function updateFolderCollabRole(folderId, uid, newRole) {
+    await db.collection('folders').doc(folderId).update({ [`collaborators.${uid}`]: newRole });
+    // Update role on all docs in folder owned by current user
+    const snap = await db.collection('documents')
+        .where(`collaborators.${auth.currentUser.uid}`, '==', 'Proprietario')
+        .where('folderId', '==', folderId)
+        .get();
+    const batch = db.batch();
+    snap.forEach(doc => batch.update(doc.ref, { [`collaborators.${uid}`]: newRole }));
+    await batch.commit();
+    renderFolderShareCollabs(folderId);
+}
+
+async function removeFolderCollab(folderId, uid) {
+    if (!confirm('Rimuovere questo collaboratore dalla cartella?')) return;
+    await db.collection('folders').doc(folderId).update({
+        [`collaborators.${uid}`]: firebase.firestore.FieldValue.delete()
+    });
+    // Remove from all docs in folder owned by current user
+    const snap = await db.collection('documents')
+        .where(`collaborators.${auth.currentUser.uid}`, '==', 'Proprietario')
+        .where('folderId', '==', folderId)
+        .get();
+    const batch = db.batch();
+    snap.forEach(doc => batch.update(doc.ref, { [`collaborators.${uid}`]: firebase.firestore.FieldValue.delete() }));
+    await batch.commit();
+    renderFolderShareCollabs(folderId);
+}
+
 function openDocFolderMenu(e, docId) {
     e.preventDefault();
     e.stopPropagation();
-    // Build a small popup
     document.querySelectorAll('.doc-folder-popup').forEach(el => el.remove());
     const folderIds = Object.keys(allFolders);
-    if (folderIds.length === 0) return;
     const menu = document.createElement('div');
     menu.className = 'folder-ctx-menu doc-folder-popup';
-    menu.style.cssText = `position:fixed; z-index:9999; left:${Math.min(e.clientX, window.innerWidth-180)}px; top:${e.clientY+4}px;`;
+    const x = Math.min(e.clientX, window.innerWidth - 180);
+    const y = e.clientY + 4;
+    menu.style.cssText = `position:fixed; z-index:9999; left:${x}px; top:${y}px;`;
     menu.innerHTML = `<div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-muted); padding:6px 12px 4px;">Sposta in cartella</div>`;
-    // No folder option
     const noneItem = document.createElement('div');
     noneItem.className = 'folder-ctx-item';
     noneItem.innerHTML = `<i class="fas fa-times" style="color:var(--text-muted);"></i> Nessuna cartella`;
@@ -1849,111 +2532,12 @@ function openDocFolderMenu(e, docId) {
         item.onclick = async () => {
             await db.collection('documents').doc(docId).update({ folderId: fid });
             menu.remove();
-            if (currentFolderFilter !== null) loadDocs();
         };
         menu.appendChild(item);
     });
     document.body.appendChild(menu);
     setTimeout(() => document.addEventListener('click', () => menu.remove(), { once: true }), 0);
 }
-
-// ── LOAD DOCS ──
-function loadDocs() {
-    if (!auth.currentUser) return;
-    let query = db.collection('documents')
-        .where(`collaborators.${auth.currentUser.uid}`, 'in', ['Proprietario', 'Editor', 'Visualizzatore']);
-
-    query.onSnapshot(snap => {
-        const grid = document.getElementById('docs-grid');
-        grid.innerHTML = '';
-
-        let docs = [];
-        snap.forEach(doc => docs.push({ id: doc.id, data: doc.data() }));
-
-        // Filter by folder
-        if (currentFolderFilter !== null) {
-            docs = docs.filter(d => d.data.folderId === currentFolderFilter);
-        }
-
-        if (docs.length === 0) {
-            const msg = currentFolderFilter ? 'Nessun documento in questa cartella.' : 'Nessun documento trovato.<br>Creane uno nuovo!';
-            grid.innerHTML = `<div class="empty-state"><i class="fas fa-file-alt"></i><p>${msg}</p></div>`;
-            return;
-        }
-
-        docs.forEach(({ id, data }) => {
-            const card = document.createElement('div');
-            card.className = 'doc-card';
-            card.onclick = () => openDoc(id, data);
-            card.oncontextmenu = (e) => {
-                if (Object.keys(allFolders).length > 0) openDocFolderMenu(e, id);
-            };
-
-            // folder dot indicator
-            let folderDot = '';
-            if (data.folderId && allFolders[data.folderId]) {
-                const f = allFolders[data.folderId];
-                folderDot = `<div class="doc-folder-dot" style="background:${f.color};" title="Cartella: ${f.name}"></div>`;
-            }
-
-            card.innerHTML = `
-                <div>
-                    <div class="doc-card-icon"><i class="fas fa-file-alt"></i></div>
-                    <h4>${data.title || 'Senza titolo'}</h4>
-                    <p>${data.content ? data.content.substring(0, 90) : 'Nessun contenuto'}...</p>
-                </div>
-                <div class="doc-card-footer">
-                    <span class="doc-role-badge">${data.collaborators[auth.currentUser.uid]}</span>
-                    ${folderDot}
-                </div>`;
-            grid.appendChild(card);
-        });
-
-        updateFolderCounts();
-    });
-}
-
-function openDoc(id, data) {
-    currentDocId = id;
-    nyraHistory = [];
-    const role = data.collaborators[auth.currentUser.uid];
-    const canEdit = role === 'Proprietario' || role === 'Editor';
-    const visual = document.getElementById('visual-editor');
-    visual.contentEditable = canEdit;
-    document.getElementById('doc-title-input').disabled = !canEdit;
-    document.getElementById('btn-delete').style.display = (role === 'Proprietario') ? 'flex' : 'none';
-    document.getElementById('dashboard-view').style.display = 'none';
-    document.getElementById('editor-view').style.display = 'flex';
-    document.getElementById('doc-title-container').style.display = 'flex';
-    document.getElementById('close-editor').style.display = 'flex';
-    document.getElementById('doc-title-input').value = data.title || 'Senza titolo';
-    document.getElementById('editor-textarea').value = data.content || '';
-    visual.style.fontSize = data.fontSize || "16px";
-    visual.style.fontFamily = data.fontFamily || "Poppins";
-    document.getElementById('font-size').value = parseInt(data.fontSize) || 16;
-    document.getElementById('font-family').value = data.fontFamily || "Poppins";
-    visual.innerHTML = marked.parse(data.content || "");
-    setMode('visual');
-}
-
-async function createNewDoc() {
-    const newDocData = {
-        title: "Senza titolo",
-        content: "",
-        fontSize: "16px",
-        fontFamily: "Poppins",
-        isPublic: false,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        collaborators: { [auth.currentUser.uid]: "Proprietario" }
-    };
-    if (currentFolderFilter) newDocData.folderId = currentFolderFilter;
-    const docRef = await db.collection('documents').add(newDocData);
-    const doc = await docRef.get();
-    openDoc(docRef.id, doc.data());
-}
-
-function closeEditor() { location.reload(); }
-function closeCollabModal(e) { document.getElementById('collab-modal').style.display = 'none'; }
 
 // ── EXPORT ──
 function exportDoc() {

@@ -307,6 +307,21 @@
         }
         .filelist-header h2 { font-size: 18px; font-weight: 600; }
 
+        /* Import button in header */
+        .filelist-header-actions { display: flex; align-items: center; gap: 8px; }
+        .btn-import-adx {
+            display: flex; align-items: center; gap: 7px;
+            padding: 7px 14px; border-radius: 50px;
+            font-size: 12px; font-weight: 600;
+            border: 1.5px solid rgba(224,8,246,0.35);
+            background: rgba(224,8,246,0.06);
+            color: var(--aura-primary);
+            cursor: pointer; transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-import-adx:hover { background: rgba(224,8,246,0.12); border-color: var(--aura-primary); }
+        .btn-import-adx i { font-size: 11px; }
+
         .filelist-table {
             flex: 1;
             min-height: 0;
@@ -358,6 +373,11 @@
             background: rgba(224,8,246,0.08);
             display: grid; place-items: center;
             color: var(--aura-primary); font-size: 13px; flex-shrink: 0;
+        }
+        /* ADXS icon style */
+        .filelist-icon.adxs {
+            background: rgba(128,58,251,0.1);
+            color: var(--aura-secondary);
         }
         .filelist-title { font-size: 13px; font-weight: 500; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
@@ -973,6 +993,9 @@
         .export-icon.md   { background: rgba(99,102,241,0.1);  color: #6366f1; }
         .export-icon.docx { background: rgba(37,99,235,0.1);   color: #2563eb; }
         .export-icon.pdf  { background: rgba(239,68,68,0.1);   color: #ef4444; }
+        /* New Aura formats */
+        .export-icon.adxe { background: rgba(224,8,246,0.1);   color: var(--aura-primary); }
+        .export-icon.adxs { background: rgba(128,58,251,0.1);  color: var(--aura-secondary); }
         .export-info { flex: 1; min-width: 0; }
         .export-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
         .export-desc { font-size: 11px; color: var(--text-muted); }
@@ -980,6 +1003,11 @@
         .export-option:active .export-caret { color: var(--aura-primary); transform: translateX(3px); }
         .export-spinner { width: 16px; height: 16px; border: 2px solid rgba(224,8,246,0.25); border-top-color: var(--aura-primary); border-radius: 50%; flex-shrink: 0; animation: exportSpin 0.7s linear infinite; }
         @keyframes exportSpin { to { transform: rotate(360deg); } }
+        .export-section-label {
+            font-size: 10px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.08em; color: var(--text-muted);
+            margin: 16px 0 8px; padding: 0 2px;
+        }
         .export-toast {
             position: fixed; bottom: 90px; left: 50%;
             transform: translateX(-50%);
@@ -996,9 +1024,155 @@
         }
         @media (min-width: 640px) {
             #export-sheet { align-items: center; }
-            .export-box { border-radius: var(--radius-xl); border: 1px solid var(--border); max-width: 380px; animation: modalSlide 0.3s ease; padding: 0 24px 28px; }
+            .export-box { border-radius: var(--radius-xl); border: 1px solid var(--border); max-width: 400px; animation: modalSlide 0.3s ease; padding: 0 24px 28px; }
             .export-handle { display: none; }
         }
+
+        /* ── SAVE ADX MODAL ── */
+        #save-adx-modal {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5); z-index: 5000;
+            justify-content: center; align-items: center;
+            backdrop-filter: blur(8px); animation: fadeIn 0.2s ease;
+        }
+        .save-adx-box {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-xl); padding: 28px;
+            width: 90%; max-width: 400px;
+            box-shadow: var(--shadow-xl); animation: modalSlide 0.3s ease;
+        }
+        .save-adx-box h3 { font-size: 17px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+        .save-adx-box h3::before { content: ''; width: 4px; height: 18px; background: var(--aura-gradient); border-radius: 2px; display: inline-block; }
+        .save-adx-format-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 4px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .save-adx-format-badge.adxe { background: rgba(224,8,246,0.1); color: var(--aura-primary); }
+        .save-adx-format-badge.adxs { background: rgba(128,58,251,0.1); color: var(--aura-secondary); }
+        .save-adx-info {
+            font-size: 12px; color: var(--text-secondary);
+            background: var(--bg-main); border-radius: var(--radius-sm);
+            padding: 12px 14px; margin-bottom: 20px;
+            border: 1px solid var(--border); line-height: 1.6;
+        }
+        .save-adx-info i { color: var(--aura-primary); margin-right: 4px; }
+        .save-adx-actions { display: flex; gap: 8px; }
+        .save-adx-actions button { flex: 1; padding: 11px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; transition: var(--transition); border: none; }
+        .btn-adx-skip { background: var(--bg-main); color: var(--text-secondary); border: 1px solid var(--border) !important; }
+        .btn-adx-skip:hover { border-color: var(--border-focus) !important; }
+        .btn-adx-save { background: var(--aura-gradient); color: white; box-shadow: 0 3px 10px rgba(224,8,246,0.25); }
+        .btn-adx-save:hover { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(224,8,246,0.35); }
+
+        /* ── TUTORIAL OVERLAY ── */
+        #tutorial-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); z-index: 9000;
+            justify-content: center; align-items: center;
+            backdrop-filter: blur(10px); animation: fadeIn 0.3s ease;
+        }
+        .tutorial-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            width: 90%; max-width: 480px;
+            box-shadow: var(--shadow-xl);
+            animation: modalSlide 0.35s ease;
+            overflow: hidden;
+        }
+        .tutorial-header {
+            padding: 28px 28px 0;
+            position: relative;
+        }
+        .tutorial-icon {
+            width: 52px; height: 52px; border-radius: 16px;
+            background: var(--aura-gradient);
+            display: grid; place-items: center;
+            font-size: 22px; color: #fff;
+            box-shadow: 0 6px 20px rgba(224,8,246,0.35);
+            margin-bottom: 16px;
+        }
+        .tutorial-step-label {
+            font-size: 10px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--aura-primary); margin-bottom: 6px;
+        }
+        .tutorial-title {
+            font-size: 20px; font-weight: 700;
+            color: var(--text-main); margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        .tutorial-body {
+            padding: 0 28px 24px;
+        }
+        .tutorial-desc {
+            font-size: 13px; color: var(--text-secondary);
+            line-height: 1.7; margin-bottom: 20px;
+        }
+        .tutorial-features {
+            display: flex; flex-direction: column; gap: 10px;
+            margin-bottom: 24px;
+        }
+        .tutorial-feature {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 12px;
+            background: var(--bg-main); border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+        .tutorial-feature-icon {
+            width: 32px; height: 32px; border-radius: 9px;
+            background: rgba(224,8,246,0.1);
+            display: grid; place-items: center;
+            color: var(--aura-primary); font-size: 13px; flex-shrink: 0;
+        }
+        .tutorial-feature-text { flex: 1; }
+        .tutorial-feature-text strong { font-size: 13px; font-weight: 600; display: block; margin-bottom: 2px; }
+        .tutorial-feature-text span { font-size: 11px; color: var(--text-muted); }
+        /* Progress dots */
+        .tutorial-progress {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 28px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-main);
+        }
+        .tutorial-dots { display: flex; gap: 6px; }
+        .tutorial-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: var(--border); transition: var(--transition);
+        }
+        .tutorial-dot.active { background: var(--aura-primary); width: 20px; border-radius: 4px; }
+        .tutorial-dot.done { background: rgba(224,8,246,0.35); }
+        .tutorial-nav { display: flex; gap: 8px; align-items: center; }
+        .btn-tut-skip {
+            background: none; border: none; cursor: pointer;
+            font-size: 12px; font-weight: 500; color: var(--text-muted);
+            font-family: 'Poppins', sans-serif; padding: 4px 8px;
+            border-radius: var(--radius-sm); transition: var(--transition);
+        }
+        .btn-tut-skip:hover { color: var(--text-main); background: var(--bg-card); }
+        .btn-tut-next {
+            background: var(--aura-gradient); color: white; border: none;
+            padding: 9px 20px; border-radius: 50px;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            font-family: 'Poppins', sans-serif; transition: var(--transition);
+            box-shadow: 0 4px 14px rgba(224,8,246,0.3);
+            display: flex; align-items: center; gap: 7px;
+        }
+        .btn-tut-next:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(224,8,246,0.4); }
+        .btn-tut-next i { font-size: 11px; }
+
+        /* ── VIEW-ONLY BANNER ── */
+        #readonly-banner {
+            display: none;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, rgba(128,58,251,0.08) 0%, rgba(224,8,246,0.08) 100%);
+            border-bottom: 1px solid rgba(128,58,251,0.2);
+            font-size: 12px; font-weight: 600; color: var(--aura-secondary);
+            text-align: center; gap: 8px; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        #readonly-banner i { font-size: 11px; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: translateX(0); } }
@@ -1063,6 +1237,9 @@
     </div>
 </header>
 
+<!-- Hidden file input for .adxe/.adxs import -->
+<input type="file" id="adx-import-input" accept=".adxe,.adxs" style="display:none;" onchange="importAdxFile(this)">
+
 <!-- NEW DASHBOARD: sidebar + main -->
 <div id="dashboard-view">
 
@@ -1122,6 +1299,11 @@
     <div id="dashboard-main">
         <div class="filelist-header">
             <h2 id="filelist-title">Recenti</h2>
+            <div class="filelist-header-actions">
+                <button class="btn-import-adx" onclick="triggerAdxImport()">
+                    <i class="fas fa-file-import"></i> Importa .adxe / .adxs
+                </button>
+            </div>
         </div>
 
         <div class="filelist-table">
@@ -1148,8 +1330,13 @@
 
 <div id="editor-view">
 
+    <!-- Read-only banner for .adxs files -->
+    <div id="readonly-banner">
+        <i class="fas fa-lock"></i> Documento in sola lettura — File .adxs (Aura Docs Sealed)
+    </div>
+
     <div id="editor-main">
-        <div class="toolbar">
+        <div class="toolbar" id="main-toolbar">
             <select id="font-family" onchange="execCmd('fontName', this.value)" title="Carattere">
                 <option value="Poppins">Poppins</option>
                 <option value="Roboto">Roboto</option>
@@ -1410,12 +1597,70 @@
     </div>
 </div>
 
+<!-- SAVE ADX MODAL -->
+<div id="save-adx-modal" onclick="if(event.target===this)closeSaveAdxModal()">
+    <div class="save-adx-box">
+        <h3 id="save-adx-title">Salvare il documento?</h3>
+        <div id="save-adx-badge" class="save-adx-format-badge adxe"></div>
+        <div class="save-adx-info" id="save-adx-info"></div>
+        <div class="save-adx-actions">
+            <button class="btn-adx-skip" onclick="closeSaveAdxModal()">
+                <i class="fas fa-times" style="margin-right:5px;"></i>Solo visualizza
+            </button>
+            <button class="btn-adx-save" onclick="confirmSaveAdx()">
+                <i class="fas fa-cloud-arrow-up" style="margin-right:5px;"></i>Salva tra i miei doc
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- TUTORIAL OVERLAY -->
+<div id="tutorial-overlay">
+    <div class="tutorial-box">
+        <div class="tutorial-header" id="tutorial-header"></div>
+        <div class="tutorial-body" id="tutorial-body"></div>
+        <div class="tutorial-progress">
+            <div class="tutorial-dots" id="tutorial-dots"></div>
+            <div class="tutorial-nav">
+                <button class="btn-tut-skip" onclick="closeTutorial()">Salta</button>
+                <button class="btn-tut-next" id="btn-tut-next" onclick="tutorialNext()">
+                    Avanti <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- EXPORT SHEET -->
 <div id="export-sheet" onclick="closeExportSheet(event)">
     <div class="export-box" onclick="event.stopPropagation()">
         <div class="export-handle"></div>
         <h3>Esporta documento</h3>
         <p class="export-subtitle">Scegli il formato. Ti verrà chiesto dove salvare il file.</p>
+
+        <!-- Aura Native formats -->
+        <div class="export-section-label">Formati Aura Docs</div>
+        <div class="export-options">
+            <div class="export-option" id="exp-adxe" onclick="runExport('adxe')">
+                <div class="export-icon adxe">.ADXE</div>
+                <div class="export-info">
+                    <div class="export-name">Aura Docs Editable</div>
+                    <div class="export-desc">Formato nativo modificabile — importabile in Aura Docs</div>
+                </div>
+                <i class="fas fa-chevron-right export-caret"></i>
+            </div>
+            <div class="export-option" id="exp-adxs" onclick="runExport('adxs')">
+                <div class="export-icon adxs">.ADXS</div>
+                <div class="export-info">
+                    <div class="export-name">Aura Docs Sealed</div>
+                    <div class="export-desc">Formato nativo sigillato — solo lettura, importabile</div>
+                </div>
+                <i class="fas fa-chevron-right export-caret"></i>
+            </div>
+        </div>
+
+        <!-- Standard formats -->
+        <div class="export-section-label" style="margin-top:18px;">Formati standard</div>
         <div class="export-options">
             <div class="export-option" id="exp-md" onclick="runExport('md')">
                 <div class="export-icon md">.MD</div>
@@ -1471,6 +1716,299 @@ let nyraHistory = [];
 let resizingImg = null;
 let resizeStartX = 0;
 let resizeStartW = 0;
+let isReadOnly = false; // true when viewing .adxs
+
+// pending imported adx payload (for save flow)
+let pendingAdxPayload = null;
+let pendingAdxFormat = null; // 'adxe' | 'adxs'
+
+// ── TUTORIAL SYSTEM ──
+// Tutorial definitions: each tutorial has an id (localStorage key), steps array.
+// A step: { icon, label, title, desc, features: [{icon,title,desc}] }
+const TUTORIALS = {
+    welcome: {
+        id: 'tut_welcome',
+        steps: [
+            {
+                icon: '✦',
+                label: 'Benvenuto',
+                title: 'Benvenuto in Aura Docs',
+                desc: 'Il tuo spazio di scrittura intelligente. Crea, modifica e organizza i tuoi documenti con il supporto dell\'AI.',
+                features: [
+                    { icon: 'fa-file-lines', title: 'Documenti cloud', desc: 'Salvati automaticamente e sincronizzati' },
+                    { icon: 'fa-folder', title: 'Cartelle colorate', desc: 'Organizza con cartelle personalizzabili' },
+                    { icon: 'fa-user-plus', title: 'Collaborazione', desc: 'Condividi con editor e visualizzatori' },
+                ]
+            },
+            {
+                icon: '🪄',
+                label: 'Nyra AI',
+                title: 'Nyra, la tua AI personale',
+                desc: 'Nyra è integrata direttamente nell\'editor. Migliora testi, riassumi, traduci, e molto altro — in un click.',
+                features: [
+                    { icon: 'fa-wand-magic-sparkles', title: 'Azioni rapide', desc: 'Migliora, riassumi, espandi con un click' },
+                    { icon: 'fa-comment', title: 'Chat libera', desc: 'Chiedile qualsiasi cosa sul tuo documento' },
+                    { icon: 'fa-check-double', title: 'Applica al volo', desc: 'Le modifiche si applicano direttamente' },
+                ]
+            },
+            {
+                icon: '📄',
+                label: 'Formati',
+                title: 'Esporta ovunque',
+                desc: 'Esporta i tuoi documenti in Markdown, Word, PDF oppure nei formati proprietari .adxe e .adxs di Aura Docs.',
+                features: [
+                    { icon: 'fa-file-word', title: '.ADXE', desc: 'Formato modificabile nativo Aura Docs' },
+                    { icon: 'fa-lock', title: '.ADXS', desc: 'Formato sigillato, solo lettura' },
+                    { icon: 'fa-file-export', title: 'MD / DOCX / PDF', desc: 'Compatibilità universale' },
+                ]
+            }
+        ]
+    },
+    editor: {
+        id: 'tut_editor',
+        steps: [
+            {
+                icon: '✏️',
+                label: 'Editor',
+                title: 'L\'editor visuale',
+                desc: 'Scrivi normalmente in modalità Visuale. La toolbar in alto ti dà accesso a tutti gli strumenti di formattazione.',
+                features: [
+                    { icon: 'fa-bold', title: 'Formattazione ricca', desc: 'Grassetto, corsivo, titoli, liste, link' },
+                    { icon: 'fa-image', title: 'Immagini', desc: 'Inserisci da URL, Google Drive, Dropbox' },
+                    { icon: 'fa-code', title: 'Blocchi codice', desc: 'Sintassi monospace per snippet' },
+                ]
+            },
+            {
+                icon: '📝',
+                label: 'Markdown',
+                title: 'Modalità Letterale',
+                desc: 'Passa in modalità Letterale per scrivere direttamente in Markdown. Perfetto per chi ama avere il controllo totale.',
+                features: [
+                    { icon: 'fa-arrows-left-right', title: 'Switch istantaneo', desc: 'Passa tra Visuale e Letterale in un click' },
+                    { icon: 'fa-rotate', title: 'Sincronizzazione', desc: 'I contenuti si convertono automaticamente' },
+                    { icon: 'fa-cloud-arrow-up', title: 'Salvataggio auto', desc: 'Ogni modifica viene salvata automaticamente' },
+                ]
+            }
+        ]
+    },
+    nyra: {
+        id: 'tut_nyra',
+        steps: [
+            {
+                icon: '✦',
+                label: 'Nyra AI',
+                title: 'Hai aperto Nyra!',
+                desc: 'Nyra può aiutarti a lavorare sul tuo documento in modo intelligente. Ecco come usarla al meglio.',
+                features: [
+                    { icon: 'fa-mouse-pointer', title: 'Azioni rapide', desc: 'Usa i bottoni preimpostati per modifiche veloci' },
+                    { icon: 'fa-text-slash', title: 'Selezione testuale', desc: 'Seleziona un testo prima di usare Nyra per modificare solo quello' },
+                    { icon: 'fa-check', title: 'Applica modifiche', desc: 'Il bottone "Applica" inserisce il testo nel documento' },
+                ]
+            }
+        ]
+    },
+    collab: {
+        id: 'tut_collab',
+        steps: [
+            {
+                icon: '👥',
+                label: 'Collaborazione',
+                title: 'Condividi i tuoi documenti',
+                desc: 'Invita collaboratori ai tuoi documenti o alle cartelle intere, con ruoli differenziati.',
+                features: [
+                    { icon: 'fa-user-pen', title: 'Editor', desc: 'Può leggere e modificare il documento' },
+                    { icon: 'fa-eye', title: 'Visualizzatore', desc: 'Può solo leggere, senza modificare' },
+                    { icon: 'fa-link', title: 'Link pubblico', desc: 'Rendi il documento accessibile a chiunque' },
+                ]
+            }
+        ]
+    },
+    adxImport: {
+        id: 'tut_adx_import',
+        steps: [
+            {
+                icon: '📦',
+                label: 'Importazione',
+                title: 'File Aura Docs importato',
+                desc: 'Puoi aprire file .adxe (modificabili) e .adxs (sigillati) direttamente in Aura Docs.',
+                features: [
+                    { icon: 'fa-pen', title: '.ADXE — Modificabile', desc: 'Puoi editarlo e salvarlo tra i tuoi documenti' },
+                    { icon: 'fa-lock', title: '.ADXS — Sigillato', desc: 'Solo lettura — struttura protetta dalla modifica' },
+                    { icon: 'fa-cloud-arrow-up', title: 'Salva sul cloud', desc: 'Scegli se salvarlo tra i tuoi documenti Aura' },
+                ]
+            }
+        ]
+    }
+};
+
+let tutorialCurrent = null;
+let tutorialStep = 0;
+let tutorialQueue = [];
+
+function hasDoneTutorial(id) {
+    try { return localStorage.getItem(id) === '1'; } catch(e) { return false; }
+}
+function markTutorialDone(id) {
+    try { localStorage.setItem(id, '1'); } catch(e) {}
+}
+
+function showTutorial(key, onComplete) {
+    const tut = TUTORIALS[key];
+    if (!tut || hasDoneTutorial(tut.id)) { if (onComplete) onComplete(); return; }
+    tutorialCurrent = tut;
+    tutorialCurrent._onComplete = onComplete || null;
+    tutorialStep = 0;
+    renderTutorialStep();
+    document.getElementById('tutorial-overlay').style.display = 'flex';
+}
+
+function renderTutorialStep() {
+    const tut = tutorialCurrent;
+    const step = tut.steps[tutorialStep];
+    const total = tut.steps.length;
+    const isLast = tutorialStep === total - 1;
+
+    // Header
+    const header = document.getElementById('tutorial-header');
+    header.innerHTML = `
+        <div class="tutorial-icon">${step.icon}</div>
+        <div class="tutorial-step-label">${step.label} · ${tutorialStep + 1} di ${total}</div>
+        <div class="tutorial-title">${step.title}</div>
+    `;
+
+    // Body
+    const body = document.getElementById('tutorial-body');
+    let featuresHtml = '';
+    if (step.features && step.features.length) {
+        featuresHtml = `<div class="tutorial-features">` + step.features.map(f => `
+            <div class="tutorial-feature">
+                <div class="tutorial-feature-icon"><i class="fas ${f.icon}"></i></div>
+                <div class="tutorial-feature-text">
+                    <strong>${f.title}</strong>
+                    <span>${f.desc}</span>
+                </div>
+            </div>
+        `).join('') + `</div>`;
+    }
+    body.innerHTML = `<p class="tutorial-desc">${step.desc}</p>${featuresHtml}`;
+
+    // Dots
+    const dots = document.getElementById('tutorial-dots');
+    dots.innerHTML = Array.from({length: total}, (_, i) => {
+        let cls = 'tutorial-dot';
+        if (i === tutorialStep) cls += ' active';
+        else if (i < tutorialStep) cls += ' done';
+        return `<div class="${cls}"></div>`;
+    }).join('');
+
+    // Next button label
+    const nextBtn = document.getElementById('btn-tut-next');
+    if (isLast) {
+        nextBtn.innerHTML = 'Inizia <i class="fas fa-check"></i>';
+    } else {
+        nextBtn.innerHTML = 'Avanti <i class="fas fa-arrow-right"></i>';
+    }
+
+    // Hide skip on last step
+    document.querySelector('.btn-tut-skip').style.display = isLast ? 'none' : 'block';
+}
+
+function tutorialNext() {
+    const tut = tutorialCurrent;
+    if (tutorialStep < tut.steps.length - 1) {
+        tutorialStep++;
+        renderTutorialStep();
+    } else {
+        closeTutorial(true);
+    }
+}
+
+function closeTutorial(completed = false) {
+    if (tutorialCurrent) {
+        markTutorialDone(tutorialCurrent.id);
+        const cb = tutorialCurrent._onComplete;
+        tutorialCurrent = null;
+        document.getElementById('tutorial-overlay').style.display = 'none';
+        if (cb) cb();
+    } else {
+        document.getElementById('tutorial-overlay').style.display = 'none';
+    }
+    // Process next queued tutorial if any
+    if (tutorialQueue.length > 0) {
+        const next = tutorialQueue.shift();
+        setTimeout(() => showTutorial(next.key, next.cb), 300);
+    }
+}
+
+function queueTutorial(key, cb) {
+    if (hasDoneTutorial(TUTORIALS[key]?.id)) { if (cb) cb(); return; }
+    tutorialQueue.push({ key, cb });
+    if (!tutorialCurrent) {
+        const next = tutorialQueue.shift();
+        showTutorial(next.key, next.cb);
+    }
+}
+
+// ── SAVE ADX FLOW ──
+function openSaveAdxModal(payload, format) {
+    pendingAdxPayload = payload;
+    pendingAdxFormat = format;
+    const isSealed = format === 'adxs';
+    const title = payload.meta?.title || 'Documento importato';
+    document.getElementById('save-adx-title').textContent = `Salvare "${title}"?`;
+    const badge = document.getElementById('save-adx-badge');
+    badge.className = `save-adx-format-badge ${format}`;
+    badge.innerHTML = `<i class="fas ${isSealed ? 'fa-lock' : 'fa-file-pen'}"></i> .${format.toUpperCase()} — ${isSealed ? 'Aura Docs Sealed' : 'Aura Docs Editable'}`;
+    const info = document.getElementById('save-adx-info');
+    if (isSealed) {
+        info.innerHTML = `<i class="fas fa-info-circle"></i> Questo file <strong>.adxs</strong> è sigillato e rimarrà in <strong>sola lettura</strong> anche dopo il salvataggio. Non potrai modificarne il contenuto.`;
+    } else {
+        info.innerHTML = `<i class="fas fa-info-circle"></i> Questo file <strong>.adxe</strong> verrà salvato tra i tuoi documenti e sarà <strong>liberamente modificabile</strong> come un documento normale.`;
+    }
+    document.getElementById('save-adx-modal').style.display = 'flex';
+}
+
+function closeSaveAdxModal() {
+    document.getElementById('save-adx-modal').style.display = 'none';
+}
+
+async function confirmSaveAdx() {
+    if (!pendingAdxPayload || !auth.currentUser) return;
+    closeSaveAdxModal();
+    const payload = pendingAdxPayload;
+    const format = pendingAdxFormat;
+    const isSealed = format === 'adxs';
+    const title = payload.meta?.title || 'Documento importato';
+    const md = payload.content_md || '';
+    const fontFamily = payload.meta?.font_family || 'Poppins';
+    const fontSize = payload.meta?.font_size || '16px';
+
+    const newDocData = {
+        title,
+        content: md,
+        fontSize,
+        fontFamily,
+        isPublic: false,
+        isSealed: isSealed, // mark sealed docs
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        collaborators: { [auth.currentUser.uid]: 'Proprietario' }
+    };
+    if (currentFolderFilter) newDocData.folderId = currentFolderFilter;
+
+    try {
+        const docRef = await db.collection('documents').add(newDocData);
+        currentDocId = docRef.id;
+        showToast(`✓ Documento salvato${isSealed ? ' (sola lettura)' : ''}`);
+        // Enable auto-save for adxe
+        if (!isSealed) {
+            document.getElementById('save-status').style.display = 'none';
+        }
+        pendingAdxPayload = null;
+        pendingAdxFormat = null;
+    } catch(err) {
+        showToast('✗ Errore nel salvataggio: ' + (err.message || ''));
+    }
+}
 
 // ── FOLDER STATE ──
 const FOLDER_COLORS = [
@@ -1479,7 +2017,7 @@ const FOLDER_COLORS = [
     '#6366f1','#14b8a6','#a855f7','#64748b','#1a1b1e'
 ];
 let currentFolderFilter = null;
-let sidebarFilter = 'recenti'; // 'recenti' | 'docs' | folderId
+let sidebarFilter = 'recenti';
 let editingFolderId = null;
 let selectedFolderColor = FOLDER_COLORS[0];
 let ctxMenuFolderId = null;
@@ -1523,14 +2061,11 @@ function toggleSidebarUserDropdown() {
 function setSidebarFilter(filter) {
     sidebarFilter = filter;
     currentFolderFilter = (filter !== 'recenti' && filter !== 'docs') ? filter : null;
-    // Update active nav items
     document.getElementById('nav-recenti').classList.toggle('active', filter === 'recenti');
     document.getElementById('nav-documenti').classList.toggle('active', filter === 'docs');
-    // Update sidebar folder items
     document.querySelectorAll('.sidebar-folder-item').forEach(el => {
         el.classList.toggle('active', el.dataset.folderId === filter);
     });
-    // Update title
     if (filter === 'recenti') {
         document.getElementById('filelist-title').textContent = 'Recenti';
     } else if (filter === 'docs') {
@@ -1648,6 +2183,8 @@ async function renderCollabsList() {
 function openCollabModal() {
     document.getElementById('collab-modal').style.display = 'flex';
     renderCollabsList();
+    // First-time collaboration tutorial
+    setTimeout(() => showTutorial('collab'), 400);
 }
 
 // ── SAVE STATUS ──
@@ -1681,17 +2218,18 @@ function setMode(mode) {
 }
 
 function execCmd(cmd, val = null) {
+    if (isReadOnly) return;
     if (currentMode === 'visual') { document.execCommand(cmd, false, val); autoSave(); }
 }
 
 function addLink() {
-    if (currentMode !== 'visual') return;
+    if (isReadOnly || currentMode !== 'visual') return;
     const url = prompt('Inserisci URL:');
     if (url) execCmd('createLink', url);
 }
 
 function insertBlockquote() {
-    if (currentMode !== 'visual') return;
+    if (isReadOnly || currentMode !== 'visual') return;
     const visual = document.getElementById('visual-editor');
     visual.focus();
     const sel = window.getSelection();
@@ -1715,7 +2253,7 @@ function insertBlockquote() {
 }
 
 function insertCodeBlock() {
-    if (currentMode !== 'visual') return;
+    if (isReadOnly || currentMode !== 'visual') return;
     const visual = document.getElementById('visual-editor');
     visual.focus();
     const sel = window.getSelection();
@@ -1747,7 +2285,7 @@ let pendingImageSrc = '';
 let savedSelectionRange = null;
 
 function openImageModal() {
-    if (currentMode !== 'visual') return;
+    if (isReadOnly || currentMode !== 'visual') return;
     const sel = window.getSelection();
     if (sel && sel.rangeCount > 0) savedSelectionRange = sel.getRangeAt(0).cloneRange();
     document.getElementById('img-url-input').value = '';
@@ -1800,33 +2338,19 @@ function previewProton(val) {
     const prev = document.getElementById('img-preview-proton');
     val = val.trim();
     if (!val) { prev.innerHTML = '<span>Anteprima</span>'; pendingImageSrc = ''; return; }
-    // Proton Drive shared links can't be embedded directly; use as direct src
-    // Convert proton.me/drive/urls to direct links if possible
     let src = val;
-    // proton.me/drive/file/ or drive.proton.me links - use as-is, user must set public
     pendingImageSrc = src;
     prev.innerHTML = `<img src="${src}" onerror="this.parentNode.innerHTML='<span style=\\'color:#ef4444;\\'>Anteprima non disponibile. L\\'immagine verrà inserita con il link fornito.</span>'" alt="preview">`;
 }
 
 function dropboxDirectUrl(val) {
     val = val.trim();
-    // Convert dropbox.com sharing links to direct download links
-    // https://www.dropbox.com/s/xxx/file.jpg?dl=0  →  https://dl.dropboxusercontent.com/s/xxx/file.jpg
-    // Also handle dl=1 links and /scl/fi/ links
     if (!val) return null;
-    // Already a direct dl.dropboxusercontent.com link
     if (val.includes('dl.dropboxusercontent.com')) return val;
-    // /scl/fi/ new-style links
     const sclMatch = val.match(/dropbox\.com\/scl\/fi\/([^?]+)/);
-    if (sclMatch) {
-        return `https://dl.dropboxusercontent.com/scl/fi/${sclMatch[1]}`;
-    }
-    // Old /s/ links
+    if (sclMatch) return `https://dl.dropboxusercontent.com/scl/fi/${sclMatch[1]}`;
     const sMatch = val.match(/dropbox\.com\/s\/([^?]+)/);
-    if (sMatch) {
-        return `https://dl.dropboxusercontent.com/s/${sMatch[1]}`;
-    }
-    // Fallback: replace dl=0 with dl=1
+    if (sMatch) return `https://dl.dropboxusercontent.com/s/${sMatch[1]}`;
     if (val.includes('dropbox.com')) {
         return val.replace('dl=0', 'dl=1').replace('?raw=1', '').replace(/\?.*$/, '') + '?raw=1';
     }
@@ -1942,6 +2466,7 @@ document.addEventListener('mouseup', () => { if (resizingImg) { resizingImg = nu
 
 // ── AUTOSAVE ──
 function autoSave() {
+    if (isReadOnly) return;
     showSaveStatus('saving');
     clearTimeout(saveTimeout);
     saveTimeout = setTimeout(() => {
@@ -1967,11 +2492,9 @@ auth.onAuthStateChanged(user => {
         if (doc.exists) {
             const d = doc.data();
             const fullName = d.nome + " " + d.cognome;
-            // Header avatar (hidden on dashboard)
             document.getElementById('user-name').textContent = fullName;
             document.getElementById('user-avatar').src = d.profileImage || 'images/default.png';
             document.getElementById('user-uid').textContent = user.uid;
-            // Sidebar user
             document.getElementById('sidebar-user-name').textContent = fullName;
             document.getElementById('sidebar-user-avatar').src = d.profileImage || 'images/default.png';
             const uidEl = document.getElementById('sidebar-user-uid');
@@ -1981,16 +2504,16 @@ auth.onAuthStateChanged(user => {
     });
     loadFolders();
     loadDocs();
+    // Show welcome tutorial on first visit
+    setTimeout(() => showTutorial('welcome'), 800);
 });
 
 // ── FOLDERS ──
 function loadFolders() {
     if (!auth.currentUser) return;
     const uid = auth.currentUser.uid;
-    // Listen to owned folders
     db.collection('folders').where('uid', '==', uid)
         .onSnapshot(snap => {
-            // Remove previously owned folders, keep shared ones
             Object.keys(allFolders).forEach(id => {
                 if (allFolders[id]._owned) delete allFolders[id];
             });
@@ -1999,10 +2522,8 @@ function loadFolders() {
             });
             renderSidebarFolders();
         });
-    // Listen to folders shared with current user
     db.collection('folders').where(`collaborators.${uid}`, 'in', ['Editor', 'Visualizzatore'])
         .onSnapshot(snap => {
-            // Remove previously shared folders
             Object.keys(allFolders).forEach(id => {
                 if (!allFolders[id]._owned) delete allFolders[id];
             });
@@ -2086,16 +2607,13 @@ function renderFileList() {
     const groupLabel = document.getElementById('filelist-group-label');
     container.innerHTML = '';
 
-    // Filter docs
     let docs = [...allDocsCache];
 
     if (sidebarFilter === 'recenti') {
-        // Last 3 opened (already sorted by updatedAt desc)
         docs = docs.slice(0, 3);
     } else if (sidebarFilter === 'docs') {
-        // All docs — no filter
+        // All docs
     } else {
-        // Folder filter
         docs = docs.filter(d => d.data.folderId === sidebarFilter);
     }
 
@@ -2109,7 +2627,6 @@ function renderFileList() {
         return;
     }
 
-    // Group by time
     const groups = groupDocsByTime(docs);
     const groupDefs = [
         { key: 'oggi', label: 'Oggi' },
@@ -2145,7 +2662,6 @@ function renderFileRow(container, id, data) {
     const role = auth.currentUser ? (data.collaborators[auth.currentUser.uid] || '') : '';
     const isMe = role === 'Proprietario';
 
-    // Location: folder name or "I miei file"
     let locationHtml = '';
     if (data.folderId && allFolders[data.folderId]) {
         const f = allFolders[data.folderId];
@@ -2183,7 +2699,6 @@ function loadDocs() {
         .onSnapshot(snap => {
             allDocsCache = [];
             snap.forEach(doc => allDocsCache.push({ id: doc.id, data: doc.data() }));
-            // Sort by updatedAt desc
             allDocsCache.sort((a, b) => {
                 const ta = a.data.updatedAt?.toDate?.() || new Date(0);
                 const tb = b.data.updatedAt?.toDate?.() || new Date(0);
@@ -2195,7 +2710,6 @@ function loadDocs() {
 }
 
 // ── REWRAP PLAIN IMAGES ──
-// After markdown parse, plain <img> tags get wrapped in our custom wrapper
 function rewrapImages() {
     const visual = document.getElementById('visual-editor');
     const imgs = visual.querySelectorAll('img:not(.doc-image-wrapper img)');
@@ -2211,6 +2725,7 @@ function rewrapImages() {
 function openDoc(id, data) {
     currentDocId = id;
     nyraHistory = [];
+    isReadOnly = false;
     const role = data.collaborators[auth.currentUser.uid];
     const canEdit = role === 'Proprietario' || role === 'Editor';
     const visual = document.getElementById('visual-editor');
@@ -2219,6 +2734,7 @@ function openDoc(id, data) {
     document.getElementById('btn-delete').style.display = (role === 'Proprietario') ? 'flex' : 'none';
     document.getElementById('dashboard-view').style.display = 'none';
     document.getElementById('editor-view').style.display = 'flex';
+    document.getElementById('readonly-banner').style.display = 'none';
     document.getElementById('doc-title-container').style.display = 'flex';
     document.getElementById('close-editor').style.display = 'flex';
     document.getElementById('user-trigger').classList.add('editor-visible');
@@ -2231,6 +2747,17 @@ function openDoc(id, data) {
     visual.innerHTML = marked.parse(data.content || "");
     rewrapImages();
     setMode('visual');
+    // Show toolbar
+    document.getElementById('main-toolbar').style.display = 'flex';
+    // First-time editor tutorial
+    setTimeout(() => showTutorial('editor'), 600);
+    // Reset Nyra quick buttons (in case previously opened a sealed doc)
+    document.querySelectorAll('.nyra-quick-btn').forEach(btn => {
+        btn.style.opacity = ''; btn.style.pointerEvents = ''; btn.title = '';
+    });
+    // Reset mode switch
+    document.querySelector('.mode-switch').style.opacity = '';
+    document.querySelector('.mode-switch').style.pointerEvents = '';
 }
 
 async function createNewDoc() {
@@ -2381,7 +2908,7 @@ async function folderShareSearch(val) {
     } else {
         snap.forEach(doc => {
             const u = doc.data();
-            if (doc.id === auth.currentUser.uid) return; // skip self
+            if (doc.id === auth.currentUser.uid) return;
             const div = document.createElement('div');
             div.className = 'search-item';
             div.style.cssText = 'display:flex; align-items:center; gap:10px;';
@@ -2404,11 +2931,9 @@ async function addFolderCollaborator() {
     if (!folderShareTempUser || !ctxMenuFolderId) return;
     const role = document.getElementById('folder-share-role').value;
     const folderId = ctxMenuFolderId;
-    // Save collaborator on folder document
     await db.collection('folders').doc(folderId).update({
         [`collaborators.${folderShareTempUser.id}`]: role
     });
-    // Also share all documents in this folder with this user (same role)
     const snap = await db.collection('documents')
         .where(`collaborators.${auth.currentUser.uid}`, '==', 'Proprietario')
         .where('folderId', '==', folderId)
@@ -2431,7 +2956,6 @@ async function renderFolderShareCollabs(folderId) {
     const folderDoc = await db.collection('folders').doc(folderId).get();
     const data = folderDoc.data();
     const collabs = data.collaborators || {};
-    // Always show owner
     const ownerUid = data.uid;
     const ownerDoc = await db.collection('users').doc(ownerUid).get();
     let ownerName = ownerUid, ownerPhoto = 'images/default.png';
@@ -2478,7 +3002,6 @@ async function renderFolderShareCollabs(folderId) {
 
 async function updateFolderCollabRole(folderId, uid, newRole) {
     await db.collection('folders').doc(folderId).update({ [`collaborators.${uid}`]: newRole });
-    // Update role on all docs in folder owned by current user
     const snap = await db.collection('documents')
         .where(`collaborators.${auth.currentUser.uid}`, '==', 'Proprietario')
         .where('folderId', '==', folderId)
@@ -2494,7 +3017,6 @@ async function removeFolderCollab(folderId, uid) {
     await db.collection('folders').doc(folderId).update({
         [`collaborators.${uid}`]: firebase.firestore.FieldValue.delete()
     });
-    // Remove from all docs in folder owned by current user
     const snap = await db.collection('documents')
         .where(`collaborators.${auth.currentUser.uid}`, '==', 'Proprietario')
         .where('folderId', '==', folderId)
@@ -2541,7 +3063,7 @@ function openDocFolderMenu(e, docId) {
 
 // ── EXPORT ──
 function exportDoc() {
-    ['exp-md','exp-docx','exp-pdf'].forEach(id => {
+    ['exp-md','exp-docx','exp-pdf','exp-adxe','exp-adxs'].forEach(id => {
         const el = document.getElementById(id);
         if (el) { el.classList.remove('busy'); showCaret(id); }
     });
@@ -2593,7 +3115,7 @@ async function saveFile(blob, filename, mime) {
 }
 
 async function runExport(format) {
-    const optId = { md: 'exp-md', docx: 'exp-docx', pdf: 'exp-pdf' }[format];
+    const optId = { md: 'exp-md', docx: 'exp-docx', pdf: 'exp-pdf', adxe: 'exp-adxe', adxs: 'exp-adxs' }[format];
     showSpinner(optId);
     const title = getDocTitle();
     const md = getMarkdownContent();
@@ -2610,11 +3132,288 @@ async function runExport(format) {
             const blob = await buildPdf(md, title);
             const saved = await saveFile(blob, title + '.pdf', 'application/pdf');
             if (saved) { document.getElementById('export-sheet').style.display = 'none'; showToast('✓ PDF salvato'); }
+        } else if (format === 'adxe') {
+            const blob = buildAdxe(title, md);
+            const saved = await saveFile(blob, title + '.adxe', 'application/x-auradocs-editable');
+            if (saved) { document.getElementById('export-sheet').style.display = 'none'; showToast('✓ File .adxe salvato'); }
+        } else if (format === 'adxs') {
+            const blob = buildAdxs(title, md);
+            const saved = await saveFile(blob, title + '.adxs', 'application/x-auradocs-sealed');
+            if (saved) { document.getElementById('export-sheet').style.display = 'none'; showToast('✓ File .adxs salvato'); }
         }
     } catch (err) {
         console.error('Export error', err);
         showToast('✗ Errore: ' + (err.message || 'esportazione fallita'));
     } finally { showCaret(optId); }
+}
+
+// ─────────────────────────────────────────────
+// ── AURA DOCS NATIVE FORMATS (.adxe / .adxs) ──
+// ─────────────────────────────────────────────
+
+// ADXE — Aura Docs eXtended Editable
+// Structure: JSON payload, optimized for Aura Docs internal doc structure.
+// Fields:
+//   adx_format: "adxe"
+//   adx_version: 1
+//   meta: { title, created, exported_by, font_family, font_size }
+//   content_md: raw markdown string (canonical source)
+//   content_blocks: array of parsed block objects (for fast rendering)
+// The content_blocks are an optimization so Aura Docs can render instantly
+// without re-parsing markdown on import.
+
+function buildAdxe(title, md) {
+    const visualEl = document.getElementById('visual-editor');
+    const blocks = parseBlocksFromMarkdown(md);
+    const payload = {
+        adx_format: 'adxe',
+        adx_version: 1,
+        meta: {
+            title: title,
+            exported_at: new Date().toISOString(),
+            exported_by: auth.currentUser ? auth.currentUser.uid : 'unknown',
+            font_family: visualEl.style.fontFamily || 'Poppins',
+            font_size: visualEl.style.fontSize || '16px',
+            app: 'Aura Docs',
+            app_url: 'https://docs.aurastudioitalia.it'
+        },
+        content_md: md,
+        content_blocks: blocks
+    };
+    const json = JSON.stringify(payload, null, 2);
+    return new Blob([json], { type: 'application/x-auradocs-editable;charset=utf-8' });
+}
+
+// ADXS — Aura Docs eXtended Sealed
+// Same as ADXE but:
+//   adx_format: "adxs"
+//   sealed: true
+//   seal_time: ISO timestamp
+//   seal_hash: lightweight checksum to detect tampering
+// No editing is possible once sealed.
+
+function buildAdxs(title, md) {
+    const visualEl = document.getElementById('visual-editor');
+    const blocks = parseBlocksFromMarkdown(md);
+    // Simple checksum: sum of char codes mod 2^32, encoded as hex
+    let checksum = 0;
+    for (let i = 0; i < md.length; i++) checksum = (checksum + md.charCodeAt(i)) >>> 0;
+    const sealHash = checksum.toString(16).padStart(8, '0');
+    const payload = {
+        adx_format: 'adxs',
+        adx_version: 1,
+        sealed: true,
+        seal_time: new Date().toISOString(),
+        seal_hash: sealHash,
+        meta: {
+            title: title,
+            exported_at: new Date().toISOString(),
+            exported_by: auth.currentUser ? auth.currentUser.uid : 'unknown',
+            font_family: visualEl.style.fontFamily || 'Poppins',
+            font_size: visualEl.style.fontSize || '16px',
+            app: 'Aura Docs',
+            app_url: 'https://docs.aurastudioitalia.it'
+        },
+        content_md: md,
+        content_blocks: blocks
+    };
+    const json = JSON.stringify(payload, null, 2);
+    return new Blob([json], { type: 'application/x-auradocs-sealed;charset=utf-8' });
+}
+
+// Parse markdown into structured block objects optimized for Aura Docs rendering.
+// Block types: heading1, heading2, heading3, heading4, paragraph, bullet,
+//              ordered, blockquote, code, hr, blank
+function parseBlocksFromMarkdown(md) {
+    const lines = md.split('\n');
+    const blocks = [];
+    let inCode = false, codeLang = '', codeLines = [];
+    for (const raw of lines) {
+        const line = raw.trimEnd();
+        // Code block
+        if (line.startsWith('```')) {
+            if (!inCode) {
+                inCode = true;
+                codeLang = line.slice(3).trim();
+                codeLines = [];
+            } else {
+                blocks.push({ type: 'code', lang: codeLang, text: codeLines.join('\n') });
+                inCode = false; codeLang = ''; codeLines = [];
+            }
+            continue;
+        }
+        if (inCode) { codeLines.push(raw); continue; }
+        // Headings
+        if (/^#### /.test(line)) { blocks.push({ type: 'heading4', text: line.slice(5), inline: parseInline(line.slice(5)) }); continue; }
+        if (/^### /.test(line))  { blocks.push({ type: 'heading3', text: line.slice(4), inline: parseInline(line.slice(4)) }); continue; }
+        if (/^## /.test(line))   { blocks.push({ type: 'heading2', text: line.slice(3), inline: parseInline(line.slice(3)) }); continue; }
+        if (/^# /.test(line))    { blocks.push({ type: 'heading1', text: line.slice(2), inline: parseInline(line.slice(2)) }); continue; }
+        // Blockquote
+        if (/^> /.test(line))    { blocks.push({ type: 'blockquote', text: line.slice(2), inline: parseInline(line.slice(2)) }); continue; }
+        // Lists
+        if (/^[-*+] /.test(line))       { blocks.push({ type: 'bullet', text: line.slice(2), inline: parseInline(line.slice(2)) }); continue; }
+        if (/^\d+\. /.test(line))       { blocks.push({ type: 'ordered', text: line.replace(/^\d+\. /, ''), inline: parseInline(line.replace(/^\d+\. /, '')) }); continue; }
+        // HR
+        if (/^(---|\*\*\*|___)$/.test(line.trim())) { blocks.push({ type: 'hr' }); continue; }
+        // Blank
+        if (line.trim() === '')  { blocks.push({ type: 'blank' }); continue; }
+        // Paragraph
+        blocks.push({ type: 'paragraph', text: line, inline: parseInline(line) });
+    }
+    return blocks;
+}
+
+// Parse inline markdown into array of spans for Aura Docs renderer.
+function parseInline(text) {
+    const spans = [];
+    const re = /(\[([^\]]*)\]\(([^)]*)\)|~~([^~]*)~~|`([^`]*)`|\*\*([^*]*)\*\*|__([^_]*)__|_([^_]*)_|\*([^*]*)\*|([^`*_~\[\]]+))/g;
+    let m;
+    while ((m = re.exec(text)) !== null) {
+        if (m[2] != null)  spans.push({ t: 'link',   text: m[2], href: m[3] });
+        else if (m[4] != null)  spans.push({ t: 's',     text: m[4] });
+        else if (m[5] != null)  spans.push({ t: 'code',  text: m[5] });
+        else if (m[6] != null)  spans.push({ t: 'b',     text: m[6] });
+        else if (m[7] != null)  spans.push({ t: 'b',     text: m[7] });
+        else if (m[8] != null)  spans.push({ t: 'i',     text: m[8] });
+        else if (m[9] != null)  spans.push({ t: 'i',     text: m[9] });
+        else if (m[10] != null) spans.push({ t: 'text',  text: m[10] });
+    }
+    return spans;
+}
+
+// ── IMPORT .adxe / .adxs ──
+function triggerAdxImport() {
+    document.getElementById('adx-import-input').value = '';
+    document.getElementById('adx-import-input').click();
+}
+
+function importAdxFile(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (ext !== 'adxe' && ext !== 'adxs') {
+        showToast('⚠️ Formato non supportato. Usa .adxe o .adxs');
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const payload = JSON.parse(e.target.result);
+            if (!payload.adx_format || !payload.content_md) throw new Error('File non valido');
+            if (payload.adx_format !== 'adxe' && payload.adx_format !== 'adxs') throw new Error('Formato ADX non riconosciuto');
+            openAdxDocument(payload);
+        } catch (err) {
+            showToast('✗ Impossibile leggere il file: ' + (err.message || 'errore'));
+        }
+    };
+    reader.readAsText(file);
+}
+
+function openAdxDocument(payload) {
+    const isSealed = payload.adx_format === 'adxs';
+    const title = payload.meta?.title || 'Documento importato';
+    const md = payload.content_md || '';
+    const fontFamily = payload.meta?.font_family || 'Poppins';
+    const fontSize = payload.meta?.font_size || '16px';
+
+    // Set state
+    currentDocId = null;
+    nyraHistory = [];
+    isReadOnly = isSealed;
+
+    const visual = document.getElementById('visual-editor');
+    // Completely block contenteditable for sealed files
+    visual.contentEditable = isSealed ? 'false' : 'true';
+    // Also block keyboard input at the element level for adxs
+    if (isSealed) {
+        visual.setAttribute('data-sealed', 'true');
+    } else {
+        visual.removeAttribute('data-sealed');
+    }
+
+    document.getElementById('doc-title-input').disabled = isSealed;
+    document.getElementById('btn-delete').style.display = 'none';
+
+    document.getElementById('dashboard-view').style.display = 'none';
+    document.getElementById('editor-view').style.display = 'flex';
+    document.getElementById('doc-title-container').style.display = 'flex';
+    document.getElementById('close-editor').style.display = 'flex';
+    document.getElementById('user-trigger').classList.add('editor-visible');
+    document.getElementById('doc-title-input').value = title;
+
+    // Read-only banner
+    const banner = document.getElementById('readonly-banner');
+    if (isSealed) {
+        banner.style.display = 'flex';
+        disableToolbarForReadOnly();
+        // Also hide the mode switch (no literal mode for sealed)
+        document.querySelector('.mode-switch').style.opacity = '0.4';
+        document.querySelector('.mode-switch').style.pointerEvents = 'none';
+    } else {
+        banner.style.display = 'none';
+        document.getElementById('main-toolbar').style.display = 'flex';
+        enableToolbarForEdit();
+        document.querySelector('.mode-switch').style.opacity = '';
+        document.querySelector('.mode-switch').style.pointerEvents = '';
+    }
+
+    // Load content
+    visual.style.fontSize = fontSize;
+    visual.style.fontFamily = fontFamily;
+    document.getElementById('font-size').value = parseInt(fontSize) || 16;
+    document.getElementById('font-family').value = fontFamily;
+    document.getElementById('editor-textarea').value = md;
+    visual.innerHTML = marked.parse(md);
+    rewrapImages();
+
+    // Both adxe and adxs open in Visual mode by default
+    setMode('visual');
+
+    // For sealed docs: grey out editing quick-action buttons in Nyra
+    const editActionKeys = ['migliora','espandi','formale','informale','correggi','traduci-en','continua'];
+    document.querySelectorAll('.nyra-quick-btn').forEach(btn => {
+        const action = btn.getAttribute('onclick')?.match(/nyraQuickAction\('([^']+)'\)/)?.[1];
+        if (isSealed && action && editActionKeys.includes(action)) {
+            btn.style.opacity = '0.35';
+            btn.style.pointerEvents = 'none';
+            btn.title = 'Non disponibile per documenti sigillati';
+        } else {
+            btn.style.opacity = '';
+            btn.style.pointerEvents = '';
+            btn.title = '';
+        }
+    });
+
+    // Show adx import tutorial first, then the save modal
+    setTimeout(() => {
+        showTutorial('adxImport', () => {
+            // After tutorial (or if already seen), show save modal
+            openSaveAdxModal(payload, payload.adx_format);
+        });
+    }, 400);
+}
+
+function disableToolbarForReadOnly() {
+    const toolbar = document.getElementById('main-toolbar');
+    // Disable ALL interactive elements in toolbar
+    const all = toolbar.querySelectorAll('button, select, input');
+    all.forEach(el => {
+        el.disabled = true;
+        el.style.opacity = '0.3';
+        el.style.pointerEvents = 'none';
+        el.style.cursor = 'not-allowed';
+    });
+    // Re-enable only Export and Nyra (read-only mode)
+    const exportBtns = toolbar.querySelectorAll('[title="Esporta"]');
+    exportBtns.forEach(b => { b.disabled = false; b.style.opacity = '1'; b.style.pointerEvents = 'auto'; b.style.cursor = 'pointer'; });
+    const nyraBtn = document.getElementById('nyra-toolbar-btn');
+    if (nyraBtn) { nyraBtn.disabled = false; nyraBtn.style.opacity = '1'; nyraBtn.style.pointerEvents = 'auto'; nyraBtn.style.cursor = 'pointer'; }
+}
+
+function enableToolbarForEdit() {
+    const toolbar = document.getElementById('main-toolbar');
+    const all = toolbar.querySelectorAll('button, select, input');
+    all.forEach(el => { el.disabled = false; el.style.opacity = ''; el.style.pointerEvents = ''; });
 }
 
 // ── MD → DOCX ──
@@ -2759,6 +3558,8 @@ function toggleNyraPanel() {
     nyraIsOpen = !nyraIsOpen;
     panel.classList.toggle('open', nyraIsOpen);
     btn.classList.toggle('active', nyraIsOpen);
+    // First-time Nyra tutorial
+    if (nyraIsOpen) setTimeout(() => showTutorial('nyra'), 400);
 }
 
 function nyraAutoResize(el) {
@@ -2766,11 +3567,13 @@ function nyraAutoResize(el) {
     el.style.height = Math.min(el.scrollHeight, 100) + 'px';
 }
 
+// Get document content always as markdown
 function getDocumentText() {
     const visual = document.getElementById('visual-editor');
     const textarea = document.getElementById('editor-textarea');
-    if (currentMode === 'visual') return visual.innerText.trim();
-    return textarea.value.trim();
+    // Always return the markdown representation
+    if (currentMode === 'literal') return textarea.value.trim();
+    return turndownService.turndown(visual.innerHTML).trim();
 }
 
 function getSelectedText() {
@@ -2779,12 +3582,21 @@ function getSelectedText() {
     return null;
 }
 
+// Apply Nyra's markdown output to the document:
+// 1. Set textarea to the new markdown
+// 2. Switch to literal (markdown) mode so content is visible as markdown
+// 3. Sync visual mode as well
 function applyTextToDoc(newText) {
+    if (isReadOnly) return;
     const visual = document.getElementById('visual-editor');
     const textarea = document.getElementById('editor-textarea');
+    // Store markdown in textarea
     textarea.value = newText;
+    // Update visual editor from markdown
     visual.innerHTML = marked.parse(newText);
-    if (currentMode !== 'visual') setMode('visual');
+    rewrapImages();
+    // Switch to literal (Letterale) mode to show the raw markdown
+    setMode('literal');
     autoSave();
     autoResizeTextarea(textarea);
 }
@@ -2812,7 +3624,7 @@ function nyraAppendMessage(role, html, withApply = false, applyText = '') {
         applyBtn.innerHTML = '<i class="fas fa-check"></i> Applica al documento';
         applyBtn.onclick = () => {
             applyTextToDoc(applyText);
-            applyBtn.innerHTML = '<i class="fas fa-check-double"></i> Applicato!';
+            applyBtn.innerHTML = '<i class="fas fa-check-double"></i> Applicato! (modalità Letterale)';
             applyBtn.disabled = true;
             applyBtn.style.opacity = '0.6';
         };
@@ -2859,15 +3671,17 @@ function nyraUpdateContextBadge() {
 document.getElementById('visual-editor').addEventListener('mouseup', nyraUpdateContextBadge);
 document.getElementById('editor-textarea').addEventListener('mouseup', nyraUpdateContextBadge);
 
+// Quick action prompts — always ask Nyra to return valid Markdown
+// so that applyTextToDoc() can directly use the output in literal mode.
 const QUICK_PROMPTS = {
-    'migliora':   (t) => `Migliora la qualità e la leggibilità del seguente testo, mantenendo il significato originale. Restituisci solo il testo migliorato, senza spiegazioni:\n\n${t}`,
-    'riassumi':   (t) => `Riassumi il seguente testo in modo conciso e chiaro. Restituisci solo il riassunto:\n\n${t}`,
-    'espandi':    (t) => `Espandi e arricchisci il seguente testo aggiungendo dettagli, esempi e contenuto pertinente. Restituisci solo il testo espanso:\n\n${t}`,
-    'formale':    (t) => `Riscrivi il seguente testo con un tono professionale e formale. Restituisci solo il testo riscritto:\n\n${t}`,
-    'informale':  (t) => `Riscrivi il seguente testo con un tono informale, amichevole e naturale. Restituisci solo il testo riscritto:\n\n${t}`,
-    'correggi':   (t) => `Correggi tutti gli errori grammaticali, ortografici e di punteggiatura nel seguente testo. Restituisci solo il testo corretto:\n\n${t}`,
-    'traduci-en': (t) => `Traduci il seguente testo in inglese. Restituisci solo la traduzione:\n\n${t}`,
-    'continua':   (t) => `Continua il seguente testo in modo coerente e naturale, mantenendo lo stile dell'autore. Restituisci solo la continuazione (non ripetere il testo originale):\n\n${t}`,
+    'migliora':   (t) => `Sei un editor di testi. Migliora la qualità e la leggibilità del seguente testo Markdown, mantenendo il significato originale e tutta la formattazione Markdown (titoli, liste, grassetto, corsivo, ecc.). Restituisci SOLO il testo Markdown migliorato, senza preamboli, spiegazioni, backtick aggiuntivi o delimitatori di blocco:\n\n${t}`,
+    'riassumi':   (t) => `Sei un editor di testi. Riassumi il seguente testo Markdown in modo conciso, conservando la struttura Markdown appropriata (titoli, liste). Restituisci SOLO il Markdown del riassunto, senza preamboli o spiegazioni:\n\n${t}`,
+    'espandi':    (t) => `Sei un editor di testi. Espandi e arricchisci il seguente testo Markdown aggiungendo dettagli, esempi e contenuto pertinente, mantenendo tutta la formattazione Markdown esistente e aggiungendone dove utile. Restituisci SOLO il Markdown espanso, senza preamboli o spiegazioni:\n\n${t}`,
+    'formale':    (t) => `Sei un editor di testi. Riscrivi il seguente testo Markdown con un tono professionale e formale, mantenendo tutta la formattazione Markdown. Restituisci SOLO il Markdown riscritto, senza preamboli o spiegazioni:\n\n${t}`,
+    'informale':  (t) => `Sei un editor di testi. Riscrivi il seguente testo Markdown con un tono informale, amichevole e naturale, mantenendo tutta la formattazione Markdown. Restituisci SOLO il Markdown riscritto, senza preamboli o spiegazioni:\n\n${t}`,
+    'correggi':   (t) => `Sei un editor di testi. Correggi tutti gli errori grammaticali, ortografici e di punteggiatura nel seguente testo Markdown, mantenendo tutta la formattazione Markdown intatta. Restituisci SOLO il Markdown corretto, senza preamboli o spiegazioni:\n\n${t}`,
+    'traduci-en': (t) => `Sei un traduttore. Traduci il seguente testo Markdown in inglese, mantenendo tutta la formattazione Markdown (titoli, liste, grassetto, corsivo). Restituisci SOLO il Markdown tradotto, senza preamboli o spiegazioni:\n\n${t}`,
+    'continua':   (t) => `Sei uno scrittore. Continua il seguente testo Markdown in modo coerente e naturale, mantenendo lo stile dell'autore e usando formattazione Markdown appropriata. Restituisci SOLO la continuazione in Markdown (non ripetere il testo originale), senza preamboli o spiegazioni:\n\n${t}`,
 };
 const QUICK_LABELS = {
     'migliora': '✨ Migliora testo', 'riassumi': '📝 Riassumi', 'espandi': '📖 Espandi',
@@ -2876,6 +3690,12 @@ const QUICK_LABELS = {
 };
 
 async function nyraQuickAction(action) {
+    // For sealed docs: only allow 'riassumi', block everything that modifies
+    const editActions = ['migliora','espandi','formale','informale','correggi','traduci-en','continua'];
+    if (isReadOnly && editActions.includes(action)) {
+        nyraAppendMessage('bot', '🔒 Questo documento è sigillato (.adxs) — non posso modificarne il contenuto. Posso solo riassumerlo o rispondere a domande su di esso.');
+        return;
+    }
     if (!nyraIsOpen) toggleNyraPanel();
     const selected = getSelectedText();
     const docText = getDocumentText();
@@ -2884,7 +3704,9 @@ async function nyraQuickAction(action) {
     const label = QUICK_LABELS[action] || action;
     const contextNote = selected ? '*(testo selezionato)*' : '*(intero documento)*';
     nyraAppendMessage('user', `${label} ${contextNote}`);
-    await nyraCallAPI(QUICK_PROMPTS[action](targetText), true);
+    // For sealed: riassumi should NOT offer apply button
+    const canApply = !isReadOnly;
+    await nyraCallAPI(QUICK_PROMPTS[action](targetText), canApply);
 }
 
 async function nyraSend() {
@@ -2901,9 +3723,11 @@ async function nyraSend() {
     const needsContext = /\b(testo|documento|scritto|contenuto|paragrafo|frase|parole|articolo)\b/i.test(text);
     if (needsContext && docText) {
         const contextSnippet = selected || (docText.length > 1200 ? docText.substring(0, 1200) + '...' : docText);
-        messageWithContext = `${text}\n\nContesto del documento:\n---\n${contextSnippet}\n---`;
+        messageWithContext = `${text}\n\nContesto del documento (in Markdown):\n---\n${contextSnippet}\n---`;
     }
-    await nyraCallAPI(messageWithContext, false);
+    // For sealed docs: never offer the "apply" button
+    const isModRequest = !isReadOnly && /\b(modifica|riscrivi|cambia|sostituisci|aggiorna|migliora|correggi|traduci|espandi|riassumi|continua|aggiungi|rimuovi|togli)\b/i.test(text);
+    await nyraCallAPI(messageWithContext, isModRequest);
 }
 
 async function nyraCallAPI(message, isDocAction = false) {
@@ -2914,9 +3738,11 @@ async function nyraCallAPI(message, isDocAction = false) {
     try {
         const payload = {
             message, history: nyraHistory, model: 'openai/gpt-5-nano', temperature: 0.7,
-            systemPrompt: isDocAction
-                ? 'Sei Nyra, assistente AI integrata in Aura Docs. Quando ti vengono chieste modifiche al testo, restituisci SOLO il testo modificato, senza preamboli, spiegazioni o commenti. Per le domande generali, rispondi normalmente in italiano.'
-                : 'Sei Nyra, assistente AI integrata in Aura Docs. Aiuta l\'utente con il suo documento. Rispondi in italiano in modo conciso e utile.',
+            systemPrompt: isReadOnly
+                ? 'Sei Nyra, assistente AI integrata in Aura Docs. Questo documento è SIGILLATO (.adxs) e non può essere modificato in alcun modo. Puoi solo rispondere a domande su di esso, riassumerlo, spiegarlo o analizzarlo — senza mai proporre modifiche, riscritture o testi alternativi da applicare. Rispondi in italiano in modo conciso e utile.'
+                : (isDocAction
+                    ? 'Sei Nyra, assistente AI integrata in Aura Docs. Quando ti vengono chieste modifiche al testo, restituisci SOLO il testo modificato in formato Markdown valido, senza preamboli, spiegazioni, commenti, blocchi di codice avvolgenti (triple backtick) o altro testo aggiuntivo. Il tuo output sarà inserito direttamente come sorgente Markdown del documento. Per le domande generali, rispondi normalmente in italiano.'
+                    : 'Sei Nyra, assistente AI integrata in Aura Docs. Aiuta l\'utente con il suo documento. Il documento usa la sintassi Markdown internamente. Rispondi in italiano in modo conciso e utile.'),
         };
         const response = await fetch('https://api.nyra.aurastudioitalia.it/nyra', {
             method: 'POST',
@@ -2927,10 +3753,15 @@ async function nyraCallAPI(message, isDocAction = false) {
         const data = await response.json();
         const reply = data.reply || '';
         if (!reply) throw new Error('Risposta vuota dal server.');
+        // Strip accidental wrapping triple-backtick markdown fences from doc-action responses
+        let cleanReply = reply;
+        if (isDocAction) {
+            cleanReply = reply.replace(/^```(?:markdown)?\n?/i, '').replace(/\n?```\s*$/i, '').trim();
+        }
         if (Array.isArray(data.updatedHistory)) { nyraHistory = data.updatedHistory; }
         else { nyraHistory.push({ role: 'user', content: message }); nyraHistory.push({ role: 'assistant', content: reply }); }
         nyraHideTyping();
-        nyraAppendMessage('bot', reply, isDocAction, reply);
+        nyraAppendMessage('bot', cleanReply, isDocAction, cleanReply);
     } catch (err) {
         nyraHideTyping();
         nyraAppendMessage('bot', `⚠️ ${err.message || 'Errore di connessione. Riprova.'}`);
